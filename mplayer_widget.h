@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef MPLAYER_WIDGET_H
 #define MPLAYER_WIDGET_H
+
 #include <QtAV/QtAV.h>
 #include <QtAV/WidgetRenderer.h>
 

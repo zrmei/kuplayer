@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef SHADOW_WIDGET_H
 #define SHADOW_WIDGET_H
+
 #include "common.h"
 #include <QWidget>
 #define VALUE_DIS 5

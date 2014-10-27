@@ -101,6 +101,7 @@ void ShadowWidget::drawWindowShadow(QPainter &painter)
 
 }
 
+
 #ifdef CAN_RESIZE
 MainWidget::MainWidget(QWidget *parent)
     : ShadowWidget(parent)

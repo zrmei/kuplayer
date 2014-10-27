@@ -10,7 +10,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 
-/*****************************************************************************/
+/****************************************************************************/
 Label::Label(QWidget *parent)
     :   QLabel(parent)
 {
@@ -34,7 +34,7 @@ void Label::leaveEvent(QEvent *ev)
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
 }
 
-/*****************************************************************************/
+/****************************************************************************/
 DetailLabel::DetailLabel(QPixmap img, QString title, QString url, QWidget *parent) :
     QWidget(parent),
     lblImg_(new Label),

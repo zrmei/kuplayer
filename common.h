@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef COMMON_H
 #define COMMON_H
+
 #include <algorithm>
 #include <functional>
 using std::for_each;

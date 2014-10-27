@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef LIST_WIDGET_H
 #define LIST_WIDGET_H
+
 #include <QScrollArea>
 
 class DetailLabel;

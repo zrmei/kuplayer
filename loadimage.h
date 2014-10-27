@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef LOADIMAGE_H
 #define LOADIMAGE_H
+
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QFile>

@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef CONTROL_WIDGET_H
 #define CONTROL_WIDGET_H
+
 #include <QLabel>
 class QMouseEvent;
 class SelectLabel;

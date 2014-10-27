@@ -9,7 +9,7 @@
 #include <QApplication>
 #include "kuplayer.h"
 
-/*****************************************************************/
+/****************************************************************/
 MPlayer::MPlayer(QObject *parent)
     :  QtAV::AVPlayer(parent)
 {

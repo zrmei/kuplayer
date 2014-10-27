@@ -83,3 +83,8 @@ OTHER_FILES += \
     kuplayer.ico \
     liboptions.so
 
+FORMS += \
+    base_set_weidget.ui \
+    about_widget.ui \
+    play_set_widget.ui
+

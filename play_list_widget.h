@@ -3,9 +3,9 @@
 *     E-Mail : listener_mei@163.com
 *       Date : 2014/10/14
 **************************************************************************/
-
 #ifndef PLAY_LIST_WIDGET_H
 #define PLAY_LIST_WIDGET_H
+
 #include "shadow_widget.h"
 #include <QList>
 class QGridLayout;

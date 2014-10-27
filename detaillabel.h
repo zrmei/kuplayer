@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef DETAILLABEL_H
 #define DETAILLABEL_H
+
 #include <QLabel>
 class QHBoxLayout;
 class QVBoxLayout;

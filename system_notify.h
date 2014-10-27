@@ -3,9 +3,9 @@
 *     E-Mail : listener_mei@163.com
 *       Date : 2014/10/22
 **************************************/
-
 #ifndef SYSTEM_NOTIFY_H
 #define SYSTEM_NOTIFY_H
+
 #include <QApplication>
 
 #if defined(Q_OS_LINUX)

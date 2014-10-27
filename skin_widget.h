@@ -3,9 +3,9 @@
 *     E-Mail : listener_mei@163.com
 *       Date : 2014/10/21
 **************************************/
-
 #ifndef SKIN_WIDGET_H
 #define SKIN_WIDGET_H
+
 #include "shadow_widget.h"
 class QScrollArea;
 class QGridLayout;

@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef SELECT_LABEL_H
 #define SELECT_LABEL_H
+
 #include <QLabel>
 
 class SelectLabel final : public QLabel
@@ -13,7 +14,7 @@ class SelectLabel final : public QLabel
 signals:
     void be_selected(QString,QString);
 public:
-    SelectLabel(QString name,QString url,QWidget *parent=0);
+    SelectLabel(QString name,QString url="",QWidget *parent=0);
     virtual ~SelectLabel();
     void set_selected(bool);
 protected:

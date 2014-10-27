@@ -3,6 +3,7 @@
 *     E-Mail : listener_mei@163.com
 *       Date : 2014/10/13
  ********************************************/
+
 #include "common.h"
 #include "kuplayer.h"
 #include "title_widget.h"
@@ -72,7 +73,7 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
 
     stacked_widget = new QStackedWidget;
     QPalette text_palette = palette();
-    text_palette.setColor(QPalette::Window,Qt::white);
+    text_palette.setColor(QPalette::Window,QColor(240,240,240));
     stacked_widget->setPalette(text_palette);
     for(CLASS i=0;i<5;++i){
         ListWidget *l = new ListWidget(i);
@@ -82,6 +83,7 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
     }
     stacked_widget->addWidget(player_widget);
     main_layout->addWidget(stacked_widget);
+    main_layout->setSpacing(0);
 
     connect(&xuan_ji_widget,SIGNAL(click(QString,QString)),this,SLOT(url_ji_triggered(QString,QString)));
     connect(&skin_widget,SIGNAL(change_skin(QString)),this,SLOT(change_skin(QString)));

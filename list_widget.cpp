@@ -14,7 +14,7 @@
 #include <QVBoxLayout>
 #include <QScrollBar>
 
-/*****************************************************************************/
+/****************************************************************************/
 mScrollArea::mScrollArea(QWidget *parent)
     : QScrollArea(parent)
 {}

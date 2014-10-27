@@ -5,6 +5,8 @@
  ********************************************/
 #ifndef KUPLAYER_H
 #define KUPLAYER_H
+
+
 #include "common.h"
 #include "shadow_widget.h"
 #include "play_list_widget.h"

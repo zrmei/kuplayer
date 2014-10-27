@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef PYSCRIPT_H_H
 #define PYSCRIPT_H_H
+
 #include "common.h"
 
 class QStringList;

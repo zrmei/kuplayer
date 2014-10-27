@@ -7,6 +7,7 @@
 #include "detaillabel.h"
 #include "skin_widget.h"
 #include "push_button.h"
+
 #include <QLabel>
 #include <QScrollArea>
 #include <QVBoxLayout>

@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef TITLE_WIDGET_H
 #define TITLE_WIDGET_H
+
 #include <QList>
 #include <QLabel>
 

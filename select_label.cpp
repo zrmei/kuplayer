@@ -5,6 +5,7 @@
  ********************************************/
 #include "select_label.h"
 #include <QMouseEvent>
+
 #define THIS_WIDGET_COLOR(r,g,b){ QPalette text_palette = palette();\
         text_palette.setColor(QPalette::WindowText, QColor(r, g, b));\
         setPalette(text_palette);}
@@ -72,7 +73,7 @@ void SelectLabel::paintEvent(QPaintEvent *ev)
         THIS_WIDGET_COLOR(255,255,255);
 
     }else{
-        this->setStyleSheet("background-color:#ffffff");
+        this->setStyleSheet("background-color:#f0f0f0");
         THIS_WIDGET_COLOR(0,0,0);
 
     }

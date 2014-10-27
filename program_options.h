@@ -3,9 +3,9 @@
 *     E-Mail : listener_mei@163.com
 *       Date : 2014/10/20
 **************************************/
-
 #ifndef PROGRAM_OPTIONS_H
 #define PROGRAM_OPTIONS_H
+
 char* VERSION =
 "\t****************************************\n\
 \t*     MadeBy : MeiZhaorui(Mason)       *\n\

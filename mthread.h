@@ -5,6 +5,7 @@
  ********************************************/
 #ifndef MTHREAD_H
 #define MTHREAD_H
+
 #include <QThread>
 #include <functional>
 #include <python2.7/Python.h>
