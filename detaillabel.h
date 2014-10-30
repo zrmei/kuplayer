@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*       Date : 2014/10/13
- ********************************************/
+*      Phone : (0)131-5898-7498
+*       Date : 2014/10/14
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef DETAILLABEL_H
 #define DETAILLABEL_H
 
@@ -31,6 +33,7 @@ class DetailLabel : public QWidget
 signals:
     void url_triggered(QString/*name*/,QString/*url*/);
 public:
+    DetailLabel(QWidget *parent = 0);
     DetailLabel(QPixmap, QString, QString, QWidget *parent = 0);
     virtual ~DetailLabel();
 

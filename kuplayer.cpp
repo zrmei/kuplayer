@@ -1,9 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
-
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #include "common.h"
 #include "kuplayer.h"
 #include "title_widget.h"
@@ -24,6 +25,7 @@
 #define WINDOW_HEIGHT 657
 
 #define SHOW_WINDOW_NORMAL \
+this->showNormal();\
 stacked_widget->setContentsMargins(3,0,3,3);\
 this->layout()->setContentsMargins(5,5,5,5);
 #define SHOW_WINDOW_MAXSIZE \
@@ -31,13 +33,12 @@ stacked_widget->setContentsMargins(0,0,0,0);\
 this->layout()->setContentsMargins(0,0,0,0);
 
 #if defined(Q_OS_LINUX)
-    #ifdef signals
-        #undef signals
+    #ifdef signals     //主要是以下包括的头文件中有signals的变量名不这
+        #undef signals //样的话不能通过编译因为在QT中signals中关键字。
         #include "system_notify.h"
-    #endif // define signal
-    #define signals public
-    #define SHOW_MSG(name)  notification_show(name,"kuplayer",\
-                                                    qApp->applicationDirPath()+"/sources/img/kuplayer.ico");
+    #endif
+    #define signals public //恢复关键字定义,信好是个宏定义
+    #define SHOW_MSG(name)  notification_show(name,"kuplayer",qApp->applicationDirPath()+"../sources/img/kuplayer.ico");
 #elif defined(Q_OS_WIN32)
     #define SHOW_MSG(name)  trayicon->showMessage("kuplayer",QString(name),QSystemTrayIcon::Information);
 #endif // define Q_OS_LINUX
@@ -46,26 +47,19 @@ this->layout()->setContentsMargins(0,0,0,0);
 
 kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
 #ifdef CAN_RESZE
-    : MainWidget
+    : MainWidget(parent)
 #else
-    : ShadowWidget
+    : ShadowWidget(parent)
 #endif
-      (parent)
     , pyinit(pyinit)
     , trayicon(new QSystemTrayIcon)
 {
     setAttribute(Qt::WA_QuitOnClose,true);
 
-    trayicon->setIcon(QIcon(":logo/logo_icon"));
-    trayicon->show();
-    trayicon->setToolTip("kuplayer");
-    connect(trayicon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this,SLOT(trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
-
     title_widget = new TitleWidget;
     QVBoxLayout *main_layout = new QVBoxLayout(this);
     main_layout->addWidget(title_widget);
-    this->setMinimumSize(WINDOW_WIDTH,WINDOW_HEIGHT);
+    setMinimumSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 
     player_widget = new MPlayerWidget;
     player = new MPlayer;
@@ -86,25 +80,24 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
     main_layout->setSpacing(0);
 
     connect(&xuan_ji_widget,SIGNAL(click(QString,QString)),this,SLOT(url_ji_triggered(QString,QString)));
-    connect(&skin_widget,SIGNAL(change_skin(QString)),this,SLOT(change_skin(QString)));
-    connect(player,SIGNAL(mFinished()),this,SLOT(play_finished()));
+    connect(&skin_widget,SIGNAL(skin_change_clicked(QString)),this,SLOT(skin_change_clicked(QString)));
+    connect(player,SIGNAL(mFinished(bool)),this,SLOT(play_finished(bool)));
     connect(player,SIGNAL(positionChanged(qint64)),player_widget->control_widget,SLOT(setTime(qint64)));
     connect(player_widget->control_widget,SIGNAL(play_pause_clicked(bool)),player,SLOT(pause(bool)));
     connect(player_widget->control_widget,SIGNAL(stop_clicked()),player,SLOT(mStop()));
     connect(player_widget->control_widget,SIGNAL(backward_clicked()),player,SLOT(mSeekBack()));
     connect(player_widget->control_widget,SIGNAL(foreward_clicked()),player,SLOT(mSeekFore()));
     connect(player_widget->control_widget,SIGNAL(xuan_ji_clcked(QString,QString)),&xuan_ji_widget,SLOT(show_xuan_ji(QString,QString)));
-    connect(player_widget,SIGNAL(escape_clicked()),this,SLOT(play_finished()));
+    connect(player_widget->control_widget,SIGNAL(vol_up_clicked()),player,SLOT(vol_up()));
+    connect(player_widget->control_widget,SIGNAL(vol_down_clicked()),player,SLOT(vol_down()));
+    connect(player_widget,SIGNAL(escape_clicked()),this,SLOT(on_Fullscreen_changed()));
     connect(player_widget->renderer,SIGNAL(double_clicked()),this,SLOT(on_Fullscreen_changed()));
     connect(title_widget,SIGNAL(skin_clicked()),&skin_widget,SLOT(this_show()));
-    connect(title_widget,SIGNAL(close_clicked()),this,SLOT(close()));
+    connect(title_widget,SIGNAL(close_clicked()),this,SLOT(show_normal_or_close()));
     connect(title_widget,SIGNAL(min_clicked()),this,SLOT(show_minimized()));
     connect(title_widget,SIGNAL(ture_page(int)),stacked_widget,SLOT(setCurrentIndex(int)));
     connect(title_widget,SIGNAL(menu_clicked()),&main_menu,SLOT(this_show()));
-    title_widget->turepage("播放器");
-    skin = setting.value("setting/skin",":/kin/0").toString();
-    skin_widget.url_triggered("",skin);
-    format = setting.value("setting/format","normal").toString();
+    connect(&main_menu,SIGNAL(setting_changed(conf_info)),this,SLOT(setting_changed(conf_info)));
 
     if(pyinit->show_list.size()){
         for(int i=0;i<5;++i){
@@ -115,9 +108,32 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
             tmp->start();
         }
     }
-    this->addActions(player_widget->control_widget->init_action());
-    SHOW_MSG("kuplayer: free for youku");
+    addActions(player_widget->control_widget->init_action());
+    addActions(xuan_ji_widget.init_action());
+    SHOW_MSG("kuplayer: free for youku!");
     SHOW_WINDOW_NORMAL
+
+    title_widget->turepage("播放器");
+    init_setting();
+    init_trayicon();
+}
+
+kuplayer::~kuplayer()
+{
+    to_inifile();
+    delete trayicon;
+    delete player;
+    delete title_widget;
+    delete player_widget;
+    while(stacked_widget->count()){
+        delete stacked_widget->widget(0);
+    }
+    delete stacked_widget;
+}
+
+void kuplayer::setting_changed(conf_info set)
+{
+    setting = set;
 }
 
 void kuplayer::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
@@ -137,20 +153,34 @@ void kuplayer::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
         break;
     }
 }
+#include <QMessageBox>
+void kuplayer::show_normal_or_close()
+{
+    if(setting.min_or_close){
+        trayicon->showMessage("kuplayer",QString("双击这显示！"),QSystemTrayIcon::Information);
+        hide();
+    }else{
+        auto msg = QMessageBox::question(this,"退出","<font color='red'><h2>是否真的要退出？</h2></font>");
+        if(msg == QMessageBox::StandardButton::Yes)
+            close();
+    }
+}
+
 void kuplayer::show_minimized()
 {
-    this->showMinimized();
+    showMinimized();
     if(player->isPlaying()){
-        player_widget->control_widget->trigger_play_pause(true);
+        player_widget->control_widget->
+                trigger_play_pause(true);
         player->pause(true);
     }
 }
 
-void kuplayer::change_skin(QString index)
+void kuplayer::skin_change_clicked(QString index)
 {
-    skin = index;
-    xuan_ji_widget.change_skin(skin);
-    update();
+    change_skin(index);
+    xuan_ji_widget.change_skin(index);
+    main_menu.change_skin(index);
 }
 
 void kuplayer::on_Fullscreen_changed()
@@ -167,15 +197,16 @@ void kuplayer::on_Fullscreen_changed()
     is_full_screen = !is_full_screen;
 }
 
-kuplayer::~kuplayer()
+void kuplayer::play_finished(bool real)
 {
-    setting.setValue("setting/skin",skin);
-    setting.setValue("setting/format",format);
-    delete trayicon;
-    delete player;
-    delete title_widget;
-    delete player_widget;
-    delete stacked_widget;
+    if(real || is_full_screen){
+        on_Fullscreen_changed();
+        player_widget->control_widget->isRuning = false;
+    }else if(player_widget->control_widget->isRuning
+             && setting.auto_play_next ){
+        xuan_ji_widget.play_next_video();
+    }
+    return;
 }
 
 void kuplayer::start_loadImage(int page,QStringList list)
@@ -191,22 +222,13 @@ void kuplayer::load_next_page(CLASS type)
 {
     if(can_update[type]){
         QString url = pyinit->gotoNextPage(name[type],pages[type]++)[0];
-        auto *tmp = new mThread(type,
-                                bind(&PyScript::connect_img_url,pyinit,url,name[type]));
+        auto *tmp = new mThread(type,bind(&PyScript::connect_img_url,
+                                          pyinit,url,name[type]));
         connect(tmp,SIGNAL(mfinished(int,QStringList)),
                 this,SLOT(start_loadImage(int,QStringList)));
         tmp->start();
         can_update[type] = false;
     }
-}
-
-void kuplayer::play_finished()
-{
-    if(is_full_screen){
-        on_Fullscreen_changed();
-        this->showNormal();
-    }
-    player_widget->control_widget->isRuning = false;
 }
 
 void kuplayer::loadImageFinished(CLASS index,QPixmap pix, QString name, QString url)
@@ -225,7 +247,7 @@ void kuplayer::url_triggered(QString name,QString url)
     if(url.startsWith(SHOW_PAGE)){
         url = pyinit->getplayUrl(url)[0];
     }
-    if(!url.isEmpty() && pyinit->GetVideoUrls(url,format)){
+    if(!url.isEmpty() && pyinit->GetVideoUrls(url,setting.default_video_format)){
         auto *tmp = new mThread(::NONE
                                 ,bind(&PyScript::getAll,pyinit
                                           ,stacked_widget->currentIndex(),url));
@@ -241,8 +263,9 @@ void kuplayer::url_triggered(QString name,QString url)
 }
 void kuplayer::url_ji_triggered(QString name,QString url)
 {
-    if(pyinit->GetVideoUrls(url,format)){
+    if(pyinit->GetVideoUrls(url,setting.default_video_format)){
         stacked_widget->setCurrentIndex(5);
+        player_widget->control_widget->isRuning = true;
         player->mPlay();
         QString msg("正在播放：");
         msg.insert(msg.size(),title_widget->get_text());
@@ -273,10 +296,50 @@ void kuplayer::change_url(CLASS classes,int type,QString name)
                    ,std::get<0>(locate_class_time[classes])
                    ,std::get<1>(locate_class_time[classes])
                    ,std::get<2>(locate_class_time[classes]))[0];
-    auto *tmp = new mThread(classes,bind(&PyScript::connect_img_url,
+    auto *tmp = new mThread(classes,
+                            bind(&PyScript::connect_img_url,
                                               pyinit, url, this->name[classes]));
     connect(tmp,SIGNAL(mfinished(int,QStringList)),
             this,SLOT(start_loadImage(int,QStringList)));
     tmp->start();
     qobject_cast<ListWidget*>(stacked_widget->widget(classes))->reset();
+}
+#include <QMenu>
+void kuplayer::init_trayicon()
+{
+    trayicon->setIcon(QIcon(":logo/logo_icon"));
+    trayicon->show();
+    trayicon->setToolTip("kuplayer");
+    connect(trayicon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+            this,SLOT(trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
+    QMenu *tray_menu = new QMenu;
+    trayicon->setContextMenu(tray_menu);
+    auto*   set_action = tray_menu->addAction("设置");
+    auto* about_action = tray_menu->addAction("关于");
+    auto*  exit_action = tray_menu->addAction("退出");
+    connect(set_action,SIGNAL(triggered()),&main_menu,SLOT(show()));
+    connect(about_action,SIGNAL(triggered()),&main_menu,SLOT(show_about()));
+    connect(exit_action,SIGNAL(triggered()),this,SLOT(close()));
+}
+
+void kuplayer::init_setting()
+{
+    setting.default_video_format = iniFile.value("setting/format","normal").toString();
+    setting.close_all = iniFile.value("setting/close_all",true).toBool();
+    setting.auto_play_next = iniFile.value("setting/auto_play_next",false).toBool();
+    setting.min_or_close = iniFile.value("setting/min_or_close",false).toBool();
+    setting.start_when_pc_on = iniFile.value("setting/start_when_pc_on",false).toBool();
+    skin_widget.url_triggered("",iniFile.value("setting/skin",":/kin/0").toString());
+
+    main_menu.init_setting(setting);
+}
+
+void kuplayer::to_inifile()
+{
+    iniFile.setValue("setting/skin",get_skin());
+    iniFile.setValue("setting/format",setting.default_video_format);
+    iniFile.setValue("setting/close_all",setting.close_all);
+    iniFile.setValue("setting/auto_play_next",setting.auto_play_next);
+    iniFile.setValue("setting/min_or_close", setting.min_or_close );
+    iniFile.setValue("setting/start_when_pc_on",setting.start_when_pc_on);
 }

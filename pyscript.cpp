@@ -25,8 +25,6 @@ PyScript::~PyScript()
 
 bool PyScript::GetVideoUrls(QString keyurl,QString format)
 {
-    std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
     int i{0};
     PYTHON_CATCH_EXCEPTION_BEGIN
     i = python::call_method<int>(module,"getVideoUrls",
@@ -55,8 +53,6 @@ bool PyScript::getShowList()
 QStringList
 PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time)
 {
-    std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
     python::str p("");
     PYTHON_CATCH_EXCEPTION_BEGIN
             p = python::call_method<str>(module,"GetUrlByname"
@@ -72,9 +68,6 @@ PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time
 
 QStringList PyScript::connect_img_url(QString url, QString name)
 {
-    std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
-
     QStringList play_list;
     list tmp ;
     PYTHON_CATCH_EXCEPTION_BEGIN
@@ -97,9 +90,6 @@ QStringList PyScript::connect_img_url(QString url, QString name)
 
 QStringList PyScript::gotoNextPage(QString name, int index)
 {
-    std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
-
     QStringList tmp;
     PYTHON_CATCH_EXCEPTION_BEGIN
             tmp  << next_page_.value(name)+QString::number(index)+".html";
@@ -110,29 +100,23 @@ QStringList PyScript::gotoNextPage(QString name, int index)
 
 QStringList PyScript::getplayUrl(QString url)
 {
-    std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
-
     QStringList tmp;
     python::list sstr;
     PYTHON_CATCH_EXCEPTION_BEGIN
-            sstr = python::call_method<list>(module
-                                             ,"getplayUrl"
-                                             ,url.toStdString().c_str());
+    sstr = python::call_method<list>(module
+                                     ,"getplayUrl"
+                                     ,url.toStdString().c_str());
     PYTHON_CATCH_EXCEPTION_END
     if(python::len(sstr)){
            tmp <<QString(extract<char*>(sstr[0]));
     }else{
         tmp << "";
     }
-
     return tmp;
 }
 
 QStringList PyScript::getAll(CLASS classes,QString url)
 {
-    std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
     QString func;
     switch (classes) {
     case TV:

@@ -1,8 +1,10 @@
-﻿/********************************************
+﻿/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #include "common.h"
 #include "title_widget.h"
 #include "push_button.h"
@@ -28,7 +30,7 @@ TypeLabel::TypeLabel(QString title_name, QWidget *parent)
     ft.setFamily("宋体");
     ft.setPointSize(20);
     ft.setBold(true);
-    this->setFont(ft);
+    setFont(ft);
 
     setFixedHeight(TITLE_WIDGET_HEIGHT - TITLE_CONTROL_HEIGHT);
     setFixedWidth(TITLE_WIDGET_WIDTH);
@@ -66,7 +68,7 @@ void TypeLabel::mouseReleaseEvent(QMouseEvent *)
 
 void TypeLabel::setMousePress(bool mouse_pressed)
 {
-    this->mouse_pressed = mouse_pressed;
+    mouse_pressed = mouse_pressed;
     update();
 }
 
@@ -98,7 +100,7 @@ TitleWidget::TitleWidget(QWidget *parent)
     : QWidget(parent)
     , down_title_layout(new QHBoxLayout)
     , up_title_layout(new QHBoxLayout)
-#ifdef HAVS_LOGO
+#ifdef HAS_LOGO
     , right_title_layout(new QHBoxLayout)
 #endif
     , push_button_store(new QList<PushButton*>)
@@ -137,7 +139,7 @@ TitleWidget::TitleWidget(QWidget *parent)
     up_title_layout->addWidget(title);
     up_title_layout->addStretch(3);
     set_no_margin(up_title_layout);
-#ifdef HAVS_LOGO
+#ifdef HAS_LOGO
     logo = new QLabel;
     logo->setPixmap(QString(":/logo/logo"));
     right_title_layout->addWidget(logo);
@@ -162,7 +164,7 @@ TitleWidget::TitleWidget(QWidget *parent)
     QHBoxLayout *main_layout = new QHBoxLayout(this);
     set_no_margin(main_layout);
     main_layout->addLayout(left_layout);
-#ifdef HAVS_LOGO
+#ifdef HAS_LOGO
     main_layout->addStretch(5);
     main_layout->addLayout(right_title_layout);
     main_layout->addStretch(1);
@@ -177,7 +179,7 @@ TitleWidget::~TitleWidget()
     delete title;
     delete down_title_layout;
     delete up_title_layout;
-#ifdef HAVS_LOGO
+#ifdef HAS_LOGO
     delete logo;
     delete right_title_layout;
 #endif

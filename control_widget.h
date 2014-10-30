@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef CONTROL_WIDGET_H
 #define CONTROL_WIDGET_H
 
@@ -31,6 +33,9 @@ signals:
     void play_pause_clicked(bool);
     void foreward_clicked();
     void xuan_ji_clcked(QString,QString);
+    void vol_up_clicked();
+    void vol_down_clicked();
+    void vol_mute_clicked();
 public slots:
     void trigger_play_pause(bool);
     void on_play_pause();
@@ -41,13 +46,20 @@ public:
     bool isRuning{false};
     inline QList<QAction*> init_action()
     {
-        return{{backward_key,stop_key,pause_key,foreward_key}};
+        return {{backward_key,stop_key,pause_key,
+                        foreward_key,vol_up_key,vol_down_key}};
     }
+private slots:
+    void stop_clicked_();
 private:
+    void init_actions();
     QAction *backward_key;
     QAction *stop_key;
     QAction *pause_key;
     QAction *foreward_key;
+    QAction *vol_up_key;
+    QAction *vol_down_key;
+    QAction *mute_key;
           QLabel *time_;
     ControlLabel *backward_;
     ControlLabel *stop_;

@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #include "select_label.h"
 #include <QMouseEvent>
 
@@ -21,9 +23,7 @@ SelectLabel::SelectLabel(QString name, QString url, QWidget *parent)
     QFont ft;
     ft.setPixelSize(15);
     ft.setBold(false);
-    this->setFont(ft);
-
-//    this->setFixedSize(60,25);
+    setFont(ft);
 }
 
 SelectLabel::~SelectLabel()
@@ -36,22 +36,22 @@ void SelectLabel::enterEvent(QEvent *)
     update();
 }
 
-void SelectLabel::mousePressEvent(QMouseEvent *ev)
+
+
+void SelectLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
-    if(ev->button() == Qt::LeftButton){
+    QLabel::mouseReleaseEvent(ev);
+    if(ev->button() == Qt::LeftButton &&
+            rect().contains(ev->pos())){
         mouse_pressed = true;
         emit be_selected(text(),url_);
     }
     update();
 }
 
-void SelectLabel::mouseReleaseEvent(QMouseEvent *)
+void SelectLabel::leaveEvent(QEvent *ev)
 {
-
-}
-
-void SelectLabel::leaveEvent(QEvent *)
-{
+    QLabel::leaveEvent(ev);
     if(!be_select){
         mouse_pressed = false;
     }
@@ -69,11 +69,11 @@ void SelectLabel::paintEvent(QPaintEvent *ev)
 {
     QLabel::paintEvent(ev);
     if(mouse_pressed){
-        this->setStyleSheet("background-color:#25BCDA");
+        setStyleSheet("background-color:#25BCDA");
         THIS_WIDGET_COLOR(255,255,255);
 
     }else{
-        this->setStyleSheet("background-color:#f0f0f0");
+        setStyleSheet("background-color:#f0f0f0");
         THIS_WIDGET_COLOR(0,0,0);
 
     }

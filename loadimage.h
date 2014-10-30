@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*       Date : 2014/10/13
- ********************************************/
+*      Phone : (0)131-5898-7498
+*       Date : 2014/10/14
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef LOADIMAGE_H
 #define LOADIMAGE_H
 
@@ -12,7 +14,7 @@
 #include <QPixmap>
 #include <QWaitCondition>
 #include <QMutex>
-#include <QDebug>
+
 typedef unsigned int CLASS;
 
 class LoadImage final : public QObject
@@ -58,7 +60,7 @@ private slots:
     {
         QPixmap pix;
         pix.loadFromData(reply->readAll());
-        emit loadImageFinished(index,pix,list_->at(currentIndex)[0],list_->at(currentIndex)[2]);
+        emit loadImageFinished(index,std::move(pix),list_->at(currentIndex)[0],list_->at(currentIndex)[2]);
         ++currentIndex;
         start();
     }

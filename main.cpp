@@ -8,6 +8,7 @@
 #include "kuplayer.h"
 #include "program_options.h"
 #include "pyscript.h"
+#include "ui_control_classes.h"
 
 #include <QApplication>
 #include <QDesktopWidget>
@@ -19,15 +20,16 @@ int main(int argc, char *argv[])
         return -1;
     }
     printf("%s",VERSION);
-
+    QApplication a(argc, argv);
     std::shared_ptr<PyScript> pyinit = std::make_shared<PyScript>();
     if( !pyinit.get()->getShowList() ){
+        a.quit();
         return -1;
     }
-    QApplication a(argc, argv);
+
     a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
 
-    std::shared_ptr<QDesktopWidget> desk = std::make_shared<QDesktopWidget>();
+    QDesktopWidget *desk = new QDesktopWidget;
 
     QPixmap pixmap(":/logo/welcome");
     QSplashScreen splash(pixmap);
@@ -42,7 +44,6 @@ int main(int argc, char *argv[])
     w.move(x,y);
     splash.finish(&w);
     w.show();
-
-
+    delete desk;
     return a.exec();
 }

@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef TITLE_WIDGET_H
 #define TITLE_WIDGET_H
 
@@ -42,24 +44,20 @@ private:
 class TitleWidget final : public QWidget
 {
     Q_OBJECT
-public:
-    explicit TitleWidget(QWidget *parent_ = 0);
-    virtual ~TitleWidget();
-    void set_text(QString);
-    inline QString get_text(){return title->text();}
 signals:
     void skin_clicked();
     void min_clicked();
     void close_clicked();
     void menu_clicked();
     void ture_page(int);
-
-
-
+public:
+    explicit TitleWidget(QWidget *parent_ = 0);
+    virtual ~TitleWidget();
+    void set_text(QString);
+    inline QString get_text(){return title->text();}
 public slots:
     void turepage(QString);
 private:
-
     PushButton *btn_min;
     PushButton *btn_close;
     PushButton *btn_skin;
@@ -69,7 +67,7 @@ private:
     QStringList  down_title;
     QHBoxLayout *down_title_layout;
     QHBoxLayout *up_title_layout;
-#ifdef HAVS_LOGO
+#ifdef HAS_LOGO
     QHBoxLayout *right_title_layout;
 #endif
     QList<TypeLabel*> *labels_store;

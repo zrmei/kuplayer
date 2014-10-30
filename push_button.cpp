@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 
 #include "push_button.h"
 #include <QMouseEvent>
@@ -44,7 +46,7 @@ void PushButton::mousePressEvent(QMouseEvent *event)
 void PushButton::mouseReleaseEvent(QMouseEvent *event)
 {
     //若点击鼠标左键
-    if(is_left_pressed  && this->rect().contains(event->pos())){
+    if(is_left_pressed  && rect().contains(event->pos())){
         is_left_pressed = false;
         status = ENTER;
         update();

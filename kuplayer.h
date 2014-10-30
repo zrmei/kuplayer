@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef KUPLAYER_H
 #define KUPLAYER_H
 
@@ -37,18 +39,25 @@ public:
     virtual ~kuplayer();
 
 public slots:
-    void change_url(CLASS, int, QString);
+    void setting_changed(conf_info);
+    void show_minimized();
+    void skin_change_clicked(QString);
+    void on_Fullscreen_changed();
+    void play_finished(bool);
+    void start_loadImage(int, QStringList);
     void load_next_page(CLASS);
     void loadImageFinished(CLASS,QPixmap,QString,QString);
-    void start_loadImage(int, QStringList);
     void url_triggered(QString, QString);
     void url_ji_triggered(QString, QString url);
-    void play_finished();
-    void on_Fullscreen_changed();
-    void change_skin(QString);
-    void show_minimized();
+    void change_url(CLASS, int, QString);
+
 private slots:
     void trayIcon_clicked(QSystemTrayIcon::ActivationReason);
+    void show_normal_or_close();
+private:
+    void init_setting();
+    void to_inifile();
+    void init_trayicon();
 public:
     PyScript *pyinit;
     const QStringList name{"tv","movice","zy","music","comic"};
@@ -60,12 +69,11 @@ private:
       PlayListWidget   xuan_ji_widget;
           SkinWidget   skin_widget;
           MenuWidget   main_menu;
-         QStringList   type_stores;
      QSystemTrayIcon   *trayicon;
            QBitArray   can_update{5,true};
-             QString   format{"normal"};
+           conf_info   setting{"",false,true,false,false};
     std::array<int,5>  pages{ {2,2,2,2,2} };
-    QSettings   setting{qApp->applicationDirPath()+"/kuplayer.ini",QSettings::IniFormat};
+    QSettings   iniFile{qApp->applicationDirPath()+"/kuplayer.ini",QSettings::IniFormat};
     std::array<std::tuple<QString,QString,QString>,5> locate_class_time;
 };
 

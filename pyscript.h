@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*       Date : 2014/10/13
- ********************************************/
+*      Phone : (0)131-5898-7498
+*       Date : 2014/10/10
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef PYSCRIPT_H_H
 #define PYSCRIPT_H_H
 
@@ -16,17 +18,17 @@ class QString;
 #include <python2.7/Python.h>
 
 #ifndef PYTHON_DONOT_CATCH_EXCEPTION
-#define PYTHON_CATCH_EXCEPTION_BEGIN try{
-#define PYTHON_CATCH_EXCEPTION_END }catch(boost::python::error_already_set){std::lock_guard<std::mutex> lock(io_mu);\
+#define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);    try{
+#define PYTHON_CATCH_EXCEPTION_END }catch(boost::python::error_already_set){\
 printf("\n=================================================================\nThe [%d] line in file\
 [%s] has error",__LINE__,__FILE__); PyErr_Print();\
 printf("\n=================================================================\n");}
 #else
-#define PYTHON_CATCH_EXCEPTION_BEGIN
+#define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);
 #define PYTHON_CATCH_EXCEPTION_END
 #endif
 
-class pyinit final : boost::noncopyable
+class pyinit final
 {
 public:
     pyinit(int initsigs = 1)
@@ -46,7 +48,7 @@ private:
     PyObject* _module;
 };
 
-class PyThreadStateLock final : boost::noncopyable
+class PyThreadStateLock final
 {
 public:
     PyThreadStateLock(){ state = PyGILState_Ensure( ); }
@@ -56,7 +58,7 @@ private:
 };
 
 #include <mutex>
-class PyScript final : boost::noncopyable
+class PyScript final
 {
 public:
     using dict = boost::python::dict;
@@ -72,14 +74,13 @@ public:
     QStringList gotoNextPage(QString name,int index);
     QStringList getplayUrl(QString);
     QStringList getAll(CLASS,QString);
-    QStringList show_list;
 
+    QStringList show_list;
 private:
     pyinit *init_;
     PyObject *module;
     QMap<QString,QString> next_page_;
 
     std::mutex mu;
-    std::mutex io_mu;
 };
 #endif // PYSCRIPT_H_H

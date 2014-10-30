@@ -1,20 +1,22 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*       Date : 2014/10/13
- ********************************************/
+*      Phone : (0)131-5898-7498
+*       Date : 2014/10/15
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #include "common.h"
 
 #include "mplayer_widget.h"
 #include <QApplication>
-#include "kuplayer.h"
+#include <AudioOutput.h>
 
 /****************************************************************/
 MPlayer::MPlayer(QObject *parent)
     :  QtAV::AVPlayer(parent)
 {
     connect(this,SIGNAL(stopped()),this,SLOT(mStarted()));
-//    QtAV::setLogLevel(QtAV::LogWarning);
+    QtAV::setLogLevel(QtAV::LogLevel::LogOff);
 }
 
 MPlayer::~MPlayer()
@@ -52,7 +54,7 @@ void MPlayer::mStarted()
         play(play_list.at(0));
         play_list.removeAt(0);
     }else{
-        emit mFinished();
+        emit mFinished(false);
     }
 }
 
@@ -60,13 +62,14 @@ void MPlayer::mStop()
 {
     play_list.clear();
     stop();
+    emit mFinished(true);
 }
 
 void MPlayer::mSeekBack()
 {
-    int pos = this->position() - 10000/*10s*/;
+    int pos = position() - 10000/*10s*/;
     if(pos <= 0) pos = 0;
-    this->setPosition(pos);
+    setPosition(pos);
 }
 
 void MPlayer::mSeekFore()
@@ -74,31 +77,40 @@ void MPlayer::mSeekFore()
     setPosition(position() + 10000/*10s*/);
 }
 
-
-
-/*****************************************************************/
-
-RendererWidget::RendererWidget(QWidget *parent)
-    : QtAV::WidgetRenderer(parent)
+void MPlayer::vol_up()
 {
-    setContentsMargins(0,0,0,0);
-    this->setMouseTracking(true);
-}
-
-void RendererWidget::mouseMoveEvent(QMouseEvent *ev)
-{
-    QtAV::WidgetRenderer::mouseMoveEvent(ev);
-    if(ev->pos() != last_point){
-        this->setCursor(QCursor(Qt::ArrowCursor));
-        QTimer::singleShot( 3000,this, SLOT(hide_cursor()) );
-        last_point = ev->pos();
+    QtAV::AudioOutput *ao = audio();
+    if (ao && ao->isAvailable()) {
+        qreal v = audio()->volume();
+        if (v > 0.5)
+            v += 0.1;
+        else if (v > 0.1)
+            v += 0.05;
+        else
+            v += 0.025;
+        audio()->setVolume(v);
+        qDebug("vol = %.3f", audio()->volume());
     }
 }
 
-void RendererWidget::hide_cursor()
+void MPlayer::vol_down()
 {
-    this->setCursor(QCursor(Qt::BlankCursor));
+    QtAV::AudioOutput *ao = audio();
+    if (ao && ao->isAvailable()) {
+        qreal v = audio()->volume();
+        if(v > 1)
+            return;
+        else if (v > 0.5)
+            v -= 0.1;
+        else if (v > 0.1)
+            v -= 0.05;
+        else
+            v -= 0.025;
+        audio()->setVolume(v);
+        qDebug("vol = %.3f", audio()->volume());
+    }
 }
+
 
 /*****************************************************************/
 #include "control_widget.h"

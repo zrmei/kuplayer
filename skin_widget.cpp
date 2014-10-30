@@ -1,8 +1,10 @@
-/**************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/21
-**************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #include "common.h"
 #include "detaillabel.h"
 #include "skin_widget.h"
@@ -19,6 +21,8 @@ SkinWidget::SkinWidget(QWidget *parent)
     : ShadowWidget(parent)
 {
     setAttribute(Qt::WA_QuitOnClose,false);
+    setWindowModality(Qt::ApplicationModal);
+
     QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
 
@@ -49,7 +53,7 @@ SkinWidget::SkinWidget(QWidget *parent)
     text_palette.setColor(QPalette::Background, QColor(230, 230, 230));
     viewWidgetContents->setPalette(text_palette);
 
-    this->setMinimumSize(800,430);
+    setMinimumSize(800,430);
     find_file(PIC_PATH);
 }
 
@@ -66,8 +70,8 @@ void SkinWidget::find_file(QString path)
     picdir.setSorting(QDir::DirsFirst);
     QFileInfoList list = picdir.entryInfoList();
 
-    for_each(list.begin(),list.end()
-             ,[&](QFileInfoList::value_type fileInfo){
+    for_each(list.begin(),list.end(),
+             [&](QFileInfoList::value_type fileInfo){
         if(pic_list.count(fileInfo.fileName())
                 || (fileInfo.fileName()==".")
                 || (fileInfo.fileName()=="..") ){
@@ -83,7 +87,7 @@ void SkinWidget::init_skin(QString name)
 {
     static int row{0},col{0};
     QString pic = PIC_PATH + name;
-    auto *l = new DetailLabel(QPixmap(pic).scaled(QSize(170,96)),QString(),pic);
+    auto *l = new DetailLabel(QPixmap(pic).scaled(QSize(170,96)),QString(),name);
     connect(l,SIGNAL(url_triggered(QString,QString)),
             this,SLOT(url_triggered(QString,QString)));
     label_store.append(l);
@@ -97,19 +101,18 @@ void SkinWidget::init_skin(QString name)
 
 void SkinWidget::url_triggered(QString, QString index)
 {
-    skin = index;
-    update();
-    emit change_skin(skin);
+    change_skin(index);
+    emit skin_change_clicked(index);
 }
 
 void SkinWidget::this_show()
 {
-    if(this->isHidden()){
+    if(isHidden()){
         QPoint pos_ = QCursor::pos();
-        this->move(pos_.x()+30,pos_.y()+120);
-        this->show();
+        move(pos_.x()+30,pos_.y()+120);
+        show();
         find_file(PIC_PATH);
     }else{
-        this->hide();
+        hide();
     }
 }

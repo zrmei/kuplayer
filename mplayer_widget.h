@@ -1,8 +1,10 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*       Date : 2014/10/13
- ********************************************/
+*      Phone : (0)131-5898-7498
+*       Date : 2014/10/15
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef MPLAYER_WIDGET_H
 #define MPLAYER_WIDGET_H
 
@@ -13,17 +15,19 @@ class MPlayer final : public QtAV::AVPlayer
 {
     Q_OBJECT
 signals:
-    void mFinished();
+    void mFinished(bool);
 public:
     MPlayer(QObject *parent = 0);
     virtual ~MPlayer();
     void mPlay();
-
 public slots:
     void mStop();
     void mSeekBack();
     void mSeekFore();
     void setPlayList();
+
+    void vol_down();
+    void vol_up();
 private slots:
     void mStarted();
 private:
@@ -36,14 +40,12 @@ class RendererWidget final : public QtAV::WidgetRenderer
 signals:
     void double_clicked();
 public:
-    RendererWidget(QWidget *parent=0);
+    RendererWidget(QWidget *parent=0)
+        : QtAV::WidgetRenderer(parent)
+    {}
 protected:
-    virtual void mouseDoubleClickEvent(QMouseEvent *){ emit double_clicked(); }
-    virtual void mouseMoveEvent(QMouseEvent *);
-private slots:
-    void hide_cursor();
-private:
-    QPoint last_point;
+    virtual void mouseDoubleClickEvent(QMouseEvent *)
+    { emit double_clicked(); }
 };
 
 class ControlWidget;
@@ -55,6 +57,8 @@ signals:
 public:
     MPlayerWidget(QWidget *parent=0);
     ~MPlayerWidget();
+    ControlWidget* operator->() const
+    {return control_widget;}
 protected:
     virtual void keyPressEvent(QKeyEvent *);
 public:

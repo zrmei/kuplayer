@@ -1,12 +1,15 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef SHADOW_WIDGET_H
 #define SHADOW_WIDGET_H
 
 #include "common.h"
+
 #include <QWidget>
 #define VALUE_DIS 5
 class QDesktopWidget;
@@ -17,6 +20,8 @@ class ShadowWidget : public QWidget
 public:
     explicit ShadowWidget(QWidget *parent = 0);
     virtual ~ShadowWidget();
+public slots:
+    void change_skin(QString);
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *);
     virtual void mousePressEvent(QMouseEvent *);
@@ -24,15 +29,17 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *event);
     bool is_full_screen{false};
+    inline QString get_skin()const{return skin.split('/').last();}
+private:
+    void drawWindowShadow(QPainter &painter);
+private:
     QString skin;
-private:
-     void drawWindowShadow(QPainter &painter);
-private:
     bool is_max{false};
     QRect original_rect;
     bool isLeftPressDown{false};
     QPoint m_ptPressGlobal;
     QDesktopWidget *desk;
+    std::shared_ptr<QList<QPixmap>> pixmaps;
 };
 
 #ifdef CAN_RESIZE

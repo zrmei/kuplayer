@@ -9,15 +9,14 @@ QT       += core gui widgets network av
 TARGET = kuplayer
 TEMPLATE = app
 
+
 PRECOMPILED_HEADER = common.h
 
 QMAKE_CXXFLAGS += -std=c++11
-QMAKE_CXXFLAGS_DEBUG +=  -g3 -O0
-QMAKE_CXXFLAGS_RELEASE += -s
+QMAKE_CXXFLAGS_RELEASE += -s -DQT_NO_DEBUG_OUTPUT
 
 QMAKE_LFLAGS += -Wl,-rpath,./lib/
-QMAKE_LFLAGS_DEBUG +=  -Winline
-QMAKE_LFLAGS_RELEASE += -s
+QMAKE_LFLAGS_RELEASE += -s -DQT_NO_DEBUG_OUTPUT
 
 SOURCES += main.cpp\
         kuplayer.cpp \
@@ -32,7 +31,8 @@ SOURCES += main.cpp\
     select_label.cpp \
     play_list_widget.cpp \
     skin_widget.cpp \
-    main_menu.cpp
+    main_menu.cpp \
+    ui_control_classes.cpp
 
 HEADERS  += kuplayer.h \
     detaillabel.h \
@@ -51,7 +51,8 @@ HEADERS  += kuplayer.h \
     program_options.h \
     skin_widget.h \
     system_notify.h \
-    main_menu.h
+    main_menu.h \
+    ui_control_classes.h
 
 unix: {
     INCLUDEPATH += /usr/include/glib-2.0/
@@ -66,8 +67,8 @@ unix: {
     INCLUDEPATH += $$PWD/../../../../../usr/include/python2.7
     DEPENDPATH += $$PWD/../../../../../usr/include/python2.7
 
-    LIBS += -L/usr/lib/i386-linux-gnu/ -lnotify
     LIBS += -L$$PWD/../../../../../usr/lib/x86_64-linux-gnu/ -lpython2.7
+    LIBS += -L$$PWD/../../../../../usr/lib/x86_64-linux-gnu/ -lnotify
 
     LIBS += $$PWD/../../../../../usr/local/lib/x86_64-linux-gnu/libboost_python.a
     LIBS += $$PWD/../../../../../usr/local/lib/x86_64-linux-gnu/libboost_system.a

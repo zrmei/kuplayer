@@ -1,13 +1,16 @@
-/********************************************
+/*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
+*      Phone : (0)131-5898-7498
 *       Date : 2014/10/13
- ********************************************/
+*       host : Ubuntu x86_64 3.13.0-37
+ *********************************************/
 #ifndef COMMON_H
 #define COMMON_H
 
 #include <algorithm>
 #include <functional>
+#include <memory>
 using std::for_each;
 using std::find_if;
 using std::find_if_not;
