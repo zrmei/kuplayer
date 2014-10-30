@@ -73,7 +73,7 @@ private:
            QBitArray   can_update{5,true};
            conf_info   setting{"",false,true,false,false};
     std::array<int,5>  pages{ {2,2,2,2,2} };
-    QSettings   iniFile{qApp->applicationDirPath()+"/kuplayer.ini",QSettings::IniFormat};
+            QSettings  *iniFile;
     std::array<std::tuple<QString,QString,QString>,5> locate_class_time;
 };
 

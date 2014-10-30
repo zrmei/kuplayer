@@ -27,7 +27,7 @@ TypeLabel::TypeLabel(QString title_name, QWidget *parent)
     THIS_WIDGET_COLOR(28, 161, 227);
     //set the font size and blod
     QFont ft;
-    ft.setFamily("宋体");
+    ft.setFamily("SimSun");
     ft.setPointSize(20);
     ft.setBold(true);
     setFont(ft);
@@ -68,7 +68,7 @@ void TypeLabel::mouseReleaseEvent(QMouseEvent *)
 
 void TypeLabel::setMousePress(bool mouse_pressed)
 {
-    mouse_pressed = mouse_pressed;
+    this->mouse_pressed = mouse_pressed;
     update();
 }
 
@@ -145,7 +145,6 @@ TitleWidget::TitleWidget(QWidget *parent)
     right_title_layout->addWidget(logo);
     set_no_margin(right_title_layout);
 #endif
-    down_title << "电视剧"<<"电  影"<<"综  艺"<<"音  乐"<<"动漫"<<"播放器";
     labels_store = new QList<TypeLabel*>;
     for(int i=0; i<down_title.size(); ++i){
         TypeLabel *label = new TypeLabel(down_title[i]);

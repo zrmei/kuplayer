@@ -20,7 +20,7 @@
 #include <QStackedWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
-
+#include <QDir>
 #define WINDOW_WIDTH  1002
 #define WINDOW_HEIGHT 657
 
@@ -114,6 +114,7 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
     SHOW_WINDOW_NORMAL
 
     title_widget->turepage("播放器");
+    iniFile = new QSettings(QDir::homePath()+"/.kuplayer/kuplayer.conf",QSettings::IniFormat);
     init_setting();
     init_trayicon();
 }
@@ -121,6 +122,7 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
 kuplayer::~kuplayer()
 {
     to_inifile();
+    delete iniFile;
     delete trayicon;
     delete player;
     delete title_widget;
@@ -159,8 +161,15 @@ void kuplayer::show_normal_or_close()
     if(setting.min_or_close){
         trayicon->showMessage("kuplayer",QString("双击这显示！"),QSystemTrayIcon::Information);
         hide();
+        if(player->isPlaying()){
+            player_widget->control_widget->
+                    trigger_play_pause(true);
+            player->pause(true);
+        }
     }else{
-        auto msg = QMessageBox::question(this,"退出","<font color='red'><h2>是否真的要退出？</h2></font>");
+        auto msg = QMessageBox::question(this,"退出",
+                                         "<span style=\" font-family:'SimSun'; color:#ff0000;\"><h2>\
+                                         是否真的要退出？</h2></span>");
         if(msg == QMessageBox::StandardButton::Yes)
             close();
     }
@@ -197,14 +206,16 @@ void kuplayer::on_Fullscreen_changed()
     is_full_screen = !is_full_screen;
 }
 
-void kuplayer::play_finished(bool real)
+void kuplayer::play_finished(bool real)//false 播放正常结束 true 中断播放
 {
-    if(real || is_full_screen){
-        on_Fullscreen_changed();
+    if(real){
         player_widget->control_widget->isRuning = false;
     }else if(player_widget->control_widget->isRuning
              && setting.auto_play_next ){
         xuan_ji_widget.play_next_video();
+    }
+    if(!real && is_full_screen){
+        on_Fullscreen_changed();
     }
     return;
 }
@@ -324,22 +335,22 @@ void kuplayer::init_trayicon()
 
 void kuplayer::init_setting()
 {
-    setting.default_video_format = iniFile.value("setting/format","normal").toString();
-    setting.close_all = iniFile.value("setting/close_all",true).toBool();
-    setting.auto_play_next = iniFile.value("setting/auto_play_next",false).toBool();
-    setting.min_or_close = iniFile.value("setting/min_or_close",false).toBool();
-    setting.start_when_pc_on = iniFile.value("setting/start_when_pc_on",false).toBool();
-    skin_widget.url_triggered("",iniFile.value("setting/skin",":/kin/0").toString());
+    setting.default_video_format = iniFile->value("setting/format","normal").toString();
+    setting.close_all = iniFile->value("setting/close_all",true).toBool();
+    setting.auto_play_next = iniFile->value("setting/auto_play_next",false).toBool();
+    setting.min_or_close = iniFile->value("setting/min_or_close",false).toBool();
+    setting.start_when_pc_on = iniFile->value("setting/start_when_pc_on",false).toBool();
+    skin_widget.url_triggered("",iniFile->value("setting/skin",":/kin/0").toString());
 
     main_menu.init_setting(setting);
 }
 
 void kuplayer::to_inifile()
 {
-    iniFile.setValue("setting/skin",get_skin());
-    iniFile.setValue("setting/format",setting.default_video_format);
-    iniFile.setValue("setting/close_all",setting.close_all);
-    iniFile.setValue("setting/auto_play_next",setting.auto_play_next);
-    iniFile.setValue("setting/min_or_close", setting.min_or_close );
-    iniFile.setValue("setting/start_when_pc_on",setting.start_when_pc_on);
+    iniFile->setValue("setting/skin",get_skin());
+    iniFile->setValue("setting/format",setting.default_video_format);
+    iniFile->setValue("setting/close_all",setting.close_all);
+    iniFile->setValue("setting/auto_play_next",setting.auto_play_next);
+    iniFile->setValue("setting/min_or_close", setting.min_or_close );
+    iniFile->setValue("setting/start_when_pc_on",setting.start_when_pc_on);
 }

@@ -17,7 +17,7 @@ ShadowWidget::ShadowWidget(QWidget *parent)
     , desk(new QDesktopWidget)
     , pixmaps(new QList<QPixmap>)
 {
-    setWindowFlags(Qt::FramelessWindowHint | Qt::Widget | Qt::WindowStaysOnTopHint);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Widget);
     setAttribute(Qt::WA_TranslucentBackground);
 
     pixmaps->append(QPixmap(":/shadow/shadow_left"));

@@ -39,7 +39,6 @@ protected:
     void leaveEvent(QEvent *);
 private slots:
     void this_click(QString name, QString url);
-    void this_hide();
 private:
             QAction *play_next_key;
             QAction *play_prev_key;

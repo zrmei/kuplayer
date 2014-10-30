@@ -29,7 +29,7 @@ PlayListWidget::PlayListWidget(QWidget *parent)
 
     btn_close = new PushButton;
     btn_close->setPicName(":/sysbutton/close");
-    connect(btn_close,SIGNAL(clicked()),this,SLOT(this_hide()));
+    connect(btn_close,SIGNAL(clicked()),this,SLOT(hide()));
     up_title_layout->addWidget(btn_close,0,Qt::AlignTop);
     up_title_layout->addStretch();
     QVBoxLayout *main_layout = new QVBoxLayout(this);
@@ -182,10 +182,6 @@ void PlayListWidget::play_prev_video()
                std::get<2>(play_list[currentIndex]));
 }
 
-void PlayListWidget::this_hide()
-{
-    hide();
-}
 
 void PlayListWidget::leaveEvent(QEvent *)
 {

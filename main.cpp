@@ -13,6 +13,7 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSplashScreen>
+#include <QMessageBox>
 
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,9 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     std::shared_ptr<PyScript> pyinit = std::make_shared<PyScript>();
     if( !pyinit.get()->getShowList() ){
+        QMessageBox::warning(NULL,"错误",
+                             "<span style=\" font-family:'SimSun'; color:#ff0000;\">\
+                             <h2>网络未连接或网络慢，请检查网络再重试！</h2></span>");
         a.quit();
         return -1;
     }
@@ -32,18 +36,21 @@ int main(int argc, char *argv[])
     QDesktopWidget *desk = new QDesktopWidget;
 
     QPixmap pixmap(":/logo/welcome");
-    QSplashScreen splash(pixmap);
+    QSplashScreen *splash = new QSplashScreen(pixmap,Qt::WindowStaysOnTopHint);
 
-    int x = (desk->screen(0)->width() - splash.width()) /2;
-    int y = (desk->screen(0)->height() - splash.height()) /2;
+    int x = (desk->screen(0)->width() - splash->width()) /2;
+    int y = (desk->screen(0)->height() - splash->height()) /2;
 
-    splash.move(x,y);
-    splash.show();
-    a.processEvents();
+    splash->move(x,y+2);
+    splash->show();
+
     kuplayer w(pyinit.get());
     w.move(x,y);
-    splash.finish(&w);
+    splash->finish(&w);
     w.show();
+
     delete desk;
+    delete splash;
+
     return a.exec();
 }

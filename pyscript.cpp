@@ -71,9 +71,9 @@ QStringList PyScript::connect_img_url(QString url, QString name)
     QStringList play_list;
     list tmp ;
     PYTHON_CATCH_EXCEPTION_BEGIN
-            tmp= python::call_method<list>(module
-                                           ,"connect_img_url"
-                                           ,url.toStdString().c_str());
+    tmp= python::call_method<list>(module
+                                   ,"connect_img_url"
+                                   ,url.toStdString().c_str());
     PYTHON_CATCH_EXCEPTION_END
 
     if(python::len(tmp)){
@@ -92,7 +92,7 @@ QStringList PyScript::gotoNextPage(QString name, int index)
 {
     QStringList tmp;
     PYTHON_CATCH_EXCEPTION_BEGIN
-            tmp  << next_page_.value(name)+QString::number(index)+".html";
+    tmp  << next_page_.value(name)+QString::number(index)+".html";
     PYTHON_CATCH_EXCEPTION_END
 
             return tmp;

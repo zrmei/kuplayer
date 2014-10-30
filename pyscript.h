@@ -18,11 +18,12 @@ class QString;
 #include <python2.7/Python.h>
 
 #ifndef PYTHON_DONOT_CATCH_EXCEPTION
-#define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);    try{
+#define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);\
+     std::shared_ptr<PyThreadStateLock> pylock; try{
 #define PYTHON_CATCH_EXCEPTION_END }catch(boost::python::error_already_set){\
 printf("\n=================================================================\nThe [%d] line in file\
-[%s] has error",__LINE__,__FILE__); PyErr_Print();\
-printf("\n=================================================================\n");}
+[%s] has error\n",__LINE__,__FILE__); PyErr_Print();\
+printf("\n=================================================================\n");}//
 #else
 #define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);
 #define PYTHON_CATCH_EXCEPTION_END
@@ -48,7 +49,7 @@ private:
     PyObject* _module;
 };
 
-class PyThreadStateLock final
+class PyThreadStateLock final : boost::noncopyable
 {
 public:
     PyThreadStateLock(){ state = PyGILState_Ensure( ); }
@@ -57,13 +58,12 @@ private:
     PyGILState_STATE state;
 };
 
+
 #include <mutex>
 class PyScript final
 {
-public:
     using dict = boost::python::dict;
     using list = boost::python::list;
-
 public:
     PyScript();
     ~PyScript();

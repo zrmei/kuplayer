@@ -49,6 +49,9 @@ class about_widget : public QWidget
 public:
     explicit about_widget(QWidget *parent = 0);
     ~about_widget();
+private slots:
+    void on_label_linkActivated(const QString &link);
+
 private:
     Ui::about_widget *ui;
 };

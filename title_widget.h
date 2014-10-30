@@ -64,7 +64,6 @@ private:
     PushButton *btn_menu;
     QLabel *title;
     QLabel *logo;
-    QStringList  down_title;
     QHBoxLayout *down_title_layout;
     QHBoxLayout *up_title_layout;
 #ifdef HAS_LOGO
@@ -72,6 +71,7 @@ private:
 #endif
     QList<TypeLabel*> *labels_store;
     QList<PushButton*> *push_button_store;
+    QStringList  down_title{ "电视剧","电  影","综  艺","音  乐","动漫","播放器"};
 
 };
 #endif // TITLE_WIDGET_H

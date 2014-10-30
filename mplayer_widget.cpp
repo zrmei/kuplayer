@@ -50,7 +50,6 @@ void MPlayer::mPlay()
 void MPlayer::mStarted()
 {
     if(play_list.size()){
-        setStartPosition(0);
         play(play_list.at(0));
         play_list.removeAt(0);
     }else{
