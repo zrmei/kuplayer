@@ -40,6 +40,7 @@ public slots:
     void trigger_play_pause(bool);
     void on_play_pause();
     void setTime(qint64);
+    void setDuration(qint64);
 public:
     explicit ControlWidget(QWidget *parent = 0);
     virtual ~ControlWidget();
@@ -49,8 +50,6 @@ public:
         return {{backward_key,stop_key,pause_key,
                         foreward_key,vol_up_key,vol_down_key}};
     }
-private slots:
-    void stop_clicked_();
 private:
     void init_actions();
     QAction *backward_key;
@@ -60,11 +59,12 @@ private:
     QAction *vol_up_key;
     QAction *vol_down_key;
     QAction *mute_key;
-          QLabel *time_;
+          QLabel *time_current;
     ControlLabel *backward_;
     ControlLabel *stop_;
     ControlLabel *play_pause;
     ControlLabel *foreward_;
+          QLabel *time_all;
      SelectLabel *xuan_ji;
     //:FIXME
     /*

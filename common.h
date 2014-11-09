@@ -44,4 +44,13 @@ inline void delete_list(T* store){
     delete store;
 }
 
+inline QString msg_font_style(const QString& text)
+{
+    QString tmp;
+    tmp.insert(0,"<span style=\"font-family:'SimSun'; color:#ff0000;\"><h2>");
+    tmp.insert(tmp.size(),text);
+    tmp.insert(tmp.size(),"</h2></span>");
+    return std::move(tmp);
+}
+
 #endif

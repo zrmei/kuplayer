@@ -153,7 +153,7 @@ down_widget_::~down_widget_()
 
 void down_widget_::init_setting(const conf_info &info)
 {
-    if(info.default_video_format == "") return;
+    if(info.default_video_format.isEmpty()) return;
     settings = info;
     play_set_widget_->ui->checkBox_auto_play_next->setChecked(settings.auto_play_next);
     base_set_widget->ui->checkBox_close->setChecked(settings.close_all);

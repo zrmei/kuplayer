@@ -9,14 +9,16 @@
 
 #include "mplayer_widget.h"
 #include <QApplication>
-#include <AudioOutput.h>
+#include "AudioOutput.h"
 
 /****************************************************************/
 MPlayer::MPlayer(QObject *parent)
     :  QtAV::AVPlayer(parent)
 {
     connect(this,SIGNAL(stopped()),this,SLOT(mStarted()));
+#ifdef QT_NO_DEBUG_OUTPUT
     QtAV::setLogLevel(QtAV::LogLevel::LogOff);
+#endif
 }
 
 MPlayer::~MPlayer()
@@ -52,6 +54,7 @@ void MPlayer::mStarted()
     if(play_list.size()){
         play(play_list.at(0));
         play_list.removeAt(0);
+        emit mSetDuration(duration());
     }else{
         emit mFinished(false);
     }
@@ -81,7 +84,11 @@ void MPlayer::vol_up()
     QtAV::AudioOutput *ao = audio();
     if (ao && ao->isAvailable()) {
         qreal v = audio()->volume();
-        if (v > 0.5)
+#ifdef QT_NO_DEBUG_OUTPUT
+        if(v >= 1.0)
+            return;
+#endif
+        if(v > 0.5)
             v += 0.1;
         else if (v > 0.1)
             v += 0.05;
@@ -97,9 +104,11 @@ void MPlayer::vol_down()
     QtAV::AudioOutput *ao = audio();
     if (ao && ao->isAvailable()) {
         qreal v = audio()->volume();
-        if(v > 1)
+#ifdef QT_NO_DEBUG_OUTPUT
+        if(v <= 0.0)
             return;
-        else if (v > 0.5)
+#endif
+        if (v > 0.5)
             v -= 0.1;
         else if (v > 0.1)
             v -= 0.05;

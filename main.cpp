@@ -24,9 +24,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     std::shared_ptr<PyScript> pyinit = std::make_shared<PyScript>();
     if( !pyinit.get()->getShowList() ){
-        QMessageBox::warning(NULL,"错误",
-                             "<span style=\" font-family:'SimSun'; color:#ff0000;\">\
-                             <h2>网络未连接或网络慢，请检查网络再重试！</h2></span>");
+        QMessageBox::warning(NULL,"错误",msg_font_style("网络未连接或网络慢，请检查网络再重试！"));
         a.quit();
         return -1;
     }

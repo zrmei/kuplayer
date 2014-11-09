@@ -16,6 +16,7 @@ class MPlayer final : public QtAV::AVPlayer
     Q_OBJECT
 signals:
     void mFinished(bool);
+    void mSetDuration(qint64);
 public:
     MPlayer(QObject *parent = 0);
     virtual ~MPlayer();

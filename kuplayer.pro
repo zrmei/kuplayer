@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets network av
+QT       += core gui widgets network
 
 TARGET = kuplayer
 TEMPLATE = app
@@ -16,7 +16,7 @@ QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS_RELEASE += -s -DQT_NO_DEBUG_OUTPUT
 
 QMAKE_LFLAGS += -Wl,-rpath,./lib/
-QMAKE_LFLAGS_RELEASE += -s -DQT_NO_DEBUG_OUTPUT
+QMAKE_LFLAGS_RELEASE += -Wl,-s -DQT_NO_DEBUG_OUTPUT
 
 SOURCES += main.cpp\
         kuplayer.cpp \
@@ -56,24 +56,21 @@ HEADERS  += kuplayer.h \
 
 unix: {
     INCLUDEPATH += /usr/include/glib-2.0/
-    DEPENDPATH += /usr/include/glib-2.0/
-
     INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include/
-    DEPENDPATH += /usr/lib/x86_64-linux-gnu/glib-2.0//include/
-
     INCLUDEPATH += /usr/include/gdk-pixbuf-2.0/
-    DEPENDPATH += /usr/include/gdk-pixbuf-2.0/
 
-    INCLUDEPATH += $$PWD/../../../../../usr/include/python2.7
-    DEPENDPATH += $$PWD/../../../../../usr/include/python2.7
+    INCLUDEPATH += $$PWD/sources/includes
+    INCLUDEPATH += $$PWD/sources/includes/QtAV
+    INCLUDEPATH += $$PWD/sources/includes/python2.7
 
-    LIBS += -L$$PWD/../../../../../usr/lib/x86_64-linux-gnu/ -lpython2.7
-    LIBS += -L$$PWD/../../../../../usr/lib/x86_64-linux-gnu/ -lnotify
+    LIBS += -L$$PWD/sources/libs/ -lpython2.7
+    LIBS += -L$$PWD/sources/libs/ -lnotify
 
-    LIBS += $$PWD/../../../../../usr/local/lib/x86_64-linux-gnu/libboost_python.a
-    LIBS += $$PWD/../../../../../usr/local/lib/x86_64-linux-gnu/libboost_system.a
+    LIBS += $$PWD/sources/libs/libboost_python.a
+    LIBS += $$PWD/sources/libs/libboost_system.a
 
-    LIBS += -L$$PWD -loptions
+    LIBS += -L$$PWD/sources/libs -loptions
+    LIBS += -L$$PWD/sources/libs -lQtAV
 }
 RESOURCES += \
     kuplayer.qrc

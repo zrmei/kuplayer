@@ -50,7 +50,6 @@ public slots:
     void url_triggered(QString, QString);
     void url_ji_triggered(QString, QString url);
     void change_url(CLASS, int, QString);
-
 private slots:
     void trayIcon_clicked(QSystemTrayIcon::ActivationReason);
     void show_normal_or_close();

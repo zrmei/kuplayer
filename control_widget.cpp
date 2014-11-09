@@ -33,12 +33,12 @@ void ControlLabel::mousePressEvent(QMouseEvent *ev)
 ControlWidget::ControlWidget(QWidget *parent) :
     QWidget(parent)
 {
-    time_ = new QLabel;
-    time_->setText("00:00:00");
-    QPalette text_palette = time_->palette();
+    time_current = new QLabel;
+    time_current->setText("00:00:00");
+    QPalette text_palette = time_current->palette();
     text_palette.setColor(QPalette::WindowText, QColor(255, 255, 255));
-    time_->setPalette(text_palette);
-    time_->setMinimumWidth(65);
+    time_current->setPalette(text_palette);
+    time_current->setMinimumWidth(65);
 
     backward_ = new ControlLabel(":/control/backward");
     connect(backward_,SIGNAL(clicked()),this,SIGNAL(backward_clicked()));
@@ -48,6 +48,11 @@ ControlWidget::ControlWidget(QWidget *parent) :
     connect(play_pause,SIGNAL(clicked()),this,SLOT(on_play_pause()));
     foreward_ = new ControlLabel(":/control/foreward");
     connect(foreward_,SIGNAL(clicked()),this,SIGNAL(foreward_clicked()));
+
+    time_all = new QLabel;
+    time_all->setText("00:00:00");
+    time_all->setPalette(text_palette);
+    time_all->setMinimumWidth(65);
     xuan_ji = new SelectLabel("选集","");
     xuan_ji->setFixedSize(60,30);
     connect(xuan_ji,SIGNAL(be_selected(QString,QString)),this,SIGNAL(xuan_ji_clcked(QString,QString)));
@@ -56,17 +61,19 @@ ControlWidget::ControlWidget(QWidget *parent) :
 
     QHBoxLayout *main_layout = new QHBoxLayout(this);
     main_layout->setContentsMargins(0,3,0,0);
-    main_layout->addWidget(time_);
+    main_layout->addStretch();
+    main_layout->addWidget(time_current);
     main_layout->addWidget(backward_);
     main_layout->addWidget(stop_);
     main_layout->addWidget(play_pause);
     main_layout->addWidget(foreward_);
+    main_layout->addWidget(time_all);
     main_layout->addStretch();
     main_layout->addWidget(xuan_ji);
 }
 ControlWidget::~ControlWidget()
 {
-    delete time_;
+    delete time_current;
     delete backward_;
     delete backward_key;
     delete stop_;
@@ -86,7 +93,7 @@ void ControlWidget::init_actions()
 
     stop_key = new QAction(this);
     stop_key->setShortcut(QKeySequence(Qt::Key_End));
-    connect(stop_key,SIGNAL(triggered()),this,SLOT(stop_clicked_()));
+    connect(stop_key,SIGNAL(triggered()),this,SIGNAL(stop_clicked()));
 
     pause_key = new QAction(this);
     pause_key->setShortcut(QKeySequence(Qt::Key_Space));
@@ -130,16 +137,12 @@ void ControlWidget::on_play_pause()
         emit play_pause_clicked(true);
 }
 
-void ControlWidget::stop_clicked_()
-{
-    if(isRuning){
-        isRuning = false;
-        time_->setText("00:00:00");
-        emit stop_clicked();
-    }
-}
-
 void ControlWidget::setTime(qint64 pos)
 {
-    time_->setText(QTime(0, 0, 0).addMSecs(pos).toString("HH:mm:ss"));
+    time_current->setText(QTime(0, 0, 0).addMSecs(pos).toString("HH:mm:ss"));
+}
+
+void ControlWidget::setDuration(qint64 pos)
+{
+    time_all->setText(QTime(0, 0, 0).addMSecs(pos).toString("HH:mm:ss"));
 }
