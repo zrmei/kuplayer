@@ -13,11 +13,9 @@ TEMPLATE = app
 PRECOMPILED_HEADER = common.h
 
 QMAKE_CXXFLAGS += -std=c++11
-QMAKE_CXXFLAGS_RELEASE += -s -DQT_NO_DEBUG_OUTPUT
-
+QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT
 QMAKE_LFLAGS += -Wl,-rpath,./lib/
-QMAKE_LFLAGS_RELEASE += -Wl,-s -DQT_NO_DEBUG_OUTPUT
-
+QMAKE_LFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT
 SOURCES += main.cpp\
         kuplayer.cpp \
     detaillabel.cpp \
@@ -63,23 +61,19 @@ unix: {
     INCLUDEPATH += $$PWD/sources/includes/QtAV
     INCLUDEPATH += $$PWD/sources/includes/python2.7
 
-    LIBS += -L$$PWD/sources/libs/ -lpython2.7
-    LIBS += -L$$PWD/sources/libs/ -lnotify
-
     LIBS += $$PWD/sources/libs/libboost_python.a
     LIBS += $$PWD/sources/libs/libboost_system.a
 
-    LIBS += -L$$PWD/sources/libs -loptions
-    LIBS += -L$$PWD/sources/libs -lQtAV
+    LIBS += -L$$PWD/sources/libs  -loptions -lQtAV -lpython2.7 -lnotify
 }
 RESOURCES += \
     kuplayer.qrc
 
-RC_FILE += kuplayer.rc
+RC_FILE += \
+    kuplayer.rc
 
 OTHER_FILES += \
-    kuplayer.ico \
-    liboptions.so
+    kuplayer.ico
 
 FORMS += \
     base_set_weidget.ui \

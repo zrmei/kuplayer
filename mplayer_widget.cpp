@@ -18,6 +18,8 @@ MPlayer::MPlayer(QObject *parent)
     connect(this,SIGNAL(stopped()),this,SLOT(mStarted()));
 #ifdef QT_NO_DEBUG_OUTPUT
     QtAV::setLogLevel(QtAV::LogLevel::LogOff);
+#else
+    QtAV::setLogLevel(QtAV::LogAll);
 #endif
 }
 
@@ -52,7 +54,7 @@ void MPlayer::mPlay()
 void MPlayer::mStarted()
 {
     if(play_list.size()){
-        play(play_list.at(0));
+                play(play_list.at(0));
         play_list.removeAt(0);
         emit mSetDuration(duration());
     }else{

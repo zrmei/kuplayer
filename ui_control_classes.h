@@ -13,7 +13,6 @@
 #include "ui_base_set_weidget.h"
 #include "ui_play_set_widget.h"
 #include "ui_about_widget.h"
-#include "ui_messagebox.h"
 
 /**********************************************/
 class base_set_weidget : public QWidget
