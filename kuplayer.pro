@@ -13,9 +13,7 @@ TEMPLATE = app
 PRECOMPILED_HEADER = common.h
 
 QMAKE_CXXFLAGS += -std=c++11
-QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT
 QMAKE_LFLAGS += -Wl,-rpath,./lib/
-QMAKE_LFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT
 SOURCES += main.cpp\
         kuplayer.cpp \
     detaillabel.cpp \
@@ -56,10 +54,10 @@ unix: {
     INCLUDEPATH += /usr/include/glib-2.0/
     INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include/
     INCLUDEPATH += /usr/include/gdk-pixbuf-2.0/
+    INCLUDEPATH += /usr/include/python2.7/
 
     INCLUDEPATH += $$PWD/sources/includes
     INCLUDEPATH += $$PWD/sources/includes/QtAV
-    INCLUDEPATH += $$PWD/sources/includes/python2.7
 
     LIBS += $$PWD/sources/libs/libboost_python.a
     LIBS += $$PWD/sources/libs/libboost_system.a

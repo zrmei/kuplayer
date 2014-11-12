@@ -39,7 +39,6 @@ public:
     virtual ~kuplayer();
 
 public slots:
-    void setting_changed(conf_info);
     void show_minimized();
     void skin_change_clicked(QString);
     void on_Fullscreen_changed();
@@ -67,10 +66,11 @@ private:
              MPlayer  *player;
       PlayListWidget   xuan_ji_widget;
           SkinWidget   skin_widget;
-          MenuWidget   main_menu;
+          MenuWidget   *main_menu;
      QSystemTrayIcon   *trayicon;
+
            QBitArray   can_update{5,true};
-           conf_info   setting{"",false,true,false,false};
+           conf_info   *setting;
     std::array<int,5>  pages{ {2,2,2,2,2} };
             QSettings  *iniFile;
     std::array<std::tuple<QString,QString,QString>,5> locate_class_time;

@@ -31,7 +31,6 @@ MenuWidget::MenuWidget(QWidget *parent)
 
     down_widget = new down_widget_;
     down_widget->setAutoFillBackground(true);
-    connect(down_widget,SIGNAL(setting_changed(conf_info)),this,SIGNAL(setting_changed(conf_info)));
     QVBoxLayout *main_layout = new QVBoxLayout(this);
     main_layout->addLayout(up_title_layout);
     main_layout->addWidget(down_widget);
@@ -57,7 +56,7 @@ void MenuWidget::show_about()
     show();
 }
 
-void MenuWidget::init_setting(conf_info& info)
+void MenuWidget::init_setting(conf_info* info)
 {
     down_widget->init_setting(info);
 }
@@ -66,7 +65,8 @@ void MenuWidget::init_setting(conf_info& info)
 
 down_widget_::down_widget_(QWidget *parent)
     : QWidget(parent)
-    ,label_sores(new QList<SelectLabel*>)
+    , settings(new conf_info)
+    , label_sores(new QList<SelectLabel*>)
 {
     base_set = new SelectLabel(setting_strs[0]);
     base_set->setFixedSize(125,32);
@@ -151,17 +151,17 @@ down_widget_::~down_widget_()
     delete down_layout;
 }
 
-void down_widget_::init_setting(const conf_info &info)
+void down_widget_::init_setting(conf_info* info)
 {
-    if(info.default_video_format.isEmpty()) return;
+    if(info->default_video_format.isEmpty()) return;
     settings = info;
-    play_set_widget_->ui->checkBox_auto_play_next->setChecked(settings.auto_play_next);
-    base_set_widget->ui->checkBox_close->setChecked(settings.close_all);
-    base_set_widget->ui->radioButton_min->setChecked(settings.min_or_close);
-    base_set_widget->ui->checkBox_start->setChecked(settings.start_when_pc_on);
-    if(settings.default_video_format == "high")
+    play_set_widget_->ui->checkBox_auto_play_next->setChecked(settings->auto_play_next);
+    base_set_widget->ui->checkBox_close->setChecked(settings->close_all);
+    base_set_widget->ui->radioButton_min->setChecked(settings->min_or_close);
+    base_set_widget->ui->checkBox_start->setChecked(settings->start_when_pc_on);
+    if(settings->default_video_format == "high")
         play_set_widget_->ui->format_high->setChecked(true);
-    else if(settings.default_video_format == "normal")
+    else if(settings->default_video_format == "normal")
         play_set_widget_->ui->format_normal->setChecked(true);
     else
         play_set_widget_->ui->format_spuer->setChecked(true);
@@ -180,17 +180,16 @@ void down_widget_::be_selected(QString name, QString)
 void down_widget_::btn_selected(QString name, QString)
 {
     if(name == setting_strs[3]){
-        settings.auto_play_next = play_set_widget_->ui->checkBox_auto_play_next->isChecked();
-        settings.close_all = base_set_widget->ui->checkBox_close->isChecked();
-        settings.min_or_close = base_set_widget->ui->radioButton_min->isChecked();
-        settings.start_when_pc_on = base_set_widget->ui->checkBox_start->isChecked();
+        settings->auto_play_next = play_set_widget_->ui->checkBox_auto_play_next->isChecked();
+        settings->close_all = base_set_widget->ui->checkBox_close->isChecked();
+        settings->min_or_close = base_set_widget->ui->radioButton_min->isChecked();
+        settings->start_when_pc_on = base_set_widget->ui->checkBox_start->isChecked();
         if(play_set_widget_->ui->format_high->isChecked())
-            settings.default_video_format = "high";
+            settings->default_video_format = "high";
         else if(play_set_widget_->ui->format_normal->isChecked())
-            settings.default_video_format = "normal";
+            settings->default_video_format = "normal";
         else
-            settings.default_video_format = "super";
-        emit setting_changed(settings);
+            settings->default_video_format = "super";
     }else{
         init_setting(settings);
     }

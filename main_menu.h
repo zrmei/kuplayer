@@ -34,15 +34,13 @@ struct conf_info
 class MenuWidget : public ShadowWidget
 {
     Q_OBJECT
-signals:
-    void setting_changed(conf_info);
 public:
     explicit MenuWidget(QWidget *parent = 0);
 
 public slots:
     void this_show();
     void show_about();
-    void init_setting(conf_info &);
+    void init_setting(conf_info *);
 private:
      PushButton *btn_close;
     QHBoxLayout *up_title_layout;
@@ -53,19 +51,17 @@ private:
 class down_widget_ : public QWidget
 {
     Q_OBJECT
-signals:
-    void setting_changed(conf_info);
 public:
     explicit down_widget_(QWidget *parent = 0);
     ~down_widget_();
     QStackedWidget* operator->(){ return right_widget;}
 public slots:
-    void init_setting(const conf_info &info= conf_info());
+    void init_setting(conf_info *info);
     void be_selected(QString,QString);
     void btn_selected(QString,QString);
 public:
     QStackedWidget *right_widget;
-    conf_info settings;
+    conf_info *settings;
 private:
          SelectLabel *base_set;
          SelectLabel *play_set;
