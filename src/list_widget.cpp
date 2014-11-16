@@ -8,7 +8,7 @@
 #include "common.h"
 #include "list_widget.h"
 #include "select_label.h"
-#include "detaillabel.h"
+#include "detail_label.h"
 
 #include <QMouseEvent>
 #include <QScrollArea>

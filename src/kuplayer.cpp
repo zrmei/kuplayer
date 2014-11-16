@@ -13,7 +13,7 @@
 #include "loadimage.h"
 #include "control_widget.h"
 #include "mthread.h"
-#include "detaillabel.h"
+#include "detail_label.h"
 #include "skin_widget.h"
 #include "pyscript.h"
 
@@ -117,7 +117,12 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
     SHOW_WINDOW_NORMAL
 
     title_widget->turepage("播放器");
+#if defined(Q_OS_LINUX)
     iniFile = new QSettings(QDir::homePath()+"/.kuplayer/kuplayer.conf",QSettings::IniFormat);
+#elif defined(Q_OS_WIN)
+    iniFile = new QSettings(qApp->applicationDirPath()+"/kuplayer.ini",QSettings::IniFormat);
+#endif
+
     init_setting();
     init_trayicon();
 }
@@ -248,8 +253,12 @@ void kuplayer::loadImageFinished(CLASS index,QPixmap pix, QString name, QString 
         can_update[index] = true;
         return;
     }
+    if(index == MUSIC && pix.width() < 170){
+        pix = pix.scaled(200,112);
+    }
     DetailLabel *l = new DetailLabel(pix,name,url);
-    connect(l,SIGNAL(url_triggered(QString,QString)),this,SLOT(url_triggered(QString,QString)));
+    connect(l,SIGNAL(url_triggered(QString,QString)),
+            this,SLOT(url_triggered(QString,QString)));
     qobject_cast<ListWidget*>(stacked_widget->widget(index))->addDetailLabel(l);
 }
 

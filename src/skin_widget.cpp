@@ -6,7 +6,7 @@
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
 #include "common.h"
-#include "detaillabel.h"
+#include "detail_label.h"
 #include "skin_widget.h"
 #include "push_button.h"
 

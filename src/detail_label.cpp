@@ -5,12 +5,13 @@
 *       Date : 2014/10/14
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
-#include "detaillabel.h"
+#include "detail_label.h"
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QPixmap>
 
 /****************************************************************************/
 
@@ -85,7 +86,6 @@ void DetailLabel::this_url_triggered()
 void DetailLabel::set_Pixmap(const QPixmap &img)
 {
     lblImg_->setPixmap(img);
-    lblImg_->setFixedSize(img.size());
     setFixedSize(img.width()+20,img.height()+36);
 }
 

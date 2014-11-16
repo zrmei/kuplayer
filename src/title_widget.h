@@ -71,7 +71,7 @@ private:
 #endif
     QList<TypeLabel*> *labels_store;
     QList<PushButton*> *push_button_store;
-    QStringList  down_title{ "电视剧","电  影","综  艺","音  乐","动漫","播放器"};
+    QStringList  down_title{ "电视剧","电影","综艺","音乐","动漫","播放器"};
 
 };
 #endif // TITLE_WIDGET_H

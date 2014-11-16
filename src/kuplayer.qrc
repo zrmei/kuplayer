@@ -1,0 +1,41 @@
+<RCC>
+    <qresource prefix="/sysbutton">
+        <file alias="close">img/sysButton/close.png</file>
+        <file alias="close_hover">img/sysButton/close_hover.png</file>
+        <file alias="close_pressed">img/sysButton/close_pressed.png</file>
+        <file alias="min">img/sysButton/min.png</file>
+        <file alias="min_hover">img/sysButton/min_hover.png</file>
+        <file alias="min_pressed">img/sysButton/min_pressed.png</file>
+        <file alias="skin">img/sysButton/skin.png</file>
+        <file alias="skin_hover">img/sysButton/skin_hover.png</file>
+        <file alias="skin_pressed">img/sysButton/skin_pressed.png</file>
+        <file alias="menu">img/sysButton/menu.png</file>
+        <file alias="menu_hover">img/sysButton/menu_hover.png</file>
+        <file alias="menu_pressed">img/sysButton/menu_pressed.png</file>
+    </qresource>
+    <qresource prefix="/skin">
+        <file alias="0">img/skin/0_big.png</file>
+    </qresource>
+    <qresource prefix="/shadow">
+        <file alias="shadow_bottom">img/shadow/shadow_bottom.png</file>
+        <file alias="shadow_left">img/shadow/shadow_left.png</file>
+        <file alias="shadow_left_bottom">img/shadow/shadow_left_bottom.png</file>
+        <file alias="shadow_left_top">img/shadow/shadow_left_top.png</file>
+        <file alias="shadow_right">img/shadow/shadow_right.png</file>
+        <file alias="shadow_right_bottom">img/shadow/shadow_right_bottom.png</file>
+        <file alias="shadow_right_top">img/shadow/shadow_right_top.png</file>
+        <file alias="shadow_top">img/shadow/shadow_top.png</file>
+    </qresource>
+    <qresource prefix="/logo">
+        <file alias="logo">img/logo/logo.png</file>
+        <file alias="welcome">img/logo/welcome.png</file>
+        <file alias="logo_icon">img/logo/logo_min.ico</file>
+    </qresource>
+    <qresource prefix="/control">
+        <file alias="backward">img/controlButton/backward.png</file>
+        <file alias="foreward">img/controlButton/foreward.png</file>
+        <file alias="pause">img/controlButton/pause.png</file>
+        <file alias="play">img/controlButton/play.png</file>
+        <file alias="stop">img/controlButton/stop.png</file>
+    </qresource>
+</RCC>
