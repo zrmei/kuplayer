@@ -69,8 +69,7 @@ unix: {
 RESOURCES += \
     src/kuplayer.qrc
 
-RC_FILE += \
-    kuplayer.rc
+RC_FILE = kuplayer.rc
 
 OTHER_FILES += \
     kuplayer.ico \
@@ -81,3 +80,4 @@ FORMS += \
     src/base_set_weidget.ui \
     src/play_set_widget.ui
 
+TRANSLATIONS += kuplayer.ts

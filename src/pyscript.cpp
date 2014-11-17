@@ -25,6 +25,8 @@ PyScript::~PyScript()
 
 bool PyScript::GetVideoUrls(QString keyurl,QString format)
 {
+    std::lock_guard<std::mutex> lock(mu);
+    std::shared_ptr<PyThreadStateLock> pylock;
     int i{0};
     PYTHON_CATCH_EXCEPTION_BEGIN
     i = python::call_method<int>(module,"getVideoUrls",
@@ -53,6 +55,9 @@ bool PyScript::getShowList()
 QStringList
 PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time)
 {
+    std::lock_guard<std::mutex> lock(mu);
+    std::shared_ptr<PyThreadStateLock> pylock;
+    
     python::str p("");
     PYTHON_CATCH_EXCEPTION_BEGIN
             p = python::call_method<str>(module,"GetUrlByname"
@@ -68,7 +73,10 @@ PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time
 
 QStringList PyScript::connect_img_url(QString url, QString name)
 {
-    QStringList play_list;
+    std::lock_guard<std::mutex> lock(mu);
+    std::shared_ptr<PyThreadStateLock> pylock;
+    
+    return_list.clear();
     list tmp ;
     PYTHON_CATCH_EXCEPTION_BEGIN
     tmp= python::call_method<list>(module
@@ -82,25 +90,31 @@ QStringList PyScript::connect_img_url(QString url, QString name)
         }
         next_page_.insert(name,QString(extract<char*>(tmp[0])));
         for(ssize_t i = 1; i< python::len(tmp); ++i){
-            play_list.append(QString(extract<char*>(tmp[i])));
+            return_list.append(QString(extract<char*>(tmp[i])));
         }
     }
-    return play_list;
+    return return_list;
 }
 
 QStringList PyScript::gotoNextPage(QString name, int index)
 {
-    QStringList tmp;
+    std::lock_guard<std::mutex> lock(mu);
+    std::shared_ptr<PyThreadStateLock> pylock;
+    
+    return_list.clear();
     PYTHON_CATCH_EXCEPTION_BEGIN
-    tmp  << next_page_.value(name)+QString::number(index)+".html";
+    return_list  << next_page_.value(name)+QString::number(index)+".html";
     PYTHON_CATCH_EXCEPTION_END
-
-            return tmp;
+    
+    return return_list;
 }
 
 QStringList PyScript::getplayUrl(QString url)
 {
-    QStringList tmp;
+    std::lock_guard<std::mutex> lock(mu);
+    std::shared_ptr<PyThreadStateLock> pylock;
+    
+    return_list.clear();
     python::list sstr;
     PYTHON_CATCH_EXCEPTION_BEGIN
     sstr = python::call_method<list>(module
@@ -108,15 +122,18 @@ QStringList PyScript::getplayUrl(QString url)
                                      ,url.toStdString().c_str());
     PYTHON_CATCH_EXCEPTION_END
     if(python::len(sstr)){
-           tmp <<QString(extract<char*>(sstr[0]));
+           return_list <<QString(extract<char*>(sstr[0]));
     }else{
-        tmp << "";
+        return_list << "";
     }
-    return tmp;
+    return return_list;
 }
 
 QStringList PyScript::getAll(CLASS classes,QString url)
 {
+    std::lock_guard<std::mutex> lock(mu);
+    std::shared_ptr<PyThreadStateLock> pylock;
+    return_list.clear();
     QString func;
     switch (classes) {
     case TV:
@@ -131,7 +148,7 @@ QStringList PyScript::getAll(CLASS classes,QString url)
     default:
         return QStringList();
     }
-    QStringList tmp;
+    
     python::list sstr;
     PYTHON_CATCH_EXCEPTION_BEGIN
             sstr = python::call_method<list>(module
@@ -139,9 +156,9 @@ QStringList PyScript::getAll(CLASS classes,QString url)
                                              ,url.toStdString().c_str());
     PYTHON_CATCH_EXCEPTION_END
     for(ssize_t i=0;i<python::len(sstr); ++i){
-        tmp << QString(extract<char*>(sstr[i]));
+        return_list << QString(extract<char*>(sstr[i]));
     }
-    return tmp;
+    return return_list;
 }
 
 #endif //PYSCRIPT_CPP

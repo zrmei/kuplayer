@@ -40,10 +40,11 @@ MenuWidget::MenuWidget(QWidget *parent)
 
 void MenuWidget::this_show()
 {
+    qDebug() << "menu show \t" << tr("Basic Settings");
     if(isHidden()){
         QPoint pos_ = QCursor::pos();
         move(pos_.x()+120,pos_.y()+120);
-        down_widget->be_selected("基本设置","");
+        down_widget->be_selected(tr("Basic Settings"),"");
         show();
     }else{
         hide();
@@ -52,7 +53,7 @@ void MenuWidget::this_show()
 
 void MenuWidget::show_about()
 {
-    down_widget->be_selected("关于","");
+    down_widget->be_selected(tr("About"),"");
     show();
 }
 
@@ -72,30 +73,35 @@ down_widget_::down_widget_(QWidget *parent)
     base_set->setFixedSize(125,32);
     label_sores->append(base_set);
     base_set->set_selected(true);
-    connect(base_set,SIGNAL(be_selected(QString,QString)),this,SLOT(be_selected(QString,QString)));
+    connect(base_set,SIGNAL(be_selected(QString,QString)),
+            this,SLOT(be_selected(QString,QString)));
 
     play_set = new SelectLabel(setting_strs[1]);
     play_set->setFixedHeight(32);
     label_sores->append(play_set);
-    connect(play_set,SIGNAL(be_selected(QString,QString)),this,SLOT(be_selected(QString,QString)));
+    connect(play_set,SIGNAL(be_selected(QString,QString)),
+            this,SLOT(be_selected(QString,QString)));
 
     about_set = new SelectLabel(setting_strs[2]);
     about_set->setFixedHeight(32);
     label_sores->append(about_set);
-    connect(about_set,SIGNAL(be_selected(QString,QString)),this,SLOT(be_selected(QString,QString)));
+    connect(about_set,SIGNAL(be_selected(QString,QString)),
+            this,SLOT(be_selected(QString,QString)));
 
     btn_save = new SelectLabel(setting_strs[3]);
     btn_save->setFixedSize(80,32);
-    connect(btn_save,SIGNAL(be_selected(QString,QString)),this,SLOT(btn_selected(QString,QString)));
+    connect(btn_save,SIGNAL(be_selected(QString,QString)),
+            this,SLOT(btn_selected(QString,QString)));
 
     btn_exit = new SelectLabel(setting_strs[4]);
     btn_exit->setFixedSize(80,32);
-    connect(btn_exit,SIGNAL(be_selected(QString,QString)),this,SLOT(btn_selected(QString,QString)));
+    connect(btn_exit,SIGNAL(be_selected(QString,QString)),
+            this,SLOT(btn_selected(QString,QString)));
 
     QWidget *left_widget = new QWidget;
     left_widget->setAutoFillBackground(true);
     QPalette text_palette = palette();
-    text_palette.setColor(QPalette::Window, QColor(230, 230, 230));
+    text_palette.setColor(QPalette::Window, QColor(225, 225, 225));
     left_widget->setPalette(text_palette);
 
     left_layout = new QVBoxLayout(left_widget);
@@ -113,6 +119,8 @@ down_widget_::down_widget_(QWidget *parent)
     right_widget->setPalette(text_palette);
 
     base_set_widget = new base_set_weidget;
+    connect(base_set_widget->ui->comboBox,SIGNAL(currentIndexChanged(int))
+            ,SLOT(LanguageChanged(int)));
     right_widget->addWidget(base_set_widget);
     right_widget->setCurrentIndex(0);
 
@@ -165,6 +173,7 @@ void down_widget_::init_setting(conf_info* info)
         play_set_widget_->ui->format_normal->setChecked(true);
     else
         play_set_widget_->ui->format_spuer->setChecked(true);
+    base_set_widget->ui->comboBox->setCurrentIndex(settings->language? 0 : 1 );
 }
 
 void down_widget_::be_selected(QString name, QString)
@@ -175,6 +184,11 @@ void down_widget_::be_selected(QString name, QString)
         item->set_selected(false);});
     label_sores->at(index)->set_selected(true);
     right_widget->setCurrentIndex(index);
+}
+
+void down_widget_::LanguageChanged(int index)
+{
+    settings->language = ( index == 0 );
 }
 
 void down_widget_::btn_selected(QString name, QString)

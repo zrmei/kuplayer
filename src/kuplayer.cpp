@@ -21,6 +21,9 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDir>
+#include <QTranslator>
+#include <QSettings>
+
 #define WINDOW_WIDTH  1002
 #define WINDOW_HEIGHT 657
 
@@ -56,7 +59,7 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
     , main_menu(new MenuWidget)
     , trayicon(new QSystemTrayIcon)
     , setting(new conf_info)
-{
+{    
     setAttribute(Qt::WA_QuitOnClose,true);
 
     title_widget = new TitleWidget;
@@ -113,24 +116,15 @@ kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
     }
     addActions(Control_Widget->init_action());
     addActions(xuan_ji_widget.init_action());
-    SHOW_MSG("kuplayer: free for youku!");
+    SHOW_MSG(tr("kuplayer: free for youku!"));
     SHOW_WINDOW_NORMAL
+    title_widget->turepage(PLAYER);
 
-    title_widget->turepage("播放器");
-#if defined(Q_OS_LINUX)
-    iniFile = new QSettings(QDir::homePath()+"/.kuplayer/kuplayer.conf",QSettings::IniFormat);
-#elif defined(Q_OS_WIN)
-    iniFile = new QSettings(qApp->applicationDirPath()+"/kuplayer.ini",QSettings::IniFormat);
-#endif
-
-    init_setting();
-    init_trayicon();
 }
 
 kuplayer::~kuplayer()
 {
     to_inifile();
-    delete iniFile;
     delete setting;
     delete trayicon;
     delete player;
@@ -140,6 +134,13 @@ kuplayer::~kuplayer()
         delete stacked_widget->widget(0);
     }
     delete stacked_widget;
+}
+
+void kuplayer::setIniFile(QSettings *iniFile)
+{
+    this->iniFile = iniFile;
+    init_setting();
+    init_trayicon();
 }
 
 void kuplayer::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
@@ -163,7 +164,7 @@ void kuplayer::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
 void kuplayer::show_normal_or_close()
 {
     if(setting->min_or_close){
-        trayicon->showMessage("kuplayer",QString("双击这显示！"),QSystemTrayIcon::Information);
+        trayicon->showMessage("kuplayer",QString("Showing by double-click !"),QSystemTrayIcon::Information);
         hide();
         if(player->isPlaying()){
             Control_Widget->
@@ -171,7 +172,7 @@ void kuplayer::show_normal_or_close()
             player->pause(true);
         }
     }else{
-        auto msg = QMessageBox::question(this,"退出",msg_font_style("是否真的要退出？"));
+        auto msg = QMessageBox::question(this,tr("Exit"),msg_font_style(tr("Really want to quit?")));
         if(msg == QMessageBox::StandardButton::Yes)
             close();
     }
@@ -273,11 +274,11 @@ void kuplayer::url_triggered(QString name,QString url)
                                           ,stacked_widget->currentIndex(),url));
         connect(tmp,SIGNAL(mfinished(int,QStringList)),
                 &xuan_ji_widget,SLOT(setList(int,QStringList)));
-        title_widget->turepage("播放器");
+        title_widget->turepage(PLAYER);
         tmp->start();
         player->mPlay();
         Control_Widget->isRuning = true;
-        SHOW_MSG("正在播放："+name);
+        SHOW_MSG(tr("Currently playing:")+name);
         title_widget->set_text(name);
     }
 }
@@ -287,7 +288,7 @@ void kuplayer::url_ji_triggered(QString name,QString url)
         stacked_widget->setCurrentIndex(5);
         Control_Widget->isRuning = true;
         player->mPlay();
-        QString msg("正在播放：");
+        QString msg(tr("Currently playing:"));
         msg.insert(msg.size(),title_widget->get_text());
         msg.insert(msg.size(),"  ");
         msg.insert(msg.size(),name);
@@ -297,7 +298,7 @@ void kuplayer::url_ji_triggered(QString name,QString url)
 
 void kuplayer::change_url(CLASS classes,int type,QString name)
 {
-    if(name == "全部"){
+    if(name == tr("All")){
         name = "";
     }
     switch (type) {
@@ -336,9 +337,9 @@ void kuplayer::init_trayicon()
             this,SLOT(trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
     QMenu *tray_menu = new QMenu;
     trayicon->setContextMenu(tray_menu);
-    auto*   set_action = tray_menu->addAction("设置");
-    auto* about_action = tray_menu->addAction("关于");
-    auto*  exit_action = tray_menu->addAction("退出");
+    auto*   set_action = tray_menu->addAction(tr("Settings"));
+    auto* about_action = tray_menu->addAction(tr("About"));
+    auto*  exit_action = tray_menu->addAction(tr("Exit"));
     connect(set_action,SIGNAL(triggered()),main_menu,SLOT(show()));
     connect(about_action,SIGNAL(triggered()),main_menu,SLOT(show_about()));
     connect(exit_action,SIGNAL(triggered()),this,SLOT(close()));
@@ -351,8 +352,10 @@ void kuplayer::init_setting()
     setting->auto_play_next = iniFile->value("setting/auto_play_next",false).toBool();
     setting->min_or_close = iniFile->value("setting/min_or_close",false).toBool();
     setting->start_when_pc_on = iniFile->value("setting/start_when_pc_on",false).toBool();
+    setting->language = iniFile->value("setting/language",true).toBool();
     skin_widget.url_triggered("",iniFile->value("setting/skin",":/kin/0").toString());
-
+    
+    qDebug() << setting->language;
     main_menu->init_setting(setting);
 }
 
@@ -364,5 +367,6 @@ void kuplayer::to_inifile()
     iniFile->setValue("setting/auto_play_next",setting->auto_play_next);
     iniFile->setValue("setting/min_or_close", setting->min_or_close );
     iniFile->setValue("setting/start_when_pc_on",setting->start_when_pc_on);
+    iniFile->setValue("setting/language",setting->language);
 }
 

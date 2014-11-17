@@ -22,6 +22,7 @@ class base_set_weidget : public QWidget
 public:
     explicit base_set_weidget(QWidget *parent = 0);
     ~base_set_weidget();
+    
 private:
     Ui::base_set_weidget *ui;
 };

@@ -10,10 +10,15 @@
 #include "pyscript.h"
 #include "ui_control_classes.h"
 
+#include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSplashScreen>
 #include <QMessageBox>
+#include <QTranslator>
+#include <QTextCodec>
+#include <QDir>
+#include <QSettings>
 
 int main(int argc, char *argv[])
 {
@@ -22,9 +27,24 @@ int main(int argc, char *argv[])
     }
     printf("%s",VERSION);
     QApplication a(argc, argv);
+    
+    QTextCodec *codec = QTextCodec::codecForName("System"); 
+	QTextCodec::setCodecForLocale(codec); 
+    QTranslator   translator;
+    std::shared_ptr<QSettings> iniFile(new QSettings(
+                                           QDir::homePath()+"/.kuplayer/kuplayer.conf",
+                                           QSettings::IniFormat));
+    if(iniFile->value("setting/language",true).toBool())
+        translator.load(QString(":/qm/kuplayer_zn"));
+    else
+        translator.load(QString(":/qm/kuplayer_en"));
+    a.installTranslator(&translator);
+    
+    
     std::shared_ptr<PyScript> pyinit = std::make_shared<PyScript>();
     if( !pyinit.get()->getShowList() ){
-        QMessageBox::warning(NULL,"错误",msg_font_style("网络未连接或网络慢，请检查网络再重试！"));
+        QMessageBox::warning(NULL,QObject::tr("Error"),
+                             msg_font_style(QObject::tr("Network error,Please try later !")));
         a.quit();
         return -1;
     }
@@ -44,6 +64,7 @@ int main(int argc, char *argv[])
 
     kuplayer w(pyinit.get());
     w.move(x,y);
+    w.setIniFile(iniFile.get());
     splash->finish(&w);
     w.show();
 

@@ -18,18 +18,17 @@
         text_palette.setColor(QPalette::WindowText, QColor(r, g, b));\
         setPalette(text_palette);}
 
-TypeLabel::TypeLabel(QString title_name, QWidget *parent)
+TypeLabel::TypeLabel(QString title, QWidget *parent)
     :QLabel(parent)
 {
-    setText(title_name);
+    setText(title);
     setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
     //set txt color
     THIS_WIDGET_COLOR(28, 161, 227);
     //set the font size and blod
     QFont ft;
-    ft.setFamily("SimSun");
-    ft.setPointSize(20);
-    ft.setBold(true);
+    ft.setFamily("Ubuntu");
+    ft.setPointSize(18);
     setFont(ft);
 
     setFixedHeight(TITLE_WIDGET_HEIGHT - TITLE_CONTROL_HEIGHT);
@@ -189,10 +188,8 @@ void TitleWidget::set_text(QString name)
     title->adjustSize();
 }
 
-void TitleWidget::turepage(QString name)
+void TitleWidget::turepage(int index)
 {
-    int index = down_title.indexOf(name);
-
     for(int i=0; i<down_title.size(); ++i){
         labels_store->at(i)->setMousePress(false);
     }
@@ -200,3 +197,10 @@ void TitleWidget::turepage(QString name)
     emit ture_page(index);
 }
 
+void TitleWidget::turepage(QString name)
+{
+    int index = down_title.indexOf(name);
+    if(index < TV || index > PLAYER)
+        index = PLAYER;
+    turepage(index);
+}

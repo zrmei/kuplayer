@@ -53,7 +53,7 @@ ControlWidget::ControlWidget(QWidget *parent) :
     time_all->setText("00:00:00");
     time_all->setPalette(text_palette);
     time_all->setMinimumWidth(65);
-    xuan_ji = new SelectLabel("选集","");
+    xuan_ji = new SelectLabel(tr("Episode"),"");
     xuan_ji->setFixedSize(60,30);
     connect(xuan_ji,SIGNAL(be_selected(QString,QString)),this,SIGNAL(xuan_ji_clcked(QString,QString)));
 

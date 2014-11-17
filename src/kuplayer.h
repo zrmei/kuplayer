@@ -18,8 +18,7 @@
 #include <QBitArray>
 #include <array>
 #include <QSystemTrayIcon>
-#include <QSettings>
-
+class QSettings;
 class TitleWidget;
 class QStackedWidget;
 class MPlayerWidget;
@@ -37,7 +36,7 @@ class kuplayer final
 public:
     kuplayer(PyScript *pyinit,QWidget *parent = 0);
     virtual ~kuplayer();
-
+    void setIniFile(QSettings *);
 public slots:
     void show_minimized();
     void skin_change_clicked(QString);
@@ -56,19 +55,19 @@ private:
     void init_setting();
     void to_inifile();
     void init_trayicon();
+    
 public:
     PyScript *pyinit;
     const QStringList name{"tv","movice","zy","music","comic"};
 private:
-         TitleWidget  *title_widget;
-      QStackedWidget  *stacked_widget;
-       MPlayerWidget  *player_widget;
-             MPlayer  *player;
+         TitleWidget   *title_widget;
+      QStackedWidget   *stacked_widget;
+       MPlayerWidget   *player_widget;
+             MPlayer   *player;
       PlayListWidget   xuan_ji_widget;
           SkinWidget   skin_widget;
           MenuWidget   *main_menu;
      QSystemTrayIcon   *trayicon;
-
            QBitArray   can_update{5,true};
            conf_info   *setting;
     std::array<int,5>  pages{ {2,2,2,2,2} };

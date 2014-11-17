@@ -12,7 +12,7 @@
 #include <QLabel>
 
 #define TITLE_WIDGET_HEIGHT 72
-#define TITLE_WIDGET_WIDTH 95
+#define TITLE_WIDGET_WIDTH 100
 #define TITLE_CONTROL_HEIGHT 29
 class PushButton;
 class QMouseEvent;
@@ -22,7 +22,7 @@ class TypeLabel final : public QLabel
 {
     Q_OBJECT
 public:
-    TypeLabel(QString title_name,QWidget *paren=0);
+    explicit TypeLabel(QString title,QWidget *paren=0);
     virtual ~TypeLabel();
     void setMousePress(bool mouse_press);
 signals:
@@ -41,7 +41,7 @@ private:
     bool mouse_pressed{false};
 };
 
-class TitleWidget final : public QWidget
+class TitleWidget : public QWidget
 {
     Q_OBJECT
 signals:
@@ -56,6 +56,7 @@ public:
     void set_text(QString);
     inline QString get_text(){return title->text();}
 public slots:
+    void turepage(int);
     void turepage(QString);
 private:
     PushButton *btn_min;
@@ -71,7 +72,10 @@ private:
 #endif
     QList<TypeLabel*> *labels_store;
     QList<PushButton*> *push_button_store;
-    QStringList  down_title{ "电视剧","电影","综艺","音乐","动漫","播放器"};
+    QStringList  down_title{ 
+        tr("TVShow"),tr("Movies"),tr("Variety"),
+        tr("Music"),tr("Cartoon"),tr("Player")
+    };
 
 };
 #endif // TITLE_WIDGET_H

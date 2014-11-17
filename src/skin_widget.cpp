@@ -115,4 +115,5 @@ void SkinWidget::this_show()
     }else{
         hide();
     }
+    qDebug() <<"skin show";
 }

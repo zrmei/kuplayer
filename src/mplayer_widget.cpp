@@ -29,7 +29,7 @@ MPlayer::~MPlayer()
 
 void MPlayer::setPlayList()
 {
-    QFile f(qApp->applicationDirPath()+"/sources/playlist.list");
+    QFile f(qApp->applicationDirPath()+"/.playlist");
     if(f.open(QIODevice::ReadOnly | QIODevice::Text)){
         QTextStream txtInput(&f);
         play_list.clear();

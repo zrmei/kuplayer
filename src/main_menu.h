@@ -28,6 +28,7 @@ struct conf_info
     bool close_all;
     bool min_or_close;
     bool auto_play_next;
+    bool language;
 };
 
 
@@ -59,6 +60,7 @@ public slots:
     void init_setting(conf_info *info);
     void be_selected(QString,QString);
     void btn_selected(QString,QString);
+    void LanguageChanged(int);
 public:
     QStackedWidget *right_widget;
     conf_info *settings;
@@ -75,7 +77,9 @@ private:
 
        QVBoxLayout *left_layout;
        QHBoxLayout *down_layout;
-    const QStringList setting_strs{"基本设置","播放设置","关于","保存","退出"};
+    const QStringList setting_strs{
+        tr("Basic Settings"),tr("Play Settings"),tr("About"),tr("Save"),tr("Cancel")
+    };
 };
 
 

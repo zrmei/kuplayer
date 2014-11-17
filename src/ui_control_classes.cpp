@@ -51,3 +51,4 @@ void about_widget::on_label_linkActivated(const QString &link)
 {
     QDesktopServices::openUrl(QUrl(link));
 }
+

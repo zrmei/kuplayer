@@ -21,7 +21,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>播放：</string>
+          <string>Play:</string>
          </property>
         </widget>
        </item>
@@ -48,14 +48,14 @@
        <item>
         <widget class="QCheckBox" name="checkBox_auto_play_next">
          <property name="text">
-          <string>始终自动连播</string>
+          <string>Play next automatic </string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QCheckBox" name="checkBox_2">
          <property name="text">
-          <string>始终跳过片头片尾</string>
+          <string>Always skip titles credits</string>
          </property>
         </widget>
        </item>
@@ -86,7 +86,7 @@
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>优先为我选择：</string>
+          <string>Priority for my choice:</string>
          </property>
         </widget>
        </item>
@@ -126,21 +126,21 @@
        <item>
         <widget class="QRadioButton" name="format_spuer">
          <property name="text">
-          <string>超清</string>
+          <string>Super </string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QRadioButton" name="format_high">
          <property name="text">
-          <string>高清</string>
+          <string>High</string>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QRadioButton" name="format_normal">
          <property name="text">
-          <string>标清</string>
+          <string>Standard </string>
          </property>
         </widget>
        </item>
@@ -167,7 +167,7 @@
         </font>
        </property>
        <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#fa0000;&quot;&gt;宽带建议：2M选择高清、4M以上选择超清&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Recommendation: 2M choose High, 4M more choose Super&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>
@@ -183,7 +183,7 @@
        <item>
         <widget class="QLabel" name="label_3">
          <property name="text">
-          <string>热键：</string>
+          <string>Hotkey:</string>
          </property>
         </widget>
        </item>
@@ -212,42 +212,42 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
-            <string>播放/暂停</string>
+            <string>Play / Pause</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>快进</string>
+            <string>Fast Forward</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_6">
            <property name="text">
-            <string>快退</string>
+            <string>Rewind</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>音量加</string>
+            <string>Volume +</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_13">
            <property name="text">
-            <string>音量减</string>
+            <string>Volume -</string>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_14">
            <property name="text">
-            <string>退出全屏</string>
+            <string>Exit Full Screen</string>
            </property>
           </widget>
          </item>
@@ -286,7 +286,7 @@
             <number>1</number>
            </property>
            <property name="text">
-            <string>空格</string>
+            <string>space</string>
            </property>
           </widget>
          </item>

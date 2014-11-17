@@ -55,7 +55,7 @@
             <enum>Qt::AutoText</enum>
            </property>
            <property name="pixmap">
-            <pixmap resource="../kuplayer.qrc">:/logo/logo</pixmap>
+            <pixmap resource="kuplayer.qrc">:/logo/logo</pixmap>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -111,7 +111,7 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources>
-  <include location="../kuplayer.qrc"/>
+  <include location="kuplayer.qrc"/>
  </resources>
  <connections/>
 </ui>

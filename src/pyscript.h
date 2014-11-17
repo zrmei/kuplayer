@@ -18,8 +18,7 @@ class QString;
 #include <python2.7/Python.h>
 
 #ifndef PYTHON_DONOT_CATCH_EXCEPTION
-#define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);\
-     std::shared_ptr<PyThreadStateLock> pylock; try{
+#define PYTHON_CATCH_EXCEPTION_BEGIN try{
 #define PYTHON_CATCH_EXCEPTION_END }catch(boost::python::error_already_set){\
 printf("\n=================================================================\nThe [%d] line in file\
 [%s] has error\n",__LINE__,__FILE__); PyErr_Print();\
@@ -79,6 +78,7 @@ public:
 private:
     pyinit *init_;
     PyObject *module;
+    QStringList return_list;
     QMap<QString,QString> next_page_;
 
     std::mutex mu;

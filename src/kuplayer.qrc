@@ -38,4 +38,8 @@
         <file alias="play">img/controlButton/play.png</file>
         <file alias="stop">img/controlButton/stop.png</file>
     </qresource>
+    <qresource prefix="/qm">
+        <file alias="kuplayer_zn">kuplayer_zn.qm</file>
+        <file alias="kuplayer_en">kuplayer_en.qm</file>
+    </qresource>
 </RCC>

@@ -21,7 +21,7 @@ def getVideoUrls(raw_url, f='normal'):
     if count == 0:
         return 0
     else:
-        f = open("./sources/playlist.list",'w')
+        f = open("./.playlist",'w')
         for i in range(count):
             print >> f,videourl[i].split("\"")[1]
         f.close()
