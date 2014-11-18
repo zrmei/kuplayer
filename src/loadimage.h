@@ -22,24 +22,22 @@ class LoadImage final : public QObject
     Q_OBJECT
 
 signals:
-    void loadImageFinished(CLASS/*视频种类*/,QPixmap/*图片*/,QString/*图片名称*/,QString/*所指url*/);
-
+    void loadImageFinished(CLASS/*视频种类*/,QPixmap/*图片*/,
+                           QString/*图片名称*/,QString/*所指url*/);
 public:
     LoadImage(CLASS index,QObject *parent = 0)
         : index(index)
         , currentIndex(0)
         , list_(new QList<QStringList>)
+        , request(new QNetworkRequest)
         , manager(new QNetworkAccessManager)
     {
         Q_UNUSED(parent);
-        connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(replyFinished(QNetworkReply*)));
+        connect(manager,SIGNAL(finished(QNetworkReply*)),
+                this,SLOT(replyFinished(QNetworkReply*)));
     }
-    virtual ~LoadImage()
-    {
-        delete manager;
-        delete list_;
-    }
-    void setFileName(QStringList listname,QString separator="$$")
+
+    void setFileName(const QStringList& listname,QString separator="$$")
     {
         for(int i=0; i<listname.size(); ++i){
             list_->append(listname[i].split(separator));
@@ -50,9 +48,12 @@ public:
         if(currentIndex == list_->length()){
             emit loadImageFinished(index,QPixmap(),"","");
             currentIndex = 0;
+            deleteLater();
             return;
+        }else{
+            request->setUrl(QUrl(list_->at(currentIndex)[1]));
+            manager->get(*request);
         }
-        manager->get(QNetworkRequest(list_->at(currentIndex)[1]));
     }
 
 private slots:
@@ -60,15 +61,25 @@ private slots:
     {
         QPixmap pix;
         pix.loadFromData(reply->readAll());
-        emit loadImageFinished(index,std::move(pix),list_->at(currentIndex)[0],list_->at(currentIndex)[2]);
+        emit loadImageFinished(index,std::move(pix),
+                               list_->at(currentIndex)[0],list_->at(currentIndex)[2]);
         ++currentIndex;
         start();
     }
-
+    
 private:
+    virtual ~LoadImage()
+    {
+        qDebug() << "delete loadimage:"<<index;
+        delete request;
+        delete manager;
+        delete list_;
+    }
+    
     int index;
     int currentIndex;
     QList<QStringList>    *list_;
+    QNetworkRequest       *request;
     QNetworkAccessManager *manager;
 };
 

@@ -40,7 +40,7 @@ public:
         PyRun_SimpleString("sys.path.append('./pyscript/')");
         _module = PyImport_ImportModule("py_kuplayer");
     }
-    ~pyinit(){ /*Py_Finalize();*/ }
+    ~pyinit(){ /*Py_Finalize(); */}
     inline bool isInitialized() { return Py_IsInitialized();}
     static void err_print() { PyErr_Print(); }
     inline PyObject* module() { return _module; }
@@ -66,16 +66,19 @@ class PyScript final
 public:
     PyScript();
     ~PyScript();
-    bool GetVideoUrls(QString keyurl,QString format);
-    QStringList connect_img_url(QString,QString);
     bool getShowList();
-    QStringList getUrlByName(CLASS,QString,QString,QString);
-    QStringList gotoNextPage(QString name,int index);
-    QStringList getplayUrl(QString);
-    QStringList getAll(CLASS,QString);
+    bool GetVideoUrls(QString keyurl,QString format);
+    
+    const QStringList& connect_img_url(QString,QString);
+    const QStringList& getUrlByName(CLASS,QString,QString,QString);
+    const QStringList& gotoNextPage(QString name,int index);
+    const QStringList& getplayUrl(QString);
+    const QStringList& getAll(CLASS,QString);
 
     QStringList show_list;
 private:
+    inline const QStringList& 
+        return_list_const(){return return_list;}
     pyinit *init_;
     PyObject *module;
     QStringList return_list;

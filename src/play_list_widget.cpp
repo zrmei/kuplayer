@@ -58,11 +58,11 @@ PlayListWidget::PlayListWidget(QWidget *parent)
 
     play_next_key = new QAction(this);
     play_next_key->setShortcut(QKeySequence(Qt::Key_PageDown));
-    connect(play_next_key,SIGNAL(triggered()),SLOT(play_next_video()));
+    connect(play_next_key,SIGNAL(triggered()),SLOT(on_playNext_clicked()));
 
     play_prev_key = new QAction(this);
     play_prev_key->setShortcut(QKeySequence(Qt::Key_PageUp));
-    connect(play_prev_key,SIGNAL(triggered()),SLOT(play_prev_video()));
+    connect(play_prev_key,SIGNAL(triggered()),SLOT(on_playPrev_clicked()));
 
 }
 PlayListWidget::~PlayListWidget()
@@ -75,7 +75,7 @@ PlayListWidget::~PlayListWidget()
     delete view;
 }
 
-void PlayListWidget::sort(QStringList& list)
+void PlayListWidget::sort(const QStringList& list)
 {
     QString first;
     QString second;
@@ -101,7 +101,7 @@ void PlayListWidget::sort(QStringList& list)
     });
 }
 
-void PlayListWidget::setList(int,QStringList list)
+void PlayListWidget::on_list_changed(int,const QStringList& list)
 {
     play_list.clear();
     currentIndex = 0;
@@ -136,7 +136,7 @@ void PlayListWidget::setList(int,QStringList list)
     for_each(play_list.begin()+1,play_list.end(),func_add_label);
 }
 
-void PlayListWidget::show_xuan_ji(QString,QString)
+void PlayListWidget::on_xuan_ji_show(QString,QString)
 {
     if(isHidden()){
         QPoint pos_ = QCursor::pos();
@@ -158,7 +158,7 @@ void PlayListWidget::this_click(QString name,QString url)
         }
     }
 }
-void PlayListWidget::play_next_video()
+void PlayListWidget::on_playNext_clicked()
 {
     ++currentIndex;
     if(currentIndex >= play_list.size()){
@@ -170,7 +170,7 @@ void PlayListWidget::play_next_video()
                std::get<2>(play_list[currentIndex]));
 }
 
-void PlayListWidget::play_prev_video()
+void PlayListWidget::on_playPrev_clicked()
 {
     --currentIndex;
     if(currentIndex < 0){

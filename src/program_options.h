@@ -8,7 +8,7 @@
 #ifndef PROGRAM_OPTIONS_H
 #define PROGRAM_OPTIONS_H
 
-char* VERSION =\
+const char* VERSION =\
 "\t******************************************\n\
 \t*      MadeBy : MeiZhaorui(Mason)        *\n\
 \t*      E-Mail : listener_mei@163.com     *\n\
@@ -16,9 +16,9 @@ char* VERSION =\
 \t*  LastUpdate : 2014/10/29               *\n\
 \t*        host : Ubuntu x86_64 3.13.0     *\n\
 \t******************************************\n";
-class QStringList;
+
 namespace opt{
-bool complie(int argc,char *argv[],char* version);
+bool program_options(int argc,char *argv[],const char* version);
 }
 
 #endif // PROGRAM_OPTIONS_H

@@ -11,6 +11,7 @@
 #include <QMouseEvent>
 #include <QDesktopWidget>
 #include <QFileInfo>
+#include <QDir>
 
 ShadowWidget::ShadowWidget(QWidget *parent)
     : QWidget(parent)
@@ -32,12 +33,16 @@ ShadowWidget::ShadowWidget(QWidget *parent)
 
 ShadowWidget::~ShadowWidget()
 {
-
+    delete desk;
 }
 
 void ShadowWidget::change_skin(QString pic_name)
 {
     static const QString PIC_PATH = qApp->applicationDirPath()+"/sources/img/skin/";
+    if(!QFileInfo(PIC_PATH).isDir()){
+    QSharedPointer<QDir> dir(new QDir());
+        dir->mkpath(PIC_PATH);
+    }
     QString pic_path;
     pic_path.insert(0,PIC_PATH);
     pic_path.insert(pic_path.size(),pic_name);

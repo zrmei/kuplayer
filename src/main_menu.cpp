@@ -38,12 +38,18 @@ MenuWidget::MenuWidget(QWidget *parent)
     main_layout->setContentsMargins(5,5,5,5);
 }
 
-void MenuWidget::this_show()
+MenuWidget::~MenuWidget()
 {
-    qDebug() << "menu show \t" << tr("Basic Settings");
+    delete btn_close;
+    delete up_title_layout;
+    delete down_widget;
+}
+
+void MenuWidget::on_this_show()
+{
     if(isHidden()){
         QPoint pos_ = QCursor::pos();
-        move(pos_.x()+120,pos_.y()+120);
+        move(pos_.x()+120,pos_.y()+100);
         down_widget->be_selected(tr("Basic Settings"),"");
         show();
     }else{
@@ -66,7 +72,6 @@ void MenuWidget::init_setting(conf_info* info)
 
 down_widget_::down_widget_(QWidget *parent)
     : QWidget(parent)
-    , settings(new conf_info)
     , label_sores(new QList<SelectLabel*>)
 {
     base_set = new SelectLabel(setting_strs[0]);

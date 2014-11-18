@@ -27,7 +27,7 @@ protected:
     virtual void mousePressEvent(QMouseEvent *);
     virtual void mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void paintEvent(QPaintEvent *event);
+    virtual void paintEvent(QPaintEvent *);
     bool is_full_screen{false};
     inline QString get_skin()const{return skin.split('/').last();}
 private:

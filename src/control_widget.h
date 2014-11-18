@@ -37,10 +37,10 @@ signals:
     void vol_down_clicked();
     void vol_mute_clicked();
 public slots:
-    void trigger_play_pause(bool);
-    void on_play_pause();
-    void setTime(qint64);
-    void setDuration(qint64);
+    void on_play_pause_triggered(bool);
+    void on_play_pause_triggered();
+    void on_time_changed(qint64);
+    void on_douration_changed(qint64);
 public:
     explicit ControlWidget(QWidget *parent = 0);
     virtual ~ControlWidget();

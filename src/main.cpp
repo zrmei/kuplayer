@@ -22,14 +22,13 @@
 
 int main(int argc, char *argv[])
 {
-    if( !opt::complie(argc,argv,VERSION) ){
+    if( !opt::program_options(argc,argv,VERSION) ){
         return -1;
     }
-    printf("%s",VERSION);
     QApplication a(argc, argv);
+    a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
     
-    QTextCodec *codec = QTextCodec::codecForName("System"); 
-	QTextCodec::setCodecForLocale(codec); 
+	QTextCodec::setCodecForLocale(QTextCodec::codecForName("System")); 
     QTranslator   translator;
     std::shared_ptr<QSettings> iniFile(new QSettings(
                                            QDir::homePath()+"/.kuplayer/kuplayer.conf",
@@ -49,17 +48,13 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
-
     QDesktopWidget *desk = new QDesktopWidget;
-
-    QPixmap pixmap(":/logo/welcome");
-    QSplashScreen *splash = new QSplashScreen(pixmap,Qt::WindowStaysOnTopHint);
+    QSplashScreen *splash = new QSplashScreen(QPixmap(":/logo/welcome"),Qt::WindowStaysOnTopHint);
 
     int x = (desk->screen(0)->width() - splash->width()) /2;
     int y = (desk->screen(0)->height() - splash->height()) /2;
 
-    splash->move(x,y+2);
+    splash->move(x,y);
     splash->show();
 
     kuplayer w(pyinit.get());

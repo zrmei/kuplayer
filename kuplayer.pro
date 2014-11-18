@@ -11,8 +11,8 @@ TEMPLATE = app
 
 PRECOMPILED_HEADER = src/common.h
 
-QMAKE_CXXFLAGS += -std=c++11 -s
-QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT
+QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT -Werror -O0
 QMAKE_LFLAGS_RELEASE += -Wl,-s
 QMAKE_LFLAGS += -Wl,-rpath,./lib
 
@@ -80,4 +80,4 @@ FORMS += \
     src/base_set_weidget.ui \
     src/play_set_widget.ui
 
-TRANSLATIONS += kuplayer.ts
+TRANSLATIONS += kuplayer_zn.ts

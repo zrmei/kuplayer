@@ -12,14 +12,15 @@
 #include <functional>
 #include <python2.7/Python.h>
 #include <QStringList>
+#include <QDebug>
 
-class mThread final : public QThread
+class mThread : public QThread
 {
     Q_OBJECT
     typedef unsigned int CLASS;
     typedef std::function<QStringList()> F;
 signals:
-    void mfinished(int,QStringList);
+    void mfinished(int,const QStringList&);
 public:
     mThread(int page,F func,QObject *parent=0)
         : QThread(parent)
@@ -27,13 +28,21 @@ public:
         , func_(func)
     {}
 
+
 protected:
     virtual void run()
     {
-        QStringList tmp = func_();
+        const QStringList& tmp = func_();
         emit mfinished(page_,tmp);
+        deleteLater();
     }
+
 private:
+    ~mThread()
+    {
+        qDebug() << "thread over" << page_;
+    }
+    
     CLASS page_;
     F func_;
 

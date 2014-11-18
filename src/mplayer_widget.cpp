@@ -8,8 +8,7 @@
 #include "common.h"
 
 #include "mplayer_widget.h"
-#include <QApplication>
-#include "AudioOutput.h"
+#include <AudioOutput.h>
 
 /****************************************************************/
 MPlayer::MPlayer(QObject *parent)
@@ -29,15 +28,13 @@ MPlayer::~MPlayer()
 
 void MPlayer::setPlayList()
 {
-    QFile f(qApp->applicationDirPath()+"/.playlist");
-    if(f.open(QIODevice::ReadOnly | QIODevice::Text)){
-        QTextStream txtInput(&f);
+    if(list_file.open(QIODevice::ReadOnly | QIODevice::Text)){
+        QTextStream txtInput(&list_file);
         play_list.clear();
         while(!txtInput.atEnd()){
-            auto tmp = txtInput.readLine();
-            play_list.append(tmp);
+            play_list.append(txtInput.readLine());
         }
-        f.close();
+        list_file.close();
     }
 }
 

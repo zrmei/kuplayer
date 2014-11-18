@@ -37,7 +37,7 @@ public:
     DetailLabel(QPixmap, QString, QString, QWidget *parent = 0);
     virtual ~DetailLabel();
 
-    inline void set_Pixmap(const QPixmap& img);
+    inline void set_Pixmap(QPixmap &&img);
     inline void set_Url(const QString& url);
     inline void set_Title(const QString& title);
     inline QString text(){return lblTitle_->text();}
@@ -49,8 +49,7 @@ private:
           Label *lblImg_;
           Label *lblTitle_;
         QString  url_;
-    QHBoxLayout *horizontalLayout;
-    QVBoxLayout *verticalLayout;
+        QVBoxLayout *verticalLayout;
 };
 
 

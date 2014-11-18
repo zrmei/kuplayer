@@ -41,6 +41,9 @@ void SelectLabel::enterEvent(QEvent *)
 void SelectLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
     QLabel::mouseReleaseEvent(ev);
+    if(be_select){
+        return;
+    }
     if(ev->button() == Qt::LeftButton &&
             rect().contains(ev->pos())){
         mouse_pressed = true;

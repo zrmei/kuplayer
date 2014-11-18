@@ -16,7 +16,7 @@ class QScrollArea;
 class PushButton;
 class SelectLabel;
 
-class PlayListWidget final : public ShadowWidget
+class PlayListWidget : public ShadowWidget
 {
     Q_OBJECT
 signals:
@@ -25,16 +25,16 @@ public:
     explicit PlayListWidget(QWidget *parent = 0);
     ~PlayListWidget();
     typedef QList<std::tuple<QString,QString,QString>> list_map;
-    void sort(QStringList &list);
+    void sort(const QStringList &list);
     inline QList<QAction*> init_action()
     {
         return {{play_next_key,play_prev_key}};
     }
 public slots:
-    void setList(int,QStringList);
-    void show_xuan_ji(QString, QString);
-    void play_next_video();
-    void play_prev_video();
+    void on_list_changed(int, const QStringList &);
+    void on_xuan_ji_show(QString, QString);
+    void on_playNext_clicked();
+    void on_playPrev_clicked();
 protected:
     void leaveEvent(QEvent *);
 private slots:

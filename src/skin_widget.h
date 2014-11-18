@@ -22,8 +22,8 @@ signals:
 public:
     explicit SkinWidget(QWidget *parent = 0);
 public slots:
-    void this_show();
-    void url_triggered(QString,QString);
+    void on_this_show();
+    void on_url_triggered(QString,QString);
 
 private:
     void init_skin(QString name);

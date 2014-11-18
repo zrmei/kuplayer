@@ -12,6 +12,7 @@
 #include <QMouseEvent>
 #include <QApplication>
 #include <QPixmap>
+#include <QDebug>
 
 /****************************************************************************/
 
@@ -29,13 +30,13 @@ void Label::mouseDoubleClickEvent(QMouseEvent *ev)
 void Label::enterEvent(QEvent *ev)
 {
     QLabel::enterEvent(ev);
-    QApplication::setOverrideCursor(QCursor(Qt::PointingHandCursor));
+    this->setCursor(QCursor(Qt::PointingHandCursor));
 }
 
 void Label::leaveEvent(QEvent *ev)
 {
     QLabel::leaveEvent(ev);
-    QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
+    this->setCursor(QCursor(Qt::ArrowCursor));
 }
 
 /****************************************************************************/
@@ -43,16 +44,16 @@ void Label::leaveEvent(QEvent *ev)
 DetailLabel::DetailLabel(QWidget *parent)
     : QWidget(parent)
 {
-    horizontalLayout = new QHBoxLayout(this);
-    verticalLayout = new QVBoxLayout();
+    QHBoxLayout *horizontalLayout = new QHBoxLayout(this);
+    verticalLayout = new QVBoxLayout;
     verticalLayout->setSpacing(0);
 
-    lblImg_ = new Label(this);
+    lblImg_ = new Label;
     lblImg_->setAlignment(Qt::AlignCenter);
 
     verticalLayout->addWidget(lblImg_);
 
-    lblTitle_= new Label(this);
+    lblTitle_= new Label;
     lblTitle_->setMaximumHeight(36);
     lblTitle_->setAlignment(Qt::AlignHCenter| Qt::AlignBottom);
 
@@ -66,24 +67,24 @@ DetailLabel::DetailLabel(QWidget *parent)
 DetailLabel::DetailLabel(QPixmap img, QString title, QString url, QWidget *parent)
     : DetailLabel(parent)
 {
-    set_Pixmap(img);
+    set_Pixmap(std::move(img));
     set_Title(title);
     set_Url(url);
 }
 
 DetailLabel::~DetailLabel()
 {
+//    qDebug() <<"DetailLabel("<<lblTitle_->text()<<") deleted";
     delete lblImg_;
     delete lblTitle_;
     delete verticalLayout;
-    delete horizontalLayout;
 }
 void DetailLabel::this_url_triggered()
 {
     emit url_triggered(lblTitle_->text(),url_);
 }
 
-void DetailLabel::set_Pixmap(const QPixmap &img)
+void DetailLabel::set_Pixmap(QPixmap &&img)
 {
     lblImg_->setPixmap(img);
     setFixedSize(img.width()+20,img.height()+36);
@@ -92,6 +93,8 @@ void DetailLabel::set_Pixmap(const QPixmap &img)
 void DetailLabel::set_Title(const QString &title)
 {
     lblTitle_->setText(title);
+    lblTitle_->setToolTip(title);
+    lblImg_->setToolTip(title);
 }
 
 void DetailLabel::set_Url(const QString &url)

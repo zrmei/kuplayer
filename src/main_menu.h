@@ -37,9 +37,9 @@ class MenuWidget : public ShadowWidget
     Q_OBJECT
 public:
     explicit MenuWidget(QWidget *parent = 0);
-
+    ~MenuWidget();
 public slots:
-    void this_show();
+    void on_this_show();
     void show_about();
     void init_setting(conf_info *);
 private:

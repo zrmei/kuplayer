@@ -24,8 +24,11 @@ class QStackedWidget;
 class MPlayerWidget;
 class MPlayer;
 class PyScript;
+class mThread;
+class LoadImage;
 
-class kuplayer final
+
+class kuplayer        
 #ifdef CAN_RESIZE
  : public MainWidget
 #else
@@ -38,14 +41,14 @@ public:
     virtual ~kuplayer();
     void setIniFile(QSettings *);
 public slots:
-    void show_minimized();
-    void skin_change_clicked(QString);
+    void on_showMin_clicked();
+    void on_skin_changed(QString);
     void on_Fullscreen_changed();
-    void play_finished(bool);
-    void start_loadImage(int, QStringList);
-    void load_next_page(CLASS);
-    void loadImageFinished(CLASS,QPixmap,QString,QString);
-    void url_triggered(QString, QString);
+    void on_play_finished(bool);
+    void on_loadImage_started(int,const QStringList&);
+    void on_nextPage_loaded(CLASS);
+    void loadImageFinished(CLASS, QPixmap, QString, QString);
+    void on_url_triggered(QString, QString);
     void url_ji_triggered(QString, QString url);
     void change_url(CLASS, int, QString);
 private slots:

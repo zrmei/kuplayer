@@ -106,12 +106,20 @@ TitleWidget::TitleWidget(QWidget *parent)
 {
     btn_close = new PushButton;
     btn_close->setObjectName("close");
+    btn_close->setToolTip(tr("Close"));
+    
     btn_min = new PushButton;
     btn_min->setObjectName("min");
+    btn_min->setToolTip(tr("Min"));
+    
     btn_skin = new PushButton;
     btn_skin->setObjectName("skin");
+    btn_skin->setToolTip(tr("Skin"));
+    
     btn_menu = new PushButton;
     btn_menu->setObjectName("menu");
+    btn_menu->setToolTip(tr("Menu"));
+    
     title = new QLabel;
     push_button_store->append(btn_close);
     push_button_store->append(btn_min);
@@ -199,8 +207,8 @@ void TitleWidget::turepage(int index)
 
 void TitleWidget::turepage(QString name)
 {
-    int index = down_title.indexOf(name);
-    if(index < TV || index > PLAYER)
+    unsigned int index = down_title.indexOf(name);
+    if(index > PLAYER)
         index = PLAYER;
     turepage(index);
 }

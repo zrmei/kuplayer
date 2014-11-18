@@ -66,6 +66,7 @@ AreaWidget::~AreaWidget()
 void AreaWidget::addDetailLabel(DetailLabel *label)
 {
     label_stores->append(label);
+    label->setParent(qobject_cast<QWidget*>(scroll_layout));
     scroll_layout->addWidget(label,row,col);
     ++col;
     if(col == 4){

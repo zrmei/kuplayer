@@ -10,8 +10,10 @@
 
 #include <QtAV/QtAV.h>
 #include <QtAV/WidgetRenderer.h>
+#include <QApplication>
+#include <QFile>
 
-class MPlayer final : public QtAV::AVPlayer
+class MPlayer : public QtAV::AVPlayer
 {
     Q_OBJECT
 signals:
@@ -33,6 +35,7 @@ private slots:
     void mStarted();
 private:
     QStringList play_list;
+    QFile list_file{qApp->applicationDirPath()+"/.playlist"};
 };
 
 class RendererWidget final : public QtAV::WidgetRenderer

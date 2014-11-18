@@ -41,12 +41,19 @@ ControlWidget::ControlWidget(QWidget *parent) :
     time_current->setMinimumWidth(65);
 
     backward_ = new ControlLabel(":/control/backward");
+    backward_->setToolTip(tr("Backward"));
     connect(backward_,SIGNAL(clicked()),this,SIGNAL(backward_clicked()));
+    
     stop_ = new ControlLabel(":/control/stop");
+    stop_->setToolTip(tr("Stop"));
     connect(stop_,SIGNAL(clicked()),this,SIGNAL(stop_clicked()));
+    
     play_pause = new ControlLabel(":/control/play");
-    connect(play_pause,SIGNAL(clicked()),this,SLOT(on_play_pause()));
+    play_pause->setToolTip(tr("Play/Pause"));
+    connect(play_pause,SIGNAL(clicked()),this,SLOT(on_play_pause_triggered()));
+    
     foreward_ = new ControlLabel(":/control/foreward");
+    foreward_->setToolTip(tr("Foreward"));
     connect(foreward_,SIGNAL(clicked()),this,SIGNAL(foreward_clicked()));
 
     time_all = new QLabel;
@@ -97,7 +104,7 @@ void ControlWidget::init_actions()
 
     pause_key = new QAction(this);
     pause_key->setShortcut(QKeySequence(Qt::Key_Space));
-    connect(pause_key,SIGNAL(triggered()),this,SLOT(on_play_pause()));
+    connect(pause_key,SIGNAL(triggered()),this,SLOT(on_play_pause_triggered()));
 
     foreward_key = new QAction(this);
     foreward_key->setShortcut(QKeySequence(Qt::Key_Right));
@@ -116,7 +123,7 @@ void ControlWidget::init_actions()
     connect(mute_key,SIGNAL(triggered()),this,SIGNAL(vol_mute_clicked()));
 }
 
-void ControlWidget::trigger_play_pause(bool)
+void ControlWidget::on_play_pause_triggered(bool)
 {
     if(!isRuning) return;
     if(play_pause->objectName() == "play"){
@@ -128,21 +135,21 @@ void ControlWidget::trigger_play_pause(bool)
     }
 }
 
-void ControlWidget::on_play_pause()
+void ControlWidget::on_play_pause_triggered()
 {
-    trigger_play_pause(true);
+    on_play_pause_triggered(true);
     if(play_pause->objectName() == "play")
         emit play_pause_clicked(false);
     else
         emit play_pause_clicked(true);
 }
 
-void ControlWidget::setTime(qint64 pos)
+void ControlWidget::on_time_changed(qint64 pos)
 {
     time_current->setText(QTime(0, 0, 0).addMSecs(pos).toString("HH:mm:ss"));
 }
 
-void ControlWidget::setDuration(qint64 pos)
+void ControlWidget::on_douration_changed(qint64 pos)
 {
     time_all->setText(QTime(0, 0, 0).addMSecs(pos).toString("HH:mm:ss"));
 }

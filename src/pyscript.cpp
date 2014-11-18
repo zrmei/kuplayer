@@ -40,6 +40,9 @@ bool PyScript::GetVideoUrls(QString keyurl,QString format)
 
 bool PyScript::getShowList()
 {
+    std::lock_guard<std::mutex> lock(mu);
+    std::shared_ptr<PyThreadStateLock> pylock;
+    
     list tmp;
     try{
         tmp = python::call_method<list>(module,"getShowList");
@@ -52,7 +55,7 @@ bool PyScript::getShowList()
     return true;
 }
 
-QStringList
+const QStringList&
 PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time)
 {
     std::lock_guard<std::mutex> lock(mu);
@@ -66,12 +69,12 @@ PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time
                                          ,classes.toStdString().c_str()
                                          ,time.toStdString().c_str());
     PYTHON_CATCH_EXCEPTION_END
-            QStringList tmp ;
-    tmp << QString(extract<char*>(p));
-    return tmp;
+    return_list.clear();
+    return_list << QString(extract<char*>(p));
+    return return_list_const();
 }
 
-QStringList PyScript::connect_img_url(QString url, QString name)
+const QStringList& PyScript::connect_img_url(QString url, QString name)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<PyThreadStateLock> pylock;
@@ -93,10 +96,10 @@ QStringList PyScript::connect_img_url(QString url, QString name)
             return_list.append(QString(extract<char*>(tmp[i])));
         }
     }
-    return return_list;
+    return return_list_const();
 }
 
-QStringList PyScript::gotoNextPage(QString name, int index)
+const QStringList& PyScript::gotoNextPage(QString name, int index)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<PyThreadStateLock> pylock;
@@ -106,10 +109,10 @@ QStringList PyScript::gotoNextPage(QString name, int index)
     return_list  << next_page_.value(name)+QString::number(index)+".html";
     PYTHON_CATCH_EXCEPTION_END
     
-    return return_list;
+    return return_list_const();
 }
 
-QStringList PyScript::getplayUrl(QString url)
+const QStringList& PyScript::getplayUrl(QString url)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<PyThreadStateLock> pylock;
@@ -126,10 +129,10 @@ QStringList PyScript::getplayUrl(QString url)
     }else{
         return_list << "";
     }
-    return return_list;
+    return return_list_const();
 }
 
-QStringList PyScript::getAll(CLASS classes,QString url)
+const QStringList& PyScript::getAll(CLASS classes,QString url)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<PyThreadStateLock> pylock;
@@ -146,7 +149,7 @@ QStringList PyScript::getAll(CLASS classes,QString url)
         func = "get_comic_all";
         break;
     default:
-        return QStringList();
+        return return_list_const();
     }
     
     python::list sstr;
@@ -158,7 +161,7 @@ QStringList PyScript::getAll(CLASS classes,QString url)
     for(ssize_t i=0;i<python::len(sstr); ++i){
         return_list << QString(extract<char*>(sstr[i]));
     }
-    return return_list;
+    return return_list_const();
 }
 
 #endif //PYSCRIPT_CPP

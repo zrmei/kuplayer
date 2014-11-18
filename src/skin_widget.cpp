@@ -89,7 +89,7 @@ void SkinWidget::init_skin(QString name)
     QString pic = PIC_PATH + name;
     auto *l = new DetailLabel(QPixmap(pic).scaled(QSize(170,96)),QString(),name);
     connect(l,SIGNAL(url_triggered(QString,QString)),
-            this,SLOT(url_triggered(QString,QString)));
+            this,SLOT(on_url_triggered(QString,QString)));
     label_store.append(l);
     scroll_layout->addWidget(l,row,col);
     ++col;
@@ -99,13 +99,13 @@ void SkinWidget::init_skin(QString name)
     }
 }
 
-void SkinWidget::url_triggered(QString, QString index)
+void SkinWidget::on_url_triggered(QString, QString index)
 {
     change_skin(index);
     emit skin_change_clicked(index);
 }
 
-void SkinWidget::this_show()
+void SkinWidget::on_this_show()
 {
     if(isHidden()){
         QPoint pos_ = QCursor::pos();
@@ -115,5 +115,4 @@ void SkinWidget::this_show()
     }else{
         hide();
     }
-    qDebug() <<"skin show";
 }
