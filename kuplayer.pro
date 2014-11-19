@@ -67,7 +67,9 @@ unix: {
     LIBS += $$PWD/resources/libs/libboost_python.a
     LIBS += $$PWD/resources/libs/libboost_system.a
 
-    LIBS += -L$$PWD/resources/libs  -loptions -lQtAV -lpython2.7 -lnotify
+    LIBS += -lnotify -lpython2.7
+
+    LIBS += -L$$PWD/resources/libs  -loptions -lQtAV
 }
 RESOURCES += \
     src/kuplayer.qrc
