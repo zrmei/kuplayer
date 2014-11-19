@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets network
+QT       += core gui widgets network av
 
 
 TARGET = kuplayer
@@ -69,7 +69,7 @@ unix: {
 
     LIBS += -lnotify -lpython2.7
 
-    LIBS += -L$$PWD/resources/libs  -loptions -lQtAV
+    LIBS += -L$$PWD/resources/libs  -loptions
 }
 RESOURCES += \
     src/kuplayer.qrc
