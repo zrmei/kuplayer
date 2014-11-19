@@ -59,22 +59,24 @@ private:
     void to_inifile();
     void init_trayicon();
     
-public:
-    PyScript *pyinit;
+public:    
     const QStringList name{"tv","movice","zy","music","comic"};
 private:
+      PlayListWidget   xuan_ji_widget;
+          SkinWidget   skin_widget;
+          
+            PyScript   *pyinit;
          TitleWidget   *title_widget;
       QStackedWidget   *stacked_widget;
        MPlayerWidget   *player_widget;
              MPlayer   *player;
-      PlayListWidget   xuan_ji_widget;
-          SkinWidget   skin_widget;
           MenuWidget   *main_menu;
      QSystemTrayIcon   *trayicon;
-           QBitArray   can_update{5,true};
            conf_info   *setting;
-    std::array<int,5>  pages{ {2,2,2,2,2} };
-            QSettings  *iniFile;
+           QSettings   *iniFile;
+           
+           QBitArray   can_update{5,true};
+    std::array<int,5>  pages{ {2,2,2,2,2} };     
     std::array<std::tuple<QString,QString,QString>,5> locate_class_time;
 };
 

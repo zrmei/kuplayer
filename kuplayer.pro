@@ -6,15 +6,18 @@
 
 QT       += core gui widgets network
 
+
 TARGET = kuplayer
 TEMPLATE = app
 
 PRECOMPILED_HEADER = src/common.h
 
-QMAKE_CXXFLAGS += -std=c++11
-QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT -Werror -O0
-QMAKE_LFLAGS_RELEASE += -Wl,-s
+QMAKE_CXXFLAGS += -std=c++11 -Wextra
+QMAKE_CXXFLAGS_DEBUG += -g3 -O0
+QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT -Werror -s
+
 QMAKE_LFLAGS += -Wl,-rpath,./lib
+QMAKE_LFLAGS_RELEASE += -Wl,-s
 
 SOURCES += src/control_widget.cpp \
     src/detail_label.cpp \

@@ -13,7 +13,7 @@ class QHBoxLayout;
 class QVBoxLayout;
 class QMouseEvent;
 
-class Label final : public QLabel
+class Label : public QLabel
 {
     Q_OBJECT
 signals:

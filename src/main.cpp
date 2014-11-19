@@ -28,6 +28,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
     
+
 	QTextCodec::setCodecForLocale(QTextCodec::codecForName("System")); 
     QTranslator   translator;
     std::shared_ptr<QSettings> iniFile(new QSettings(

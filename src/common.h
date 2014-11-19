@@ -26,6 +26,20 @@ using std::function;
 #define SHADOW_WIDTH  5
 #define SHADOW_HEIGHT 5
 
+#if defined(__GNUC__) && !defined(__clang__) 
+    #if (__GNUC__ < 4) || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
+        #error Please use gcc4.6.0 or higher to support some new feature.
+//    #else
+//        #pragma message "gcc is using"
+    #endif
+#elif defined(__clang__)
+    #if (__clang_major__ < 3) || (__clang_major__ == 3 && __clang_minor__ < 5)
+        #error Please use clang3.5.0 or higher to support some new feature.
+//    #else
+//        #pragma message "clang is using "
+    #endif
+#endif
+
 typedef unsigned int CLASS;
 const CLASS TV = 0,MOVIE = 1,ZONGYI = 2,MUSIC = 3,COMIC = 4,PLAYER = 5,NONE = 6;
 

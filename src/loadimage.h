@@ -14,6 +14,7 @@
 #include <QPixmap>
 #include <QWaitCondition>
 #include <QMutex>
+#include <QDebug>
 
 typedef unsigned int CLASS;
 

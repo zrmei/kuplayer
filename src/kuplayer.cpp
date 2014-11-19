@@ -52,7 +52,7 @@ this->layout()->setContentsMargins(0,0,0,0);
 #define SHOW_PAGE "http://www.youku.com/show_page/"
 
 kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
-#ifdef CAN_RESZE
+#ifdef CAN_RESIZE
     : MainWidget(parent)
 #else
     : ShadowWidget(parent)
