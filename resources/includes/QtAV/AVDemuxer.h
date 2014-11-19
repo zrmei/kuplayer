@@ -24,7 +24,6 @@
 
 #include <QtAV/QtAV_Global.h>
 #include <QtAV/CommonTypes.h>
-#include <QtAV/AVError.h>
 #include <QtCore/QVariant>
 #include <QtCore/QObject>
 #include <QtCore/QSize>
@@ -64,7 +63,7 @@ public:
     };
 
     enum SeekUnit {
-        SeekByTime, // only this is supported now
+        SeekByTime,
         SeekByByte,
         SeekByFrame
     };
@@ -79,7 +78,7 @@ public:
 
     MediaStatus mediaStatus() const;
     bool atEnd() const;
-    bool close(); //TODO: rename unload()
+    bool close();
     bool loadFile(const QString& fileName);
     bool isLoaded(const QString& fileName) const;
     bool load(QIODevice* iocontext);
@@ -158,22 +157,30 @@ public:
 
     /**
      * @brief getInterruptTimeout return the interrupt timeout
+     * @return
      */
     qint64 getInterruptTimeout() const;
+
     /**
      * @brief setInterruptTimeout set the interrupt timeout
-     * @param timeout in ms
+     * @param timeout
+     * @return
      */
     void setInterruptTimeout(qint64 timeout);
+
     /**
      * @brief getInterruptStatus return the interrupt status
+     * @return
      */
-    bool getInterruptStatus() const;
+    int getInterruptStatus() const;
+
     /**
      * @brief setInterruptStatus set the interrupt status
-     * @param interrupt true: abort current operation like loading and reading packets. false: no interrupt
+     * @param interrupt
+     * @return
      */
-    void setInterruptStatus(bool interrupt);
+    void setInterruptStatus(int interrupt);
+
     /*
      * libav's AVDictionary. we can ignore the flags used in av_dict_xxx because we can use hash api.
      * In addition, av_dict is slow.
@@ -184,9 +191,6 @@ public:
     QVariantHash options() const;
 
 signals:
-    void unloaded();
-    void userInterrupted(); //NO direct connection because it's emit before interrupted happens
-    void loaded();
     /*emit when the first frame is read*/
     void started();
     void finished(); //end of file
@@ -195,11 +199,6 @@ signals:
 
 private:
     void setMediaStatus(MediaStatus status);
-    /*!
-     * \brief handleError
-     * error code (errorCode) and message (msg) may be modified internally
-     */
-    void handleError(int averr, AVError::ErrorCode* errorCode, QString& msg);
 
     MediaStatus mCurrentMediaStatus;
     bool has_attached_pic;

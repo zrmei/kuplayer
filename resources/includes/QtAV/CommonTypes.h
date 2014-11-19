@@ -29,15 +29,15 @@ namespace QtAV {
 
 enum MediaStatus
 {
-    UnknownMediaStatus, // e.g. user status after interrupt
+    UnknownMediaStatus,
     NoMedia,
-    LoadingMedia, // when source is set
-    LoadedMedia, // if auto load and source is set. player is stopped state
+    LoadingMedia,
+    LoadedMedia,
     StalledMedia,
     BufferingMedia,
-    BufferedMedia, // when playing
+    BufferedMedia,
     EndOfMedia,
-    InvalidMedia // what if loop > 0 or stopPosition() is not mediaStopPosition()?
+    InvalidMedia
 };
 
 enum SurfaceType {
