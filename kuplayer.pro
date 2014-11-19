@@ -69,7 +69,7 @@ unix: {
 
     LIBS += -lnotify -lpython2.7
 
-    LIBS += -L$$PWD/resources/libs  -loptions
+    LIBS += -L$$PWD/resources/libs  -loptions_64
 }
 RESOURCES += \
     src/kuplayer.qrc
