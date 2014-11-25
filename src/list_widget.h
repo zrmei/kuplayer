@@ -7,18 +7,18 @@
  *********************************************/
 #ifndef LIST_WIDGET_H
 #define LIST_WIDGET_H
-
+#include "common.h"
 #include <QScrollArea>
 
-class DetailLabel;
-class QStackedWidget;
 class QHBoxLayout;
-class QVBoxLayout;
-class QGridLayout;
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
+class DetailLabel;
 class SelectLabel;
-typedef unsigned int CLASS;
 
-class mScrollArea final : public QScrollArea
+struct AreaWidget_Impl;
+struct ListWidget_Impl;
+
+class mScrollArea : public QScrollArea
 {
     Q_OBJECT
 signals:
@@ -29,7 +29,7 @@ protected:
     virtual void wheelEvent(QWheelEvent *);
 };
 
-class AreaWidget final : public QWidget
+class AreaWidget : public QWidget
 {
     Q_OBJECT
 signals:
@@ -41,12 +41,7 @@ public:
     void reset();
 
 private:
-    QGridLayout *scroll_layout;
-    mScrollArea *view;
-        QWidget *viewWidgetContents;
-
-    int row{0},col{0};
-    QList<DetailLabel*> *label_stores;
+    std::shared_ptr<AreaWidget_Impl> pImpl;
 };
 
 class ListWidget final : public QWidget
@@ -72,25 +67,15 @@ private slots:
     inline void load_next_page_(){ emit load_next_page(type_); }
 
 private:
-    void init_locate(CLASS);
-    void init_type(CLASS);
-    void init_time();
+    void init_locate(QHBoxLayout *locate_layout);
+    void init_type(QHBoxLayout *type_layout);
+    void init_time(QHBoxLayout *time_layout);
 
 private:
-    QHBoxLayout *locate_layout;
-    QHBoxLayout *type_layout;
-    QHBoxLayout *time_layout;
      AreaWidget *down_list_widget;
-    QVBoxLayout *main_vlayout;
-    CLASS type_;
-    /*存储指针，退出时释放资源*/
-    QList<SelectLabel*> *locate_labels;
-    QList<SelectLabel*> *type_labels;
-    QList<SelectLabel*> *time_labels;
-
-    QStringList locate_name;
-    QStringList type_name;
-    QStringList time_name{"全部","2014","2013","2012","2010","00年代","90年代","80年代","70年代"};
+     CLASS type_;
+     std::shared_ptr<ListWidget_Impl> pImpl;
 };
 
+KUPLAYER_NAMESPACE_END //namespace end
 #endif // LIST_layout_H

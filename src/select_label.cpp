@@ -6,6 +6,8 @@
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
 #include "select_label.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
+
 #include <QMouseEvent>
 
 #define THIS_WIDGET_COLOR(r,g,b){ QPalette text_palette = palette();\

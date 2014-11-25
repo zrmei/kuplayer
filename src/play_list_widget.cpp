@@ -7,10 +7,11 @@
  *********************************************/
 
 #include "common.h"
-
+#include "gloal_func.h"
 #include "push_button.h"
 #include "play_list_widget.h"
 #include "select_label.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
 #include <QScrollArea>
 #include <QGridLayout>

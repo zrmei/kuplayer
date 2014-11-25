@@ -6,6 +6,8 @@
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
 #include "detail_label.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
+
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QLabel>
@@ -13,6 +15,22 @@
 #include <QApplication>
 #include <QPixmap>
 #include <QDebug>
+
+
+struct DECLARE_NAMESPACE_KUPLAYER DetailLabel_Impl
+{
+    Label *lblImg_;
+    Label *lblTitle_;
+    QString  url_;
+    QVBoxLayout *verticalLayout;
+    
+    ~DetailLabel_Impl()
+    {
+        delete lblImg_;
+        delete lblTitle_;
+        delete verticalLayout;
+    }
+};
 
 /****************************************************************************/
 
@@ -43,25 +61,26 @@ void Label::leaveEvent(QEvent *ev)
 
 DetailLabel::DetailLabel(QWidget *parent)
     : QWidget(parent)
+    , pImpl(new DetailLabel_Impl())
 {
     QHBoxLayout *horizontalLayout = new QHBoxLayout(this);
-    verticalLayout = new QVBoxLayout;
-    verticalLayout->setSpacing(0);
+    pImpl->verticalLayout = new QVBoxLayout;
+    pImpl->verticalLayout->setSpacing(0);
 
-    lblImg_ = new Label;
-    lblImg_->setAlignment(Qt::AlignCenter);
+    pImpl->lblImg_ = new Label;
+    pImpl->lblImg_->setAlignment(Qt::AlignCenter);
 
-    verticalLayout->addWidget(lblImg_);
+    pImpl->verticalLayout->addWidget(pImpl->lblImg_);
 
-    lblTitle_= new Label;
-    lblTitle_->setMaximumHeight(36);
-    lblTitle_->setAlignment(Qt::AlignHCenter| Qt::AlignBottom);
+    pImpl->lblTitle_= new Label;
+    pImpl->lblTitle_->setMaximumHeight(36);
+    pImpl->lblTitle_->setAlignment(Qt::AlignHCenter| Qt::AlignBottom);
 
-    verticalLayout->addWidget(lblTitle_);
-    horizontalLayout->addLayout(verticalLayout);
+    pImpl->verticalLayout->addWidget(pImpl->lblTitle_);
+    horizontalLayout->addLayout(pImpl->verticalLayout);
 
-    connect(lblImg_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));
-    connect(lblTitle_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));
+    connect(pImpl->lblImg_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));
+    connect(pImpl->lblTitle_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));
 }
 
 DetailLabel::DetailLabel(QPixmap img, QString title, QString url, QWidget *parent)
@@ -75,29 +94,31 @@ DetailLabel::DetailLabel(QPixmap img, QString title, QString url, QWidget *paren
 DetailLabel::~DetailLabel()
 {
 //    qDebug() <<"DetailLabel("<<lblTitle_->text()<<") deleted";
-    delete lblImg_;
-    delete lblTitle_;
-    delete verticalLayout;
 }
 void DetailLabel::this_url_triggered()
 {
-    emit url_triggered(lblTitle_->text(),url_);
+    emit url_triggered(pImpl->lblTitle_->text(),pImpl->url_);
 }
 
 void DetailLabel::set_Pixmap(QPixmap &&img)
 {
-    lblImg_->setPixmap(img);
+    pImpl->lblImg_->setPixmap(img);
     setFixedSize(img.width()+20,img.height()+36);
 }
 
 void DetailLabel::set_Title(const QString &title)
 {
-    lblTitle_->setText(title);
-    lblTitle_->setToolTip(title);
-    lblImg_->setToolTip(title);
+    pImpl->lblTitle_->setText(title);
+    pImpl->lblTitle_->setToolTip(title);
+    pImpl->lblImg_->setToolTip(title);
 }
 
 void DetailLabel::set_Url(const QString &url)
 {
-    url_ = url;
+    pImpl->url_ = url;
+}
+
+QString DetailLabel::text() const
+{
+    return pImpl->lblTitle_->text();
 }

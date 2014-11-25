@@ -5,11 +5,12 @@
  ********************************************/
 
 #include "common.h"
+#include "gloal_func.h"
 #include "kuplayer.h"
 #include "program_options.h"
 #include "pyscript.h"
 #include "ui_control_classes.h"
-
+USR_NAMESPACE_KUPLAYER // using namespace mei::kuplayer
 #include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -40,6 +41,10 @@ int main(int argc, char *argv[])
         translator.load(QString(":/qm/kuplayer_en"));
     a.installTranslator(&translator);
     
+    QString ico_path = QDir::homePath()+"/.kuplayer/kuplayer.ico";
+    if(!QFileInfo(ico_path).isFile()){
+        QPixmap(":/logo/logo").save(ico_path);
+    }
     
     std::shared_ptr<PyScript> pyinit = std::make_shared<PyScript>();
     if( !pyinit.get()->getShowList() ){
@@ -58,7 +63,7 @@ int main(int argc, char *argv[])
     splash->move(x,y);
     splash->show();
 
-    kuplayer w(pyinit.get());
+    MainWidget w(pyinit.get(),ico_path);
     w.move(x,y);
     w.setIniFile(iniFile.get());
     splash->finish(&w);

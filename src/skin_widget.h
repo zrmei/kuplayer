@@ -7,10 +7,12 @@
  *********************************************/
 #ifndef SKIN_WIDGET_H
 #define SKIN_WIDGET_H
-
+#include "common.h"
 #include "shadow_widget.h"
 class QScrollArea;
 class QGridLayout;
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class DetailLabel;
 class PushButton;
 
@@ -38,4 +40,5 @@ QList<DetailLabel*> label_store;
             qApp->applicationDirPath()+"/sources/img/skin/";
 };
 
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // SKIN_WIDGET_H

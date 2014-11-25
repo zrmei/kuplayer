@@ -6,6 +6,7 @@
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
 #include "common.h"
+#include "gloal_func.h"
 #include "kuplayer.h"
 #include "title_widget.h"
 #include "list_widget.h"
@@ -16,136 +17,171 @@
 #include "detail_label.h"
 #include "skin_widget.h"
 #include "pyscript.h"
+#include "play_list_widget.h"
+#include "main_menu.h"
+#include "system_notify.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
 #include <QStackedWidget>
+#include <QBitArray>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QDir>
 #include <QTranslator>
 #include <QSettings>
-
-#define WINDOW_WIDTH  1002
-#define WINDOW_HEIGHT 657
+#include <QMenu>
 
 #define SHOW_WINDOW_NORMAL \
 this->showNormal();\
-stacked_widget->setContentsMargins(3,0,3,3);\
+pImpl->stacked_widget->setContentsMargins(3,0,3,3);\
 this->layout()->setContentsMargins(5,5,5,5);
 #define SHOW_WINDOW_MAXSIZE \
-stacked_widget->setContentsMargins(0,0,0,0);\
+pImpl->stacked_widget->setContentsMargins(0,0,0,0);\
 this->layout()->setContentsMargins(0,0,0,0);
 
 #if defined(Q_OS_LINUX)
-    #ifdef signals     //主要是以下包括的头文件中有signals的变量名不这
-        #undef signals //样的话不能通过编译因为在QT中signals中关键字。
-        #include "system_notify.h"
-    #endif
-    #define signals public //恢复关键字定义,信好是个宏定义
-    #define SHOW_MSG(name)  notification_show(name,tr("kuplayer")\
-    ,qApp->applicationDirPath()+"/sources/img/kuplayer.ico");
+    #define SHOW_MSG(name)  notification_show(name,tr("kuplayer"),pImpl->ico_path);
 #elif defined(Q_OS_WIN32)
     #define SHOW_MSG(name)  trayicon->showMessage(tr("kuplayer")\
     ,QString(name),QSystemTrayIcon::Information);
 #endif // define Q_OS_LINUX
 
-#define Control_Widget (*player_widget)
-#define SHOW_PAGE "http://www.youku.com/show_page/"
+#define Control_Widget (*(pImpl->player_widget))
 
-kuplayer::kuplayer(PyScript *pyinit,QWidget *parent)
+
+
+struct DECLARE_NAMESPACE_KUPLAYER MainWidget_Impl
+{
+    Q_DISABLE_COPY(MainWidget_Impl)
+    
+          PyScript   *pyinit;
+    PlayListWidget   *xuan_ji_widget;
+        SkinWidget   *skin_widget;
+         QSettings   *iniFile;
+       TitleWidget   *title_widget;
+    QStackedWidget   *stacked_widget;
+     MPlayerWidget   *player_widget;
+           MPlayer   *player;
+        MenuWidget   *main_menu;
+   QSystemTrayIcon   *trayicon;
+         conf_info   *setting;
+     ControlWidget   *control_widget;
+     
+ const QStringList   name;
+ const    QString&   ico_path;
+         QBitArray   can_update{5,true};
+  std::array<int,5>  pages{ {2,2,2,2,2} };     
+  std::array<std::tuple<QString,QString,QString>,5> locate_class_time;
+  
+  MainWidget_Impl(PyScript* pyinit,const QString &ico_path)
+      : pyinit(pyinit)
+      , xuan_ji_widget(new PlayListWidget)
+      , skin_widget(new SkinWidget)
+      , title_widget(new TitleWidget)
+      , stacked_widget(new QStackedWidget)
+      , player_widget(new MPlayerWidget)
+      , player(new MPlayer)
+      , main_menu(new MenuWidget)
+      , trayicon(new QSystemTrayIcon)
+      , setting(new conf_info)
+      , name({"tv","movice","zy","music","comic"})
+      , ico_path(ico_path)
+  {
+      control_widget = player_widget->control_widget;
+  }
+  ~MainWidget_Impl()
+  {
+      delete setting;
+      delete trayicon;
+      delete player;
+      delete title_widget;
+      delete player_widget;
+      while(stacked_widget->count()){
+          delete stacked_widget->widget(0);
+      }
+      delete stacked_widget;
+  }
+};
+
+MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *parent)
 #ifdef CAN_RESIZE
     : MainWidget(parent)
 #else
     : ShadowWidget(parent)
 #endif
-    , pyinit(pyinit)
-    , main_menu(new MenuWidget)
-    , trayicon(new QSystemTrayIcon)
-    , setting(new conf_info)
+    , pImpl(new MainWidget_Impl(pyinit,ico_path))
 {    
     setAttribute(Qt::WA_QuitOnClose,true);
 
-    title_widget = new TitleWidget;
     QVBoxLayout *main_layout = new QVBoxLayout(this);
-    main_layout->addWidget(title_widget);
+    main_layout->addWidget(pImpl->title_widget);
     setMinimumSize(WINDOW_WIDTH,WINDOW_HEIGHT);
 
-    player_widget = new MPlayerWidget;
-    player = new MPlayer;
-    player->setRenderer(player_widget->renderer);
+    pImpl->player->setRenderer(pImpl->player_widget->renderer);
 
-    stacked_widget = new QStackedWidget;
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Window,QColor(240,240,240));
-    stacked_widget->setPalette(text_palette);
+    pImpl->stacked_widget->setPalette(text_palette);
     for(CLASS i=0;i<5;++i){
         ListWidget *l = new ListWidget(i);
         connect(l,SIGNAL(clicked(CLASS,int,QString)),this,SLOT(change_url(CLASS,int,QString)));
         connect(l,SIGNAL(load_next_page(CLASS)),this,SLOT(on_nextPage_loaded(CLASS)));
-        stacked_widget->addWidget(l);
+        pImpl->stacked_widget->addWidget(l);
     }
-    stacked_widget->addWidget(player_widget);
-    main_layout->addWidget(stacked_widget);
+    pImpl->stacked_widget->addWidget(pImpl->player_widget);
+    main_layout->addWidget(pImpl->stacked_widget);
     main_layout->setSpacing(0);
 
-    connect(&xuan_ji_widget,SIGNAL(click(QString,QString)),this,SLOT(url_ji_triggered(QString,QString)));
-    connect(&skin_widget,SIGNAL(skin_change_clicked(QString)),this,SLOT(on_skin_changed(QString)));
-    connect(player,SIGNAL(mFinished(bool)),this,SLOT(on_play_finished(bool)));
-    connect(player,SIGNAL(positionChanged(qint64)),player_widget->control_widget,SLOT(on_time_changed(qint64)));
-    connect(player,SIGNAL(mSetDuration(qint64)),player_widget->control_widget,SLOT(on_douration_changed(qint64)));
-    connect(player_widget->control_widget,SIGNAL(play_pause_clicked(bool)),player,SLOT(pause(bool)));
-    connect(player_widget->control_widget,SIGNAL(stop_clicked()),player,SLOT(mStop()));
-    connect(player_widget->control_widget,SIGNAL(backward_clicked()),player,SLOT(mSeekBack()));
-    connect(player_widget->control_widget,SIGNAL(foreward_clicked()),player,SLOT(mSeekFore()));
-    connect(player_widget->control_widget,SIGNAL(xuan_ji_clcked(QString,QString)),
-            &xuan_ji_widget,SLOT(on_xuan_ji_show(QString,QString)));
-    connect(player_widget->control_widget,SIGNAL(vol_up_clicked()),player,SLOT(vol_up()));
-    connect(player_widget->control_widget,SIGNAL(vol_down_clicked()),player,SLOT(vol_down()));
-    connect(player_widget,SIGNAL(escape_clicked()),this,SLOT(on_Fullscreen_changed()));
-    connect(player_widget->renderer,SIGNAL(double_clicked()),this,SLOT(on_Fullscreen_changed()));
-    connect(title_widget,SIGNAL(skin_clicked()),&skin_widget,SLOT(on_this_show()));
-    connect(title_widget,SIGNAL(close_clicked()),this,SLOT(show_normal_or_close()));
-    connect(title_widget,SIGNAL(min_clicked()),this,SLOT(on_showMin_clicked()));
-    connect(title_widget,SIGNAL(ture_page(int)),stacked_widget,SLOT(setCurrentIndex(int)));
-    connect(title_widget,SIGNAL(menu_clicked()),main_menu,SLOT(on_this_show()));
+    connect(pImpl->xuan_ji_widget,SIGNAL(click(QString,QString)),this,SLOT(url_ji_triggered(QString,QString)));
+    connect(pImpl->skin_widget,SIGNAL(skin_change_clicked(QString)),this,SLOT(on_skin_changed(QString)));
+    connect(pImpl->player,SIGNAL(mFinished(bool)),this,SLOT(on_play_finished(bool)));
+    connect(pImpl->player,SIGNAL(positionChanged(qint64)),pImpl->control_widget,SLOT(on_time_changed(qint64)));
+    connect(pImpl->player,SIGNAL(mSetDuration(qint64)),pImpl->control_widget,SLOT(on_douration_changed(qint64)));
+    connect(pImpl->control_widget,SIGNAL(play_pause_clicked(bool)),pImpl->player,SLOT(pause(bool)));
+    connect(pImpl->control_widget,SIGNAL(stop_clicked()),pImpl->player,SLOT(mStop()));
+    connect(pImpl->control_widget,SIGNAL(backward_clicked()),pImpl->player,SLOT(mSeekBack()));
+    connect(pImpl->control_widget,SIGNAL(foreward_clicked()),pImpl->player,SLOT(mSeekFore()));
+    connect(pImpl->control_widget,SIGNAL(xuan_ji_clcked(QString,QString)),
+            pImpl->xuan_ji_widget,SLOT(on_xuan_ji_show(QString,QString)));
+    connect(pImpl->control_widget,SIGNAL(vol_up_clicked()),pImpl->player,SLOT(vol_up()));
+    connect(pImpl->control_widget,SIGNAL(vol_down_clicked()),pImpl->player,SLOT(vol_down()));
+    connect(pImpl->player_widget,SIGNAL(escape_clicked()),this,SLOT(on_Fullscreen_changed()));
+    connect(pImpl->player_widget->renderer,SIGNAL(double_clicked()),this,SLOT(on_Fullscreen_changed()));
+    connect(pImpl->title_widget,SIGNAL(skin_clicked()),pImpl->skin_widget,SLOT(on_this_show()));
+    connect(pImpl->title_widget,SIGNAL(close_clicked()),this,SLOT(show_normal_or_close()));
+    connect(pImpl->title_widget,SIGNAL(min_clicked()),this,SLOT(on_showMin_clicked()));
+    connect(pImpl->title_widget,SIGNAL(ture_page(int)),pImpl->stacked_widget,SLOT(setCurrentIndex(int)));
+    connect(pImpl->title_widget,SIGNAL(menu_clicked()),pImpl->main_menu,SLOT(on_this_show()));
 
-    if(pyinit->show_list.size()){
+    if(pImpl->pyinit->show_list.size()){
         for(int i=0;i<5;++i){
             auto *tmp = new mThread(i,
-                 bind(&PyScript::connect_img_url,pyinit,pyinit->show_list[i], name[i]));
+                 bind(&PyScript::connect_img_url,pImpl->pyinit,pImpl->pyinit->show_list[i],pImpl->name[i]));
             connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
                     this,SLOT(on_loadImage_started(int,const QStringList&)));
             tmp->start();
         }
     }
-    addActions(Control_Widget->init_action());
-    addActions(xuan_ji_widget.init_action());
+    addActions(Control_Widget->reg_actions());
+    addActions(pImpl->xuan_ji_widget->init_action());
     SHOW_MSG(tr("kuplayer: free for youku!"));
     SHOW_WINDOW_NORMAL
-    title_widget->turepage(PLAYER);
+    pImpl->title_widget->turepage(PLAYER);
 }
 
-kuplayer::~kuplayer()
+MainWidget::~MainWidget()
 {
     to_inifile();
-    delete setting;
-    delete trayicon;
-    delete player;
-    delete title_widget;
-    delete player_widget;
-    while(stacked_widget->count()){
-        delete stacked_widget->widget(0);
-    }
-    delete stacked_widget;
 }
 
-void kuplayer::setIniFile(QSettings *iniFile)
+void MainWidget::setIniFile(QSettings *iniFile)
 {
-    this->iniFile = iniFile;
+    pImpl->iniFile = iniFile;
     init_setting();
     init_trayicon();
 }
 
-void kuplayer::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
+void MainWidget::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
 {
     switch(reason)
     {
@@ -153,8 +189,8 @@ void kuplayer::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
         if(isHidden() || isMinimized()){
             setWindowState(Qt::WindowActive);
             showNormal();
-            if(player->isPaused()){
-                player->pause(false);
+            if(pImpl->player->isPaused()){
+                pImpl->player->pause(false);
             }
         }
         break;
@@ -163,16 +199,16 @@ void kuplayer::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
     }
 }
 #include <QMessageBox>
-void kuplayer::show_normal_or_close()
+void MainWidget::show_normal_or_close()
 {
-    if(setting->min_or_close){
-        trayicon->showMessage(tr("kuplayer"),
+    if(pImpl->setting->min_or_close){
+        pImpl->trayicon->showMessage(tr("kuplayer"),
                               tr("Showing by double-click !"),
                               QSystemTrayIcon::Information);
         hide();
-        if(player->isPlaying()){
+        if(pImpl->player->isPlaying()){
             Control_Widget->on_play_pause_triggered(true);
-            player->pause(true);
+            pImpl->player->pause(true);
         }
     }else if( QMessageBox::question(this,tr("Exit"),
                                     msg_font_style(tr("Really want to quit?")))
@@ -180,51 +216,51 @@ void kuplayer::show_normal_or_close()
         close();
 }
 
-void kuplayer::on_showMin_clicked()
+void MainWidget::on_showMin_clicked()
 {
     showMinimized();
-    if(player->isPlaying()){
+    if(pImpl->player->isPlaying()){
         Control_Widget->on_play_pause_triggered(true);
-        player->pause(true);
+        pImpl->player->pause(true);
     }
 }
 
-void kuplayer::on_skin_changed(QString index)
+void MainWidget::on_skin_changed(QString index)
 {
     change_skin(index);
-    xuan_ji_widget.change_skin(index);
-    main_menu->change_skin(index);
+    pImpl->xuan_ji_widget->change_skin(index);
+    pImpl->main_menu->change_skin(index);
 }
 
-void kuplayer::on_Fullscreen_changed()
+void MainWidget::on_Fullscreen_changed()
 {
     if(is_full_screen){
-        title_widget->show();
+        pImpl->title_widget->show();
         Control_Widget->show();
         SHOW_WINDOW_NORMAL
     }else{
-        title_widget->hide();
+        pImpl->title_widget->hide();
         Control_Widget->hide();
         SHOW_WINDOW_MAXSIZE
     }
     is_full_screen = !is_full_screen;
 }
 
-void kuplayer::on_play_finished(bool real)//false 播放正常结束 true 中断播放
+void MainWidget::on_play_finished(bool real)//false 播放正常结束 true 中断播放
 {
     if(real){
         Control_Widget->isRuning = false;
-    }else if(player_widget->control_widget->isRuning
-             && setting->auto_play_next ){
-        xuan_ji_widget.on_playNext_clicked();
+    }else if(pImpl->control_widget->isRuning
+             && pImpl->setting->auto_play_next ){
+        pImpl->xuan_ji_widget->on_playNext_clicked();
     }
-    if(!player->isPlaying() && is_full_screen){
+    if(!pImpl->player->isPlaying() && is_full_screen){
         on_Fullscreen_changed();
     }
     return;
 }
 
-void kuplayer::on_loadImage_started(int page, const QStringList& list)
+void MainWidget::on_loadImage_started(int page, const QStringList& list)
 {
     LoadImage *download = new LoadImage(page);
     download->setFileName(list);
@@ -234,23 +270,23 @@ void kuplayer::on_loadImage_started(int page, const QStringList& list)
 }
 
 
-void kuplayer::on_nextPage_loaded(CLASS type)
+void MainWidget::on_nextPage_loaded(CLASS type)
 {
-    if(can_update[type]){
-        QString url = pyinit->gotoNextPage(name[type],pages[type]++)[0];
+    if(pImpl->can_update[type]){
+        QString url = pImpl->pyinit->gotoNextPage(pImpl->name[type],pImpl->pages[type]++)[0];
         auto *tmp = new mThread(type,bind(&PyScript::connect_img_url,
-                                          pyinit,url,name[type]));
+                                          pImpl->pyinit,url,pImpl->name[type]));
         connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
                 this,SLOT(on_loadImage_started(int,const QStringList&)));
         tmp->start();
-        can_update[type] = false;
+        pImpl->can_update[type] = false;
     }
 }
 
-void kuplayer::loadImageFinished(CLASS index,QPixmap pix, QString name, QString url)
+void MainWidget::loadImageFinished(CLASS index,QPixmap pix, QString name, QString url)
 {
     if(name.isEmpty() && url.isEmpty()){
-        can_update[index] = true;
+        pImpl->can_update[index] = true;
         return;
     }
     if(index == MUSIC && pix.width() < 170){
@@ -259,111 +295,109 @@ void kuplayer::loadImageFinished(CLASS index,QPixmap pix, QString name, QString 
     DetailLabel *l = new DetailLabel(pix,name,url);
     connect(l,SIGNAL(url_triggered(QString,QString)),
             this,SLOT(on_url_triggered(QString,QString)));
-    qobject_cast<ListWidget*>(stacked_widget->widget(index))->addDetailLabel(l);
+    qobject_cast<ListWidget*>(pImpl->stacked_widget->widget(index))->addDetailLabel(l);
 }
 
-void kuplayer::on_url_triggered(QString name,QString url)
+void MainWidget::on_url_triggered(QString name,QString url)
 {
     if(url.startsWith(SHOW_PAGE)){
-        url = pyinit->getplayUrl(url)[0];
+        url = pImpl->pyinit->getplayUrl(url)[0];
     }
-    if(!url.isEmpty() && pyinit->GetVideoUrls(url,setting->default_video_format)){
+    if(!url.isEmpty() && pImpl->pyinit->GetVideoUrls(url,pImpl->setting->default_video_format)){
         auto *tmp = new mThread(::NONE
-                                ,bind(&PyScript::getAll,pyinit
-                                          ,stacked_widget->currentIndex(),url));
+                                ,bind(&PyScript::getAll,pImpl->pyinit
+                                          ,pImpl->stacked_widget->currentIndex(),url));
         connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
-                &xuan_ji_widget,SLOT(on_list_changed(int,const QStringList&)));
-        title_widget->turepage(PLAYER);
+                pImpl->xuan_ji_widget,SLOT(on_list_changed(int,const QStringList&)));
+        pImpl->title_widget->turepage(PLAYER);
         tmp->start();
-        player->mPlay();
+        pImpl->player->mPlay();
         Control_Widget->isRuning = true;
-        SHOW_MSG(tr("Currently playing:")+name);
-        title_widget->set_text(name);
+        SHOW_MSG(tr("Currently playing:").append(name));
+        pImpl->title_widget->set_text(name);
     }
 }
-void kuplayer::url_ji_triggered(QString name,QString url)
+void MainWidget::url_ji_triggered(QString name,QString url)
 {
-    if(pyinit->GetVideoUrls(url,setting->default_video_format)){
-        stacked_widget->setCurrentIndex(5);
+    if(pImpl->pyinit->GetVideoUrls(url,pImpl->setting->default_video_format)){
+        pImpl->stacked_widget->setCurrentIndex(5);
         Control_Widget->isRuning = true;
-        player->mPlay();
-        QString msg(tr("Currently playing:"));
-        msg.insert(msg.size(),title_widget->get_text());
-        msg.insert(msg.size(),"  ");
-        msg.insert(msg.size(),name);
-        SHOW_MSG(msg);
+        pImpl->player->mPlay();
+        SHOW_MSG(tr("Currently playing:")
+                 .append(pImpl->title_widget->get_text())
+                 .append("   ")
+                 .append(name));
     }
 }
 
-void kuplayer::change_url(CLASS classes,int type,QString name)
+void MainWidget::change_url(CLASS classes,int type,QString name)
 {
-    if(name == tr("All")){
+    if(name =="全部"){
         name = "";
     }
     switch (type) {
     case 0: //locate
-        std::get<0>(locate_class_time[classes]) = name;
+        std::get<0>(pImpl->locate_class_time[classes]) = name;
         break;
     case 1:
-        std::get<1>(locate_class_time[classes]) = name;
+        std::get<1>(pImpl->locate_class_time[classes]) = name;
         break;
     case 2:
-        std::get<2>(locate_class_time[classes]) = name;
+        std::get<2>(pImpl->locate_class_time[classes]) = name;
     default:
         break;
     }
-    auto url = pyinit->getUrlByName(classes
-                   ,std::get<0>(locate_class_time[classes])
-                   ,std::get<1>(locate_class_time[classes])
-                   ,std::get<2>(locate_class_time[classes]))[0];
+    auto url = pImpl->pyinit->getUrlByName(classes
+                   ,std::get<0>(pImpl->locate_class_time[classes])
+                   ,std::get<1>(pImpl->locate_class_time[classes])
+                   ,std::get<2>(pImpl->locate_class_time[classes]))[0];
     auto *tmp = new mThread(classes,
                             bind(&PyScript::connect_img_url,
-                                              pyinit, url, this->name[classes]));
+                                 pImpl->pyinit, url, pImpl->name[classes]));
     connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
             this,SLOT(on_loadImage_started(int,const QStringList&)));
     tmp->start();
-    qobject_cast<ListWidget*>(stacked_widget->widget(classes))->reset();
+    qobject_cast<ListWidget*>(pImpl->stacked_widget->widget(classes))->reset();
 }
 
-#include <QMenu>
-void kuplayer::init_trayicon()
+void MainWidget::init_trayicon()
 {
-    trayicon->setIcon(QIcon(":logo/logo_icon"));
-    trayicon->show();
-    trayicon->setToolTip("kuplayer");
-    connect(trayicon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+    pImpl->trayicon->setIcon(QIcon(":logo/logo_icon"));
+    pImpl->trayicon->show();
+    pImpl->trayicon->setToolTip("kuplayer");
+    connect(pImpl->trayicon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this,SLOT(trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
     QMenu *tray_menu = new QMenu;
-    trayicon->setContextMenu(tray_menu);
+    pImpl->trayicon->setContextMenu(tray_menu);
     auto*   set_action = tray_menu->addAction(tr("Settings"));
     auto* about_action = tray_menu->addAction(tr("About"));
     auto*  exit_action = tray_menu->addAction(tr("Exit"));
-    connect(set_action,SIGNAL(triggered()),main_menu,SLOT(show()));
-    connect(about_action,SIGNAL(triggered()),main_menu,SLOT(show_about()));
+    connect(set_action,SIGNAL(triggered()),pImpl->main_menu,SLOT(show()));
+    connect(about_action,SIGNAL(triggered()),pImpl->main_menu,SLOT(show_about()));
     connect(exit_action,SIGNAL(triggered()),this,SLOT(close()));
 }
 
-void kuplayer::init_setting()
+void MainWidget::init_setting()
 {
-    setting->default_video_format = iniFile->value("setting/format","normal").toString();
-    setting->close_all = iniFile->value("setting/close_all",true).toBool();
-    setting->auto_play_next = iniFile->value("setting/auto_play_next",false).toBool();
-    setting->min_or_close = iniFile->value("setting/min_or_close",false).toBool();
-    setting->start_when_pc_on = iniFile->value("setting/start_when_pc_on",false).toBool();
-    setting->language = iniFile->value("setting/language",true).toBool();
-    skin_widget.on_url_triggered("",iniFile->value("setting/skin",":/kin/0").toString());
+    pImpl->setting->default_video_format = pImpl->iniFile->value("setting/format","normal").toString();
+    pImpl->setting->close_all = pImpl->iniFile->value("setting/close_all",true).toBool();
+    pImpl->setting->auto_play_next = pImpl->iniFile->value("setting/auto_play_next",false).toBool();
+    pImpl->setting->min_or_close = pImpl->iniFile->value("setting/min_or_close",false).toBool();
+    pImpl->setting->start_when_pc_on = pImpl->iniFile->value("setting/start_when_pc_on",false).toBool();
+    pImpl->setting->language = pImpl->iniFile->value("setting/language",true).toBool();
+    pImpl->skin_widget->on_url_triggered("",pImpl->iniFile->value("setting/skin",":/kin/0").toString());
     
-    main_menu->init_setting(setting);
+    pImpl->main_menu->init_setting(pImpl->setting);
 }
 
-void kuplayer::to_inifile()
+void MainWidget::to_inifile()
 {
-    iniFile->setValue("setting/skin",get_skin());
-    iniFile->setValue("setting/format",setting->default_video_format);
-    iniFile->setValue("setting/close_all",setting->close_all);
-    iniFile->setValue("setting/auto_play_next",setting->auto_play_next);
-    iniFile->setValue("setting/min_or_close", setting->min_or_close );
-    iniFile->setValue("setting/start_when_pc_on",setting->start_when_pc_on);
-    iniFile->setValue("setting/language",setting->language);
+    pImpl->iniFile->setValue("setting/skin",get_skin());
+    pImpl->iniFile->setValue("setting/format",pImpl->setting->default_video_format);
+    pImpl->iniFile->setValue("setting/close_all",pImpl->setting->close_all);
+    pImpl->iniFile->setValue("setting/auto_play_next",pImpl->setting->auto_play_next);
+    pImpl->iniFile->setValue("setting/min_or_close", pImpl->setting->min_or_close );
+    pImpl->iniFile->setValue("setting/start_when_pc_on",pImpl->setting->start_when_pc_on);
+    pImpl->iniFile->setValue("setting/language",pImpl->setting->language);
 }
 

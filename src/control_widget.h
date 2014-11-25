@@ -7,11 +7,15 @@
  *********************************************/
 #ifndef CONTROL_WIDGET_H
 #define CONTROL_WIDGET_H
+#include "common.h"
 
 #include <QLabel>
 class QMouseEvent;
-class SelectLabel;
 class QAction;
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
+class SelectLabel;
+struct ControlWidget_Impl;
 
 class ControlLabel final : public QLabel
 {
@@ -36,42 +40,20 @@ signals:
     void vol_up_clicked();
     void vol_down_clicked();
     void vol_mute_clicked();
+public:
+    explicit ControlWidget(QWidget *parent = 0);
+    virtual ~ControlWidget();
+    QList<QAction*> reg_actions();
+    bool isRuning{false};
 public slots:
     void on_play_pause_triggered(bool);
     void on_play_pause_triggered();
     void on_time_changed(qint64);
     void on_douration_changed(qint64);
-public:
-    explicit ControlWidget(QWidget *parent = 0);
-    virtual ~ControlWidget();
-    bool isRuning{false};
-    inline QList<QAction*> init_action()
-    {
-        return {{backward_key,stop_key,pause_key,
-                        foreward_key,vol_up_key,vol_down_key}};
-    }
 private:
     void init_actions();
-    QAction *backward_key;
-    QAction *stop_key;
-    QAction *pause_key;
-    QAction *foreward_key;
-    QAction *vol_up_key;
-    QAction *vol_down_key;
-    QAction *mute_key;
-          QLabel *time_current;
-    ControlLabel *backward_;
-    ControlLabel *stop_;
-    ControlLabel *play_pause;
-    ControlLabel *foreward_;
-          QLabel *time_all;
-     SelectLabel *xuan_ji;
-    //:FIXME
-    /*
-     * ControlLabel *vol_up;
-     * ControlLabel *vol_down;
-     */
-
+    std::shared_ptr<ControlWidget_Impl> pImpl;
 };
 
+KUPLAYER_NAMESPACE_END //namespace end
 #endif // CONTROL_WIDGET_H

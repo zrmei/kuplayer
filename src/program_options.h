@@ -8,7 +8,7 @@
 #ifndef PROGRAM_OPTIONS_H
 #define PROGRAM_OPTIONS_H
 
-const char* VERSION =\
+const char* const VERSION =\
 "\t******************************************\n\
 \t*      MadeBy : MeiZhaorui(Mason)        *\n\
 \t*      E-Mail : listener_mei@163.com     *\n\

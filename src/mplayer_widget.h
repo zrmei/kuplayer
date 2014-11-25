@@ -8,10 +8,14 @@
 #ifndef MPLAYER_WIDGET_H
 #define MPLAYER_WIDGET_H
 
+#include "common.h"
+
 #include <QtAV/QtAV.h>
 #include <QtAV/WidgetRenderer.h>
 #include <QApplication>
 #include <QFile>
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 class MPlayer : public QtAV::AVPlayer
 {
@@ -70,4 +74,5 @@ public:
     RendererWidget *renderer;
 };
 
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // MPLAYER_WIDGET_H

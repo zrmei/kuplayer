@@ -11,7 +11,12 @@
 #include <QApplication>
 
 #if defined(Q_OS_LINUX)
+#ifdef signals //主要是以下包括的头文件中有signals的变量名不这
+#undef signals //样的话不能通过编译因为在QT中signals中关键字。
 #include <libnotify/notify.h>
+#endif
+#define signals public //恢复关键字定义,信好是个宏定义
+
 
 bool notification_show(QString title,QString body,QString icon)
 {
@@ -28,7 +33,7 @@ bool notification_show(QString title,QString body,QString icon)
                 title.toStdString().c_str(),
                 body.toStdString().c_str(),
                 icon.toStdString().c_str());
-    notify_notification_set_timeout(notify_p, 500);
+    notify_notification_set_timeout(notify_p, 8000);
     notify_notification_set_urgency(notify_p,NOTIFY_URGENCY_NORMAL);
 
     if (notify_notification_show(notify_p, &error) == FALSE){

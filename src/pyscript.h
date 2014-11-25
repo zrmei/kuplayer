@@ -13,6 +13,7 @@
 class QStringList;
 class QString;
 #include <QMap>
+#include <mutex>
 #include <boost/noncopyable.hpp>
 #include <boost/python.hpp>
 #include <python2.7/Python.h>
@@ -27,9 +28,11 @@ printf("\n=================================================================\n");
 #define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);
 #define PYTHON_CATCH_EXCEPTION_END
 #endif
+namespace Python{
 
 class pyinit final
 {
+    Q_DISABLE_COPY(pyinit)
 public:
     pyinit(int initsigs = 1)
     {
@@ -48,8 +51,9 @@ private:
     PyObject* _module;
 };
 
-class PyThreadStateLock final : boost::noncopyable
+class PyThreadStateLock final
 {
+    Q_DISABLE_COPY(PyThreadStateLock)
 public:
     PyThreadStateLock(){ state = PyGILState_Ensure( ); }
     ~PyThreadStateLock(){ PyGILState_Release( state ); }
@@ -57,10 +61,13 @@ private:
     PyGILState_STATE state;
 };
 
+}
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
-#include <mutex>
 class PyScript final
 {
+    Q_DISABLE_COPY(PyScript)
+    
     using dict = boost::python::dict;
     using list = boost::python::list;
 public:
@@ -77,13 +84,14 @@ public:
 
     QStringList show_list;
 private:
-    inline const QStringList& 
-        return_list_const(){return return_list;}
-    pyinit *init_;
+    inline const QStringList& return_list_const(){return return_list;}
+    Python::pyinit *init_;
     PyObject *module;
     QStringList return_list;
     QMap<QString,QString> next_page_;
 
     std::mutex mu;
 };
+
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // PYSCRIPT_H_H

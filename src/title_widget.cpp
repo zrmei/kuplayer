@@ -6,8 +6,10 @@
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
 #include "common.h"
+#include "gloal_func.h"
 #include "title_widget.h"
 #include "push_button.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
 #include <QLabel>
 #include <QHBoxLayout>

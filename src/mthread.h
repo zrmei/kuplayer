@@ -8,11 +8,15 @@
 #ifndef MTHREAD_H
 #define MTHREAD_H
 
+#include "common.h"
+
 #include <QThread>
 #include <functional>
 #include <python2.7/Python.h>
 #include <QStringList>
 #include <QDebug>
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 class mThread : public QThread
 {
@@ -22,13 +26,11 @@ class mThread : public QThread
 signals:
     void mfinished(int,const QStringList&);
 public:
-    mThread(int page,F func,QObject *parent=0)
+    mThread(const int& page,const F& func,QObject *parent=0)
         : QThread(parent)
         , page_(page)
         , func_(func)
     {}
-
-
 protected:
     virtual void run()
     {
@@ -36,7 +38,7 @@ protected:
         emit mfinished(page_,tmp);
         deleteLater();
     }
-
+ 
 private:
     ~mThread()
     {
@@ -48,4 +50,5 @@ private:
 
 };
 
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // MTHREAD_H

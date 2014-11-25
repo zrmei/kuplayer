@@ -11,9 +11,13 @@
 #include "common.h"
 
 #include <QWidget>
-#define VALUE_DIS 5
 class QDesktopWidget;
+
 #define TITLE_CONTROL_HEIGHT 29
+#define VALUE_DIS 5
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
+
 class ShadowWidget : public QWidget
 {
     Q_OBJECT
@@ -43,13 +47,13 @@ private:
 };
 
 #ifdef CAN_RESIZE
-class MainWidget : public ShadowWidget
+class ResizedWidget : public ShadowWidget
 {
     Q_OBJECT
     typedef unsigned char Direction;
 public:
-    explicit MainWidget(QWidget *parent = 0);
-    virtual ~MainWidget();
+    explicit ResizedWidget(QWidget *parent = 0);
+    virtual ~ResizedWidget();
 
 protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
@@ -69,4 +73,7 @@ private:
 
 };
 #endif// CAN_RESIZE
+
+
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // SHADOW_WIDGET_H

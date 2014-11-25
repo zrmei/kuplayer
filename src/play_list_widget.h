@@ -13,6 +13,8 @@
 class QGridLayout;
 class QHBoxLayout;
 class QScrollArea;
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class PushButton;
 class SelectLabel;
 
@@ -53,4 +55,5 @@ QList<SelectLabel*> *label_store;
     int currentIndex{0};
 };
 
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // PLAY_LIST_WIDGET_H

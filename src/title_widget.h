@@ -7,16 +7,18 @@
  *********************************************/
 #ifndef TITLE_WIDGET_H
 #define TITLE_WIDGET_H
-
+#include "common.h"
 #include <QList>
 #include <QLabel>
 
 #define TITLE_WIDGET_HEIGHT 72
 #define TITLE_WIDGET_WIDTH 100
 #define TITLE_CONTROL_HEIGHT 29
-class PushButton;
 class QMouseEvent;
 class QHBoxLayout;
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
+class PushButton;
 
 class TypeLabel final : public QLabel
 {
@@ -34,7 +36,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *event);
 private:
-    void painterInfo(int top_color, int middle_color, int bottom_color);
+    void painterInfo(int, int, int);
 
 private:
     bool mouse_hover{false};
@@ -72,10 +74,10 @@ private:
 #endif
     QList<TypeLabel*> *labels_store;
     QList<PushButton*> *push_button_store;
-    QStringList  down_title{ 
-        tr("TVShow"),tr("Movies"),tr("Variety"),
-        tr("Music"),tr("Cartoon"),tr("Player")
-    };
+    QStringList  down_title{tr("TVShow"),tr("Movies"),tr("Variety"),
+        tr("Music"),tr("Cartoon"),tr("Player")};
 
 };
+
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // TITLE_WIDGET_H

@@ -13,8 +13,8 @@ TEMPLATE = app
 PRECOMPILED_HEADER = src/common.h
 
 QMAKE_CXXFLAGS += -std=c++11 -Wextra
-QMAKE_CXXFLAGS_DEBUG += -g3 -O0
-QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT -Werror -s
+QMAKE_CXXFLAGS_DEBUG += -O0
+QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT -Werror -s -O3
 
 QMAKE_LFLAGS += -Wl,-rpath,./lib
 QMAKE_LFLAGS_RELEASE += -Wl,-s
@@ -53,7 +53,8 @@ HEADERS  += src/common.h \
     src/skin_widget.h \
     src/system_notify.h \
     src/title_widget.h \
-    src/ui_control_classes.h
+    src/ui_control_classes.h \
+    src/gloal_func.h
 
 unix: {
     INCLUDEPATH += /usr/include/glib-2.0/

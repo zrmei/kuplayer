@@ -7,38 +7,27 @@
  *********************************************/
 #ifndef KUPLAYER_H
 #define KUPLAYER_H
-
-
 #include "common.h"
 #include "shadow_widget.h"
-#include "play_list_widget.h"
-#include "skin_widget.h"
-#include "main_menu.h"
 
-#include <QBitArray>
-#include <array>
 #include <QSystemTrayIcon>
 class QSettings;
-class TitleWidget;
-class QStackedWidget;
-class MPlayerWidget;
-class MPlayer;
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class PyScript;
-class mThread;
-class LoadImage;
+struct MainWidget_Impl;
 
-
-class kuplayer        
+class MainWidget        
 #ifdef CAN_RESIZE
- : public MainWidget
+ : public ResizedWidget
 #else
  : public ShadowWidget
 #endif
 {
     Q_OBJECT
 public:
-    kuplayer(PyScript *pyinit,QWidget *parent = 0);
-    virtual ~kuplayer();
+    MainWidget(PyScript *pyinit, const QString&, QWidget *parent = 0);
+    virtual ~MainWidget();
     void setIniFile(QSettings *);
 public slots:
     void on_showMin_clicked();
@@ -49,7 +38,7 @@ public slots:
     void on_nextPage_loaded(CLASS);
     void loadImageFinished(CLASS, QPixmap, QString, QString);
     void on_url_triggered(QString, QString);
-    void url_ji_triggered(QString, QString url);
+    void url_ji_triggered(QString, QString);
     void change_url(CLASS, int, QString);
 private slots:
     void trayIcon_clicked(QSystemTrayIcon::ActivationReason);
@@ -59,25 +48,9 @@ private:
     void to_inifile();
     void init_trayicon();
     
-public:    
-    const QStringList name{"tv","movice","zy","music","comic"};
 private:
-      PlayListWidget   xuan_ji_widget;
-          SkinWidget   skin_widget;
-          
-            PyScript   *pyinit;
-         TitleWidget   *title_widget;
-      QStackedWidget   *stacked_widget;
-       MPlayerWidget   *player_widget;
-             MPlayer   *player;
-          MenuWidget   *main_menu;
-     QSystemTrayIcon   *trayicon;
-           conf_info   *setting;
-           QSettings   *iniFile;
-           
-           QBitArray   can_update{5,true};
-    std::array<int,5>  pages{ {2,2,2,2,2} };     
-    std::array<std::tuple<QString,QString,QString>,5> locate_class_time;
+    std::shared_ptr<MainWidget_Impl> pImpl;
 };
 
+KUPLAYER_NAMESPACE_END //namespace end
 #endif // KUPLAYER_H

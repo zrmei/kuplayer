@@ -7,11 +7,11 @@
  *********************************************/
 #ifndef DETAILLABEL_H
 #define DETAILLABEL_H
-
+#include "common.h"
 #include <QLabel>
-class QHBoxLayout;
-class QVBoxLayout;
 class QMouseEvent;
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 class Label : public QLabel
 {
@@ -26,6 +26,7 @@ protected:
     virtual void leaveEvent(QEvent *);
 };
 
+struct DetailLabel_Impl;
 
 class DetailLabel : public QWidget
 {
@@ -40,18 +41,15 @@ public:
     inline void set_Pixmap(QPixmap &&img);
     inline void set_Url(const QString& url);
     inline void set_Title(const QString& title);
-    inline QString text(){return lblTitle_->text();}
+    QString text() const;
 
 private slots:
     void this_url_triggered();
 
 private:
-          Label *lblImg_;
-          Label *lblTitle_;
-        QString  url_;
-        QVBoxLayout *verticalLayout;
+    std::shared_ptr<DetailLabel_Impl> pImpl;
 };
 
 
-
+KUPLAYER_NAMESPACE_END //namespace end
 #endif // DETAILLABEL_H

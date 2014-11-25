@@ -7,6 +7,8 @@
  *********************************************/
 
 #include "push_button.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
+
 #include <QMouseEvent>
 #include <QPainter>
 

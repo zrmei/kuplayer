@@ -2,123 +2,155 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="zh_CN">
 <context>
-    <name>ControlWidget</name>
+    <name>mei::kuplayer::ControlWidget</name>
     <message>
-        <location filename="src/control_widget.cpp" line="44"/>
+        <location filename="src/control_widget.cpp" line="84"/>
         <source>Backward</source>
         <translation>快退</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="48"/>
+        <location filename="src/control_widget.cpp" line="88"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="52"/>
+        <location filename="src/control_widget.cpp" line="92"/>
         <source>Play/Pause</source>
         <translation>播放/暂停</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="56"/>
+        <location filename="src/control_widget.cpp" line="96"/>
         <source>Foreward</source>
         <translation>快进</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="63"/>
+        <location filename="src/control_widget.cpp" line="103"/>
         <source>Episode</source>
         <translation>选集</translation>
     </message>
 </context>
 <context>
-    <name>MenuWidget</name>
+    <name>mei::kuplayer::MainWidget</name>
     <message>
-        <location filename="src/main_menu.cpp" line="50"/>
-        <location filename="src/main_menu.cpp" line="54"/>
-        <source>Basic Settings</source>
-        <translation>基本设置</translation>
+        <location filename="src/kuplayer.cpp" line="166"/>
+        <source>kuplayer: free for youku!</source>
+        <translation>酷播：免费的优酷播放器！</translation>
     </message>
     <message>
-        <location filename="src/main_menu.cpp" line="63"/>
+        <location filename="src/kuplayer.cpp" line="204"/>
+        <source>kuplayer</source>
+        <translation>酷播</translation>
+    </message>
+    <message>
+        <location filename="src/kuplayer.cpp" line="205"/>
+        <source>Showing by double-click !</source>
+        <translation>双击这显示！</translation>
+    </message>
+    <message>
+        <location filename="src/kuplayer.cpp" line="212"/>
+        <location filename="src/kuplayer.cpp" line="375"/>
+        <source>Exit</source>
+        <translation>退出</translation>
+    </message>
+    <message>
+        <location filename="src/kuplayer.cpp" line="213"/>
+        <source>Really want to quit?</source>
+        <translation>是否真的要退出？</translation>
+    </message>
+    <message>
+        <location filename="src/kuplayer.cpp" line="315"/>
+        <location filename="src/kuplayer.cpp" line="325"/>
+        <source>Currently playing:</source>
+        <translation>正在播放：</translation>
+    </message>
+    <message>
+        <location filename="src/kuplayer.cpp" line="373"/>
+        <source>Settings</source>
+        <translation>设置</translation>
+    </message>
+    <message>
+        <location filename="src/kuplayer.cpp" line="374"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
 </context>
 <context>
-    <name>QObject</name>
+    <name>mei::kuplayer::MenuWidget</name>
     <message>
-        <source>No</source>
-        <translation type="vanished">取消</translation>
+        <location filename="src/main_menu.cpp" line="55"/>
+        <source>Basic Settings</source>
+        <translation>基本设置</translation>
     </message>
     <message>
-        <source>Yes</source>
-        <translation type="vanished">确定</translation>
+        <location filename="src/main_menu.cpp" line="64"/>
+        <source>About</source>
+        <translation>关于</translation>
     </message>
+</context>
+<context>
+    <name>mei::kuplayer::QObject</name>
     <message>
-        <source>Exit</source>
-        <translation type="vanished">退出</translation>
-    </message>
-    <message>
-        <location filename="src/main.cpp" line="45"/>
+        <location filename="src/main.cpp" line="51"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="46"/>
+        <location filename="src/main.cpp" line="52"/>
         <source>Network error,Please try later !</source>
         <translation>当前网络差，请检查网络设置，稍后再试！</translation>
     </message>
 </context>
 <context>
-    <name>TitleWidget</name>
+    <name>mei::kuplayer::TitleWidget</name>
     <message>
-        <location filename="src/title_widget.h" line="76"/>
-        <source>TVShow</source>
-        <translation>电视剧</translation>
-    </message>
-    <message>
-        <location filename="src/title_widget.h" line="76"/>
-        <source>Movies</source>
-        <translation>电影</translation>
-    </message>
-    <message>
-        <location filename="src/title_widget.h" line="76"/>
-        <source>Variety</source>
-        <translation>综艺</translation>
-    </message>
-    <message>
-        <location filename="src/title_widget.h" line="77"/>
-        <source>Music</source>
-        <translation>音乐</translation>
-    </message>
-    <message>
-        <location filename="src/title_widget.h" line="77"/>
-        <source>Cartoon</source>
-        <translation>动漫</translation>
-    </message>
-    <message>
-        <location filename="src/title_widget.h" line="77"/>
-        <source>Player</source>
-        <translation>播放器</translation>
-    </message>
-    <message>
-        <location filename="src/title_widget.cpp" line="109"/>
+        <location filename="src/title_widget.cpp" line="111"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="src/title_widget.cpp" line="113"/>
+        <location filename="src/title_widget.cpp" line="115"/>
         <source>Min</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="src/title_widget.cpp" line="117"/>
+        <location filename="src/title_widget.cpp" line="119"/>
         <source>Skin</source>
         <translation>皮肤</translation>
     </message>
     <message>
-        <location filename="src/title_widget.cpp" line="121"/>
+        <location filename="src/title_widget.cpp" line="123"/>
         <source>Menu</source>
         <translation>菜单</translation>
+    </message>
+    <message>
+        <location filename="src/title_widget.h" line="78"/>
+        <source>TVShow</source>
+        <translation>电视剧</translation>
+    </message>
+    <message>
+        <location filename="src/title_widget.h" line="78"/>
+        <source>Movies</source>
+        <translation>电影</translation>
+    </message>
+    <message>
+        <location filename="src/title_widget.h" line="78"/>
+        <source>Variety</source>
+        <translation>综艺</translation>
+    </message>
+    <message>
+        <location filename="src/title_widget.h" line="79"/>
+        <source>Music</source>
+        <translation>音乐</translation>
+    </message>
+    <message>
+        <location filename="src/title_widget.h" line="79"/>
+        <source>Cartoon</source>
+        <translation>动漫</translation>
+    </message>
+    <message>
+        <location filename="src/title_widget.h" line="79"/>
+        <source>Player</source>
+        <translation>播放器</translation>
     </message>
 </context>
 <context>
@@ -184,101 +216,47 @@ p, li { white-space: pre-wrap; }
         <translation>语言：</translation>
     </message>
     <message>
-        <location filename="src/base_set_weidget.ui" line="266"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;changed when restart !&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;下次启动时更改！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <location filename="src/base_set_weidget.ui" line="238"/>
+        <source>中文</source>
+        <translation></translation>
     </message>
     <message>
         <location filename="src/base_set_weidget.ui" line="243"/>
         <source>English</source>
-        <translation>English</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="src/base_set_weidget.ui" line="238"/>
-        <source>中文</source>
-        <translation>中文</translation>
+        <location filename="src/base_set_weidget.ui" line="266"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;changed when restart !&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;下次启动时更改！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
-    <name>down_widget_</name>
+    <name>mei::kuplayer::down_widget_</name>
     <message>
-        <location filename="src/main_menu.h" line="81"/>
+        <location filename="src/main_menu.cpp" line="79"/>
         <source>Basic Settings</source>
         <translation>基本设置</translation>
     </message>
     <message>
-        <location filename="src/main_menu.h" line="81"/>
+        <location filename="src/main_menu.cpp" line="79"/>
         <source>Play Settings</source>
         <translation>播放设置</translation>
     </message>
     <message>
-        <location filename="src/main_menu.h" line="81"/>
+        <location filename="src/main_menu.cpp" line="80"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="src/main_menu.h" line="81"/>
+        <location filename="src/main_menu.cpp" line="80"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="src/main_menu.h" line="81"/>
+        <location filename="src/main_menu.cpp" line="80"/>
         <source>Cancel</source>
         <translation>取消</translation>
-    </message>
-</context>
-<context>
-    <name>kuplayer</name>
-    <message>
-        <location filename="src/kuplayer.cpp" line="122"/>
-        <source>kuplayer: free for youku!</source>
-        <translation>酷播：免费的优酷播放器！</translation>
-    </message>
-    <message>
-        <source>Player</source>
-        <translation type="vanished">播放器</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="170"/>
-        <source>Showing by double-click !</source>
-        <translation>双击这显示！</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="169"/>
-        <source>kuplayer</source>
-        <translation>酷播</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="177"/>
-        <location filename="src/kuplayer.cpp" line="340"/>
-        <source>Exit</source>
-        <translation>退出</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="178"/>
-        <source>Really want to quit?</source>
-        <translation>是否真的要退出？</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="280"/>
-        <location filename="src/kuplayer.cpp" line="290"/>
-        <source>Currently playing:</source>
-        <translation>正在播放：</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="300"/>
-        <source>All</source>
-        <translation>全部</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="338"/>
-        <source>Settings</source>
-        <translation>设置</translation>
-    </message>
-    <message>
-        <location filename="src/kuplayer.cpp" line="339"/>
-        <source>About</source>
-        <translation>关于</translation>
     </message>
 </context>
 <context>
@@ -391,7 +369,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="src/play_set_widget.ui" line="354"/>
         <source>Esc</source>
-        <translation>Esc</translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

@@ -6,7 +6,9 @@
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
 #include "common.h"
+#include "gloal_func.h"
 #include "shadow_widget.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
 #include <QMouseEvent>
 #include <QDesktopWidget>
@@ -122,12 +124,12 @@ void ShadowWidget::drawWindowShadow(QPainter &painter)
 
 
 #ifdef CAN_RESIZE
-MainWidget::MainWidget(QWidget *parent)
+ResizedWidget::ResizedWidget(QWidget *parent)
     : ShadowWidget(parent)
 {
 }
 
-MainWidget::~MainWidget()
+ResizedWidget::~ResizedWidget()
 {
 
 }

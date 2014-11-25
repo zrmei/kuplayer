@@ -10,12 +10,13 @@
 #include "common.h"
 #include "shadow_widget.h"
 
-class PushButton;
-class SelectLabel;
 class QHBoxLayout;
 class QVBoxLayout;
 class QStackedWidget;
 
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
+class PushButton;
+class SelectLabel;
 class base_set_weidget;
 class play_set_widget;
 class about_widget;
@@ -23,12 +24,12 @@ class down_widget_;
 
 struct conf_info
 {
- QString default_video_format;
-    bool start_when_pc_on;
-    bool close_all;
-    bool min_or_close;
-    bool auto_play_next;
-    bool language;
+    QString default_video_format;
+       bool start_when_pc_on;
+       bool close_all;
+       bool min_or_close;
+       bool auto_play_next;
+       bool language;
 };
 
 
@@ -61,10 +62,10 @@ public slots:
     void be_selected(QString,QString);
     void btn_selected(QString,QString);
     void LanguageChanged(int);
-public:
-    QStackedWidget *right_widget;
-    conf_info *settings;
+
 private:
+      QStackedWidget *right_widget;
+           conf_info *settings;
          SelectLabel *base_set;
          SelectLabel *play_set;
          SelectLabel *about_set;
@@ -77,10 +78,9 @@ private:
 
        QVBoxLayout *left_layout;
        QHBoxLayout *down_layout;
-    const QStringList setting_strs{
-        tr("Basic Settings"),tr("Play Settings"),tr("About"),tr("Save"),tr("Cancel")
-    };
+    const QStringList setting_strs{tr("Basic Settings"),tr("Play Settings"),
+      tr("About"),tr("Save"),tr("Cancel")};
 };
 
-
+KUPLAYER_NAMESPACE_END //namespace end
 #endif // MAIN_MENU_H

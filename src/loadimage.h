@@ -8,6 +8,8 @@
 #ifndef LOADIMAGE_H
 #define LOADIMAGE_H
 
+#include "common.h"
+
 #include <QNetworkReply>
 #include <QNetworkAccessManager>
 #include <QFile>
@@ -15,6 +17,8 @@
 #include <QWaitCondition>
 #include <QMutex>
 #include <QDebug>
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 typedef unsigned int CLASS;
 
@@ -84,4 +88,5 @@ private:
     QNetworkAccessManager *manager;
 };
 
+KUPLAYER_NAMESPACE_END //namespace end
 #endif // LOADIMAGE_H

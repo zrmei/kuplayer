@@ -8,13 +8,15 @@
 #define PYSCRIPT_CPP
 
 #include "pyscript.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
+
 #include <memory>
 
 using namespace boost;
 using namespace boost::python;
 
 PyScript::PyScript()
-    : init_(new pyinit)
+    : init_(new Python::pyinit)
 {
     module = init_->module();
 }
@@ -26,7 +28,7 @@ PyScript::~PyScript()
 bool PyScript::GetVideoUrls(QString keyurl,QString format)
 {
     std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
+    std::shared_ptr<Python::PyThreadStateLock> pylock;
     int i{0};
     PYTHON_CATCH_EXCEPTION_BEGIN
     i = python::call_method<int>(module,"getVideoUrls",
@@ -41,7 +43,7 @@ bool PyScript::GetVideoUrls(QString keyurl,QString format)
 bool PyScript::getShowList()
 {
     std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
+    std::shared_ptr<Python::PyThreadStateLock> pylock;
     
     list tmp;
     try{
@@ -59,7 +61,7 @@ const QStringList&
 PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time)
 {
     std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
+    std::shared_ptr<Python::PyThreadStateLock> pylock;
     
     python::str p("");
     PYTHON_CATCH_EXCEPTION_BEGIN
@@ -77,7 +79,7 @@ PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time
 const QStringList& PyScript::connect_img_url(QString url, QString name)
 {
     std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
+    std::shared_ptr<Python::PyThreadStateLock> pylock;
     
     return_list.clear();
     list tmp ;
@@ -102,7 +104,7 @@ const QStringList& PyScript::connect_img_url(QString url, QString name)
 const QStringList& PyScript::gotoNextPage(QString name, int index)
 {
     std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
+    std::shared_ptr<Python::PyThreadStateLock> pylock;
     
     return_list.clear();
     PYTHON_CATCH_EXCEPTION_BEGIN
@@ -115,7 +117,7 @@ const QStringList& PyScript::gotoNextPage(QString name, int index)
 const QStringList& PyScript::getplayUrl(QString url)
 {
     std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
+    std::shared_ptr<Python::PyThreadStateLock> pylock;
     
     return_list.clear();
     python::list sstr;
@@ -135,7 +137,7 @@ const QStringList& PyScript::getplayUrl(QString url)
 const QStringList& PyScript::getAll(CLASS classes,QString url)
 {
     std::lock_guard<std::mutex> lock(mu);
-    std::shared_ptr<PyThreadStateLock> pylock;
+    std::shared_ptr<Python::PyThreadStateLock> pylock;
     return_list.clear();
     QString func;
     switch (classes) {

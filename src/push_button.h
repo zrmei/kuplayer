@@ -7,8 +7,11 @@
  *********************************************/
 #ifndef PUSH_BUTTON_H
 #define PUSH_BUTTON_H
+#include "common.h"
 
 #include <QPushButton>
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 class PushButton final : public QPushButton
 {
@@ -35,5 +38,6 @@ private:
     int btn_height; //按钮高度
     bool is_left_pressed; //按钮左键是否按下
 };
-
+    
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // PUSH_BUTTON_H

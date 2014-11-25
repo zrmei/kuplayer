@@ -6,6 +6,7 @@
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
 #include "ui_control_classes.h"
+USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
 base_set_weidget::base_set_weidget(QWidget *parent) :
     QWidget(parent),

@@ -17,54 +17,43 @@ using std::find_if_not;
 using std::bind;
 using std::function;
 
+#ifndef NO_KUPLAYER_NAMESPACE
+#define KUPLAYER_NAMESPACE_BEGIN namespace mei { namespace kuplayer {
+#define KUPLAYER_NAMESPACE_END } }
+#define USR_NAMESPACE_KUPLAYER using namespace mei::kuplayer;
+#define DECLARE_NAMESPACE_KUPLAYER mei::kuplayer::
+#endif
+
 #include <QObject>
 #include <QDebug>
 #include <QTimer>
 #include <QPainter>
 #include <QApplication>
 
-#define SHADOW_WIDTH  5
-#define SHADOW_HEIGHT 5
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
+
+const int SHADOW_WIDTH = 5;
+const int SHADOW_HEIGHT = 5;
+const int WINDOW_WIDTH = 1002;
+const int WINDOW_HEIGHT = 657;
+const QString SHOW_PAGE = "http://www.youku.com/show_page/";
 
 #if defined(__GNUC__) && !defined(__clang__) 
     #if (__GNUC__ < 4) || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
         #error Please use gcc4.6.0 or higher to support some new feature.
-//    #else
-//        #pragma message "gcc is using"
     #endif
 #elif defined(__clang__)
-    #if (__clang_major__ < 3) || (__clang_major__ == 3 && __clang_minor__ < 5)
+    #if (__clang_major__ < 3) || (__clang_major__ == 3 && __clang_minor__ < 4)
         #error Please use clang3.5.0 or higher to support some new feature.
-//    #else
-//        #pragma message "clang is using "
     #endif
 #endif
 
 typedef unsigned int CLASS;
 const CLASS TV = 0,MOVIE = 1,ZONGYI = 2,MUSIC = 3,COMIC = 4,PLAYER = 5,NONE = 6;
 
-template<typename T>
-inline void set_no_margin(T *layout){
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    layout->setContentsMargins(0,0,0,0);
-}
-template<typename T>
-inline void delete_list(T* store){
-    while (store->size()){
-        delete store->at(0);
-        store->removeAt(0);
-    }
-    delete store;
-}
 
-inline QString msg_font_style(const QString& text)
-{
-    QString tmp;
-    tmp.insert(0,"<span style=\"font-family:'SimSun'; color:#ff0000;\"><h2>");
-    tmp.insert(tmp.size(),text);
-    tmp.insert(tmp.size(),"</h2></span>");
-    return std::move(tmp);
-}
 
+
+
+KUPLAYER_NAMESPACE_END // namespace end
 #endif

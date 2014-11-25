@@ -7,8 +7,10 @@
  *********************************************/
 #ifndef SELECT_LABEL_H
 #define SELECT_LABEL_H
-
+#include "common.h"
 #include <QLabel>
+
+KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 class SelectLabel final : public QLabel
 {
@@ -29,4 +31,6 @@ private:
     bool be_select{false};
     QString url_;
 };
+
+KUPLAYER_NAMESPACE_END // namespace end
 #endif // SELECT_LABEL_H
