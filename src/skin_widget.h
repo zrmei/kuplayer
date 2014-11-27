@@ -9,12 +9,9 @@
 #define SKIN_WIDGET_H
 #include "common.h"
 #include "shadow_widget.h"
-class QScrollArea;
-class QGridLayout;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
-class DetailLabel;
-class PushButton;
+struct SkinWidget_Impl;
 
 class SkinWidget final : public ShadowWidget
 {
@@ -23,6 +20,7 @@ signals:
     void skin_change_clicked(QString);
 public:
     explicit SkinWidget(QWidget *parent = 0);
+    ~SkinWidget(){}
 public slots:
     void on_this_show();
     void on_url_triggered(QString,QString);
@@ -30,14 +28,10 @@ public slots:
 private:
     void init_skin(QString name);
     void find_file(QString path);
-QList<DetailLabel*> label_store;
-        QStringList pic_list;
-            QWidget *viewWidgetContents;
-        QScrollArea *view;
-        QGridLayout *scroll_layout;
-         PushButton *btn_close;
-      const QString PIC_PATH =\
+    QStringList pic_list;
+    const QString PIC_PATH =\
             qApp->applicationDirPath()+"/sources/img/skin/";
+    std::shared_ptr<SkinWidget_Impl> pImpl;
 };
 
 KUPLAYER_NAMESPACE_END // namespace end

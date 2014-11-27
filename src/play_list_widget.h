@@ -10,13 +10,13 @@
 
 #include "shadow_widget.h"
 #include <QList>
-class QGridLayout;
-class QHBoxLayout;
-class QScrollArea;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class PushButton;
 class SelectLabel;
+
+struct PlayListWidget_Impl;
+typedef QList<std::tuple<QString,QString,QString>> list_map;
 
 class PlayListWidget : public ShadowWidget
 {
@@ -26,12 +26,8 @@ signals:
 public:
     explicit PlayListWidget(QWidget *parent = 0);
     ~PlayListWidget();
-    typedef QList<std::tuple<QString,QString,QString>> list_map;
     void sort(const QStringList &list);
-    inline QList<QAction*> init_action()
-    {
-        return {{play_next_key,play_prev_key}};
-    }
+    QList<QAction*> init_action();
 public slots:
     void on_list_changed(int, const QStringList &);
     void on_xuan_ji_show(QString, QString);
@@ -42,17 +38,10 @@ protected:
 private slots:
     void this_click(QString name, QString url);
 private:
-            QAction *play_next_key;
-            QAction *play_prev_key;
-        QGridLayout *scroll_layout;
-        QScrollArea *view;
-            QWidget *viewWidgetContents;
-         PushButton *btn_close;
-        QHBoxLayout *up_title_layout;
-QList<SelectLabel*> *label_store;
-           list_map  play_list;
     int col{1};
     int currentIndex{0};
+    list_map  play_list;
+    std::shared_ptr<PlayListWidget_Impl> pImpl;
 };
 
 KUPLAYER_NAMESPACE_END // namespace end

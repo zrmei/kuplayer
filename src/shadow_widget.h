@@ -42,7 +42,7 @@ private:
     QRect original_rect;
     bool isLeftPressDown{false};
     QPoint m_ptPressGlobal;
-    QDesktopWidget *desk;
+    std::shared_ptr<QDesktopWidget> desk;
     std::shared_ptr<QList<QPixmap>> pixmaps;
 };
 

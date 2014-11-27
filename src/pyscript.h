@@ -76,15 +76,14 @@ public:
     bool getShowList();
     bool GetVideoUrls(QString keyurl,QString format);
     
-    const QStringList& connect_img_url(QString,QString);
-    const QStringList& getUrlByName(CLASS,QString,QString,QString);
-    const QStringList& gotoNextPage(QString name,int index);
-    const QStringList& getplayUrl(QString);
-    const QStringList& getAll(CLASS,QString);
+    QStringList connect_img_url(QString,QString);
+    QStringList getUrlByName(CLASS,QString,QString,QString);
+    QStringList gotoNextPage(QString name,int index);
+    QStringList getplayUrl(QString);
+    QStringList getAll(CLASS,QString);
 
     QStringList show_list;
 private:
-    inline const QStringList& return_list_const(){return return_list;}
     Python::pyinit *init_;
     PyObject *module;
     QStringList return_list;

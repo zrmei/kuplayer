@@ -10,17 +10,12 @@
 #include "common.h"
 #include "shadow_widget.h"
 
-class QHBoxLayout;
-class QVBoxLayout;
 class QStackedWidget;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
-class PushButton;
-class SelectLabel;
-class base_set_weidget;
-class play_set_widget;
-class about_widget;
-class down_widget_;
+
+struct down_widget_Impl;
+struct MenuWidget_Impl;
 
 struct conf_info
 {
@@ -44,9 +39,7 @@ public slots:
     void show_about();
     void init_setting(conf_info *);
 private:
-     PushButton *btn_close;
-    QHBoxLayout *up_title_layout;
-    down_widget_*down_widget;
+    std::shared_ptr<MenuWidget_Impl> pImpl;
 };
 
 /**********************************************/
@@ -64,22 +57,8 @@ public slots:
     void LanguageChanged(int);
 
 private:
-      QStackedWidget *right_widget;
-           conf_info *settings;
-         SelectLabel *base_set;
-         SelectLabel *play_set;
-         SelectLabel *about_set;
-         SelectLabel *btn_save;
-         SelectLabel *btn_exit;
- QList<SelectLabel*> *label_sores;
-    base_set_weidget *base_set_widget;
-     play_set_widget *play_set_widget_;
-        about_widget *about_widget_;
-
-       QVBoxLayout *left_layout;
-       QHBoxLayout *down_layout;
-    const QStringList setting_strs{tr("Basic Settings"),tr("Play Settings"),
-      tr("About"),tr("Save"),tr("Cancel")};
+    QStackedWidget *right_widget;
+    std::shared_ptr<down_widget_Impl> pImpl;
 };
 
 KUPLAYER_NAMESPACE_END //namespace end

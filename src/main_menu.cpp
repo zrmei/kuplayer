@@ -16,44 +16,55 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+struct DECLARE_NAMESPACE_KUPLAYER MenuWidget_Impl
+{
+    PushButton *btn_close;
+    down_widget_*down_widget;
+    
+    MenuWidget_Impl()
+        : btn_close(new PushButton)
+        , down_widget(new down_widget_)
+    {}
+    ~MenuWidget_Impl()
+    {
+        delete btn_close;
+        delete down_widget;
+    }
+};
 
 MenuWidget::MenuWidget(QWidget *parent)
     : ShadowWidget(parent)
+    , pImpl(new MenuWidget_Impl())
 {
     setAttribute(Qt::WA_QuitOnClose,false);
     setWindowModality(Qt::ApplicationModal);
     setMinimumSize(600,430);
-
-    up_title_layout = new QHBoxLayout;
+    
+    QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
-    btn_close = new PushButton;
-    btn_close->setPicName(":/sysbutton/close");
-    connect(btn_close,SIGNAL(clicked()),this,SLOT(hide()));
-    up_title_layout->addWidget(btn_close,0,Qt::AlignTop);
+    
+    pImpl->btn_close->setPicName(":/sysbutton/close");
+    connect(pImpl->btn_close,SIGNAL(clicked()),this,SLOT(hide()));
+    up_title_layout->addWidget(pImpl->btn_close,0,Qt::AlignTop);
     up_title_layout->addStretch();
-
-    down_widget = new down_widget_;
-    down_widget->setAutoFillBackground(true);
+    
+    pImpl->down_widget->setAutoFillBackground(true);
     QVBoxLayout *main_layout = new QVBoxLayout(this);
     main_layout->addLayout(up_title_layout);
-    main_layout->addWidget(down_widget);
+    main_layout->addWidget(pImpl->down_widget);
     main_layout->setSpacing(0);
     main_layout->setContentsMargins(5,5,5,5);
 }
 
 MenuWidget::~MenuWidget()
-{
-    delete btn_close;
-    delete up_title_layout;
-    delete down_widget;
-}
+{ }
 
 void MenuWidget::on_this_show()
 {
     if(isHidden()){
         QPoint pos_ = QCursor::pos();
         move(pos_.x()+120,pos_.y()+100);
-        down_widget->be_selected(tr("Basic Settings"),"");
+        pImpl->down_widget->be_selected(QObject::tr("Basic Settings"),"");
         show();
     }else{
         hide();
@@ -62,158 +73,186 @@ void MenuWidget::on_this_show()
 
 void MenuWidget::show_about()
 {
-    down_widget->be_selected(tr("About"),"");
+    pImpl->down_widget->be_selected(QObject::tr("About"),"");
     show();
 }
 
 void MenuWidget::init_setting(conf_info* info)
 {
-    down_widget->init_setting(info);
+    pImpl->down_widget->init_setting(info);
 }
 
 /*********************************************************************************/
 
+struct DECLARE_NAMESPACE_KUPLAYER down_widget_Impl
+{
+    conf_info *settings;
+    SelectLabel *base_set;
+    SelectLabel *play_set;
+    SelectLabel *about_set;
+    SelectLabel *btn_save;
+    SelectLabel *btn_exit;
+    QList<SelectLabel*> *label_sores;
+    base_set_weidget *base_set_widget;
+    play_set_widget *play_set_widget_;
+    about_widget *about_widget_;
+    Ui::base_set_weidget *base_ui;
+    Ui::play_set_widget  *play_ui;
+    
+    const QStringList setting_strs{
+        QObject::tr("Basic Settings"),QObject::tr("Play Settings"),
+                QObject::tr("About"),QObject::tr("Save"),
+                QObject::tr("Cancel")};
+    
+    down_widget_Impl()
+        : base_set(new SelectLabel(QObject::tr("Basic Settings")))
+        , play_set(new SelectLabel(QObject::tr("Play Settings")))
+        , about_set(new SelectLabel(QObject::tr("About")))
+        , btn_save(new SelectLabel(QObject::tr("Save")))
+        , btn_exit(new SelectLabel(QObject::tr("Cancel")))
+        , label_sores(new QList<SelectLabel*>)
+        , base_set_widget(new base_set_weidget)
+        , play_set_widget_(new play_set_widget)
+        , about_widget_(new about_widget)
+    {
+        base_ui = base_set_widget->ui;
+        play_ui = play_set_widget_->ui;
+    }
+    
+    ~down_widget_Impl()
+    {
+        delete_list(label_sores);
+        delete base_set_widget;
+        delete play_set_widget_;
+        delete about_widget_;  
+    }
+};
+
 down_widget_::down_widget_(QWidget *parent)
     : QWidget(parent)
-    , label_sores(new QList<SelectLabel*>)
+    ,pImpl(new down_widget_Impl())
 {
-    base_set = new SelectLabel(setting_strs[0]);
-    base_set->setFixedSize(125,32);
-    label_sores->append(base_set);
-    base_set->set_selected(true);
-    connect(base_set,SIGNAL(be_selected(QString,QString)),
+    pImpl->base_set->setFixedSize(125,32);
+    pImpl->label_sores->append(pImpl->base_set);
+    pImpl->base_set->set_selected(true);
+    connect(pImpl->base_set,SIGNAL(be_selected(QString,QString)),
             this,SLOT(be_selected(QString,QString)));
-
-    play_set = new SelectLabel(setting_strs[1]);
-    play_set->setFixedHeight(32);
-    label_sores->append(play_set);
-    connect(play_set,SIGNAL(be_selected(QString,QString)),
+    
+    pImpl->play_set->setFixedHeight(32);
+    pImpl->label_sores->append(pImpl->play_set);
+    connect(pImpl->play_set,SIGNAL(be_selected(QString,QString)),
             this,SLOT(be_selected(QString,QString)));
-
-    about_set = new SelectLabel(setting_strs[2]);
-    about_set->setFixedHeight(32);
-    label_sores->append(about_set);
-    connect(about_set,SIGNAL(be_selected(QString,QString)),
+    
+    pImpl->about_set->setFixedHeight(32);
+    pImpl->label_sores->append(pImpl->about_set);
+    connect(pImpl->about_set,SIGNAL(be_selected(QString,QString)),
             this,SLOT(be_selected(QString,QString)));
-
-    btn_save = new SelectLabel(setting_strs[3]);
-    btn_save->setFixedSize(80,32);
-    connect(btn_save,SIGNAL(be_selected(QString,QString)),
+    
+    pImpl->btn_save->setFixedSize(80,32);
+    connect(pImpl->btn_save,SIGNAL(be_selected(QString,QString)),
             this,SLOT(btn_selected(QString,QString)));
-
-    btn_exit = new SelectLabel(setting_strs[4]);
-    btn_exit->setFixedSize(80,32);
-    connect(btn_exit,SIGNAL(be_selected(QString,QString)),
+    
+    pImpl->btn_exit->setFixedSize(80,32);
+    connect(pImpl->btn_exit,SIGNAL(be_selected(QString,QString)),
             this,SLOT(btn_selected(QString,QString)));
-
+    
     QWidget *left_widget = new QWidget;
     left_widget->setAutoFillBackground(true);
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Window, QColor(225, 225, 225));
     left_widget->setPalette(text_palette);
-
-    left_layout = new QVBoxLayout(left_widget);
-    left_layout->addWidget(base_set);
-    left_layout->addWidget(play_set);
-    left_layout->addWidget(about_set);
+    
+    QVBoxLayout *left_layout = new QVBoxLayout(left_widget);
+    left_layout->addWidget(pImpl->base_set);
+    left_layout->addWidget(pImpl->play_set);
+    left_layout->addWidget(pImpl->about_set);
     left_layout->addStretch();
     left_layout->setSpacing(1);
     left_layout->setContentsMargins(0,0,0,0);
-
+    
     text_palette.setColor(QPalette::Window,QColor(240,240,240));
-
+    
     right_widget = new QStackedWidget;
     right_widget->setAutoFillBackground(true);
     right_widget->setPalette(text_palette);
-
-    base_set_widget = new base_set_weidget;
-    connect(base_set_widget->ui->comboBox,SIGNAL(currentIndexChanged(int))
-            ,SLOT(LanguageChanged(int)));
-    right_widget->addWidget(base_set_widget);
+    
+    connect(pImpl->base_ui->comboBox,SIGNAL(currentIndexChanged(int)),SLOT(LanguageChanged(int)));
+    right_widget->addWidget(pImpl->base_set_widget);
     right_widget->setCurrentIndex(0);
-
-    play_set_widget_ = new play_set_widget;
-    right_widget->addWidget(play_set_widget_);
-
-    about_widget_ = new about_widget;
-    right_widget->addWidget(about_widget_);
-
+    right_widget->addWidget(pImpl->play_set_widget_);
+    right_widget->addWidget(pImpl->about_widget_);
+    
     QWidget *down_back_widget = new QWidget;
     down_back_widget->setAutoFillBackground(true);
     down_back_widget->setPalette(text_palette);
-    down_layout = new QHBoxLayout(down_back_widget);
+    QHBoxLayout *down_layout = new QHBoxLayout(down_back_widget);
     down_layout->addStretch();
-    down_layout->addWidget(btn_save);
-    down_layout->addWidget(btn_exit);
-
+    down_layout->addWidget(pImpl->btn_save);
+    down_layout->addWidget(pImpl->btn_exit);
+    
     QVBoxLayout *right_layout = new QVBoxLayout;
     right_layout->addWidget(right_widget);
     right_layout->addWidget(down_back_widget);
-
+    
     QHBoxLayout *main_layout = new QHBoxLayout(this);
     main_layout->addWidget(left_widget);
     main_layout->addLayout(right_layout);
     main_layout->setSpacing(0);
     main_layout->setContentsMargins(0,0,0,0);
-
+    
 }
 down_widget_::~down_widget_()
 {
-    delete_list(label_sores);
-    delete base_set_widget;
-    delete play_set_widget_;
-    delete about_widget_;
-    delete left_layout;
-    delete down_layout;
+    delete right_widget;
 }
 
 void down_widget_::init_setting(conf_info* info)
 {
     if(info->default_video_format.isEmpty()) return;
-    settings = info;
-    play_set_widget_->ui->checkBox_auto_play_next->setChecked(settings->auto_play_next);
-    base_set_widget->ui->checkBox_close->setChecked(settings->close_all);
-    base_set_widget->ui->radioButton_min->setChecked(settings->min_or_close);
-    base_set_widget->ui->checkBox_start->setChecked(settings->start_when_pc_on);
-    if(settings->default_video_format == "high")
-        play_set_widget_->ui->format_high->setChecked(true);
-    else if(settings->default_video_format == "normal")
-        play_set_widget_->ui->format_normal->setChecked(true);
+    pImpl->settings = info;
+    pImpl->play_ui->checkBox_auto_play_next->setChecked(pImpl->settings->auto_play_next);
+    pImpl->base_ui->checkBox_close->setChecked(pImpl->settings->close_all);
+    pImpl->base_ui->radioButton_min->setChecked(pImpl->settings->min_or_close);
+    pImpl->base_ui->checkBox_start->setChecked(pImpl->settings->start_when_pc_on);
+    if(pImpl->settings->default_video_format == "high")
+        pImpl->play_ui->format_high->setChecked(true);
+    else if(pImpl->settings->default_video_format == "normal")
+        pImpl->play_ui->format_normal->setChecked(true);
     else
-        play_set_widget_->ui->format_spuer->setChecked(true);
-    base_set_widget->ui->comboBox->setCurrentIndex(settings->language? 0 : 1 );
+        pImpl->play_ui->format_spuer->setChecked(true);
+    pImpl->base_ui->comboBox->setCurrentIndex(pImpl->settings->language? 0 : 1 );
 }
 
 void down_widget_::be_selected(QString name, QString)
 {
-    auto index = setting_strs.indexOf(name);
-    for_each(label_sores->begin(),label_sores->end(),
+    auto index = pImpl->setting_strs.indexOf(name);
+    for_each(pImpl->label_sores->begin(),pImpl->label_sores->end(),
              [](QList<SelectLabel*>::value_type item){
         item->set_selected(false);});
-    label_sores->at(index)->set_selected(true);
+    pImpl->label_sores->at(index)->set_selected(true);
     right_widget->setCurrentIndex(index);
 }
 
 void down_widget_::LanguageChanged(int index)
 {
-    settings->language = ( index == 0 );
+    pImpl->settings->language = ( index == 0 );
 }
 
 void down_widget_::btn_selected(QString name, QString)
 {
-    if(name == setting_strs[3]){
-        settings->auto_play_next = play_set_widget_->ui->checkBox_auto_play_next->isChecked();
-        settings->close_all = base_set_widget->ui->checkBox_close->isChecked();
-        settings->min_or_close = base_set_widget->ui->radioButton_min->isChecked();
-        settings->start_when_pc_on = base_set_widget->ui->checkBox_start->isChecked();
-        if(play_set_widget_->ui->format_high->isChecked())
-            settings->default_video_format = "high";
-        else if(play_set_widget_->ui->format_normal->isChecked())
-            settings->default_video_format = "normal";
+    if(name == pImpl->setting_strs[3]){
+        pImpl->settings->auto_play_next = pImpl->play_ui->checkBox_auto_play_next->isChecked();
+        pImpl->settings->close_all = pImpl->base_ui->checkBox_close->isChecked();
+        pImpl->settings->min_or_close = pImpl->base_ui->radioButton_min->isChecked();
+        pImpl->settings->start_when_pc_on = pImpl->base_ui->checkBox_start->isChecked();
+        if(pImpl->play_ui->format_high->isChecked())
+            pImpl->settings->default_video_format = "high";
+        else if(pImpl->play_ui->format_normal->isChecked())
+            pImpl->settings->default_video_format = "normal";
         else
-            settings->default_video_format = "super";
+            pImpl->settings->default_video_format = "super";
     }else{
-        init_setting(settings);
+        init_setting(pImpl->settings);
     }
     qobject_cast<MenuWidget*>(parent())->hide();
 }

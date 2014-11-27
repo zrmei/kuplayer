@@ -34,7 +34,7 @@ public slots:
     void on_skin_changed(QString);
     void on_Fullscreen_changed();
     void on_play_finished(bool);
-    void on_loadImage_started(int,const QStringList&);
+    void on_loadImage_started(int, QStringList);
     void on_nextPage_loaded(CLASS);
     void loadImageFinished(CLASS, QPixmap, QString, QString);
     void on_url_triggered(QString, QString);

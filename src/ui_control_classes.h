@@ -22,12 +22,10 @@ KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class base_set_weidget : public QWidget
 {
     Q_OBJECT
-    friend class down_widget_;
 public:
     explicit base_set_weidget(QWidget *parent = 0);
     ~base_set_weidget();
     
-private:
     Ui::base_set_weidget *ui;
 };
 
@@ -40,7 +38,7 @@ class play_set_widget : public QWidget
 public:
     explicit play_set_widget(QWidget *parent = 0);
     ~play_set_widget();
-private:
+
     Ui::play_set_widget *ui;
 };
 
@@ -49,15 +47,13 @@ private:
 class about_widget : public QWidget
 {
     Q_OBJECT
-    friend class down_widget_;
+
 public:
     explicit about_widget(QWidget *parent = 0);
     ~about_widget();
-private slots:
-    void on_label_linkActivated(const QString &link);
-
-private:
     Ui::about_widget *ui;
+private slots:
+    void on_label_linkActivated(const QString &link);   
 };
 
 KUPLAYER_NAMESPACE_END // namespace end

@@ -46,18 +46,22 @@ bool PyScript::getShowList()
     std::shared_ptr<Python::PyThreadStateLock> pylock;
     
     list tmp;
-    try{
+    PYTHON_CATCH_EXCEPTION_BEGIN
         tmp = python::call_method<list>(module,"getShowList");
     }catch(boost::python::error_already_set){
+    printf("\n=================================================================\nThe [%d] line in file\
+    [%s] has error\n",__LINE__,__FILE__); PyErr_Print();\
+    printf("\n=================================================================\n");
         return false;
     }
     for(ssize_t i= 0; i<python::len(tmp);++i){
         show_list.append(QString(extract<char*>(tmp[i])));
     }
+        qDebug() << show_list;
     return true;
 }
 
-const QStringList&
+QStringList
 PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time)
 {
     std::lock_guard<std::mutex> lock(mu);
@@ -73,10 +77,10 @@ PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time
     PYTHON_CATCH_EXCEPTION_END
     return_list.clear();
     return_list << QString(extract<char*>(p));
-    return return_list_const();
+    return return_list;
 }
 
-const QStringList& PyScript::connect_img_url(QString url, QString name)
+QStringList PyScript::connect_img_url(QString url, QString name)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
@@ -98,10 +102,10 @@ const QStringList& PyScript::connect_img_url(QString url, QString name)
             return_list.append(QString(extract<char*>(tmp[i])));
         }
     }
-    return return_list_const();
+    return return_list;
 }
 
-const QStringList& PyScript::gotoNextPage(QString name, int index)
+QStringList PyScript::gotoNextPage(QString name, int index)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
@@ -111,10 +115,10 @@ const QStringList& PyScript::gotoNextPage(QString name, int index)
     return_list  << next_page_.value(name)+QString::number(index)+".html";
     PYTHON_CATCH_EXCEPTION_END
     
-    return return_list_const();
+    return return_list;
 }
 
-const QStringList& PyScript::getplayUrl(QString url)
+QStringList PyScript::getplayUrl(QString url)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
@@ -131,10 +135,10 @@ const QStringList& PyScript::getplayUrl(QString url)
     }else{
         return_list << "";
     }
-    return return_list_const();
+    return return_list;
 }
 
-const QStringList& PyScript::getAll(CLASS classes,QString url)
+QStringList PyScript::getAll(CLASS classes,QString url)
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
@@ -151,7 +155,7 @@ const QStringList& PyScript::getAll(CLASS classes,QString url)
         func = "get_comic_all";
         break;
     default:
-        return return_list_const();
+        return return_list;
     }
     
     python::list sstr;
@@ -163,7 +167,7 @@ const QStringList& PyScript::getAll(CLASS classes,QString url)
     for(ssize_t i=0;i<python::len(sstr); ++i){
         return_list << QString(extract<char*>(sstr[i]));
     }
-    return return_list_const();
+    return return_list;
 }
 
 #endif //PYSCRIPT_CPP

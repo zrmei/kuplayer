@@ -10,7 +10,7 @@
 #include "program_options.h"
 #include "pyscript.h"
 #include "ui_control_classes.h"
-USR_NAMESPACE_KUPLAYER // using namespace mei::kuplayer
+
 #include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
@@ -46,10 +46,11 @@ int main(int argc, char *argv[])
         QPixmap(":/logo/logo").save(ico_path);
     }
     
-    std::shared_ptr<PyScript> pyinit = std::make_shared<PyScript>();
+    std::shared_ptr<DECLARE_NAMESPACE_KUPLAYER PyScript> pyinit = 
+            std::make_shared<DECLARE_NAMESPACE_KUPLAYER PyScript>();
     if( !pyinit.get()->getShowList() ){
         QMessageBox::warning(NULL,QObject::tr("Error"),
-                             msg_font_style(QObject::tr("Network error,Please try later !")));
+        DECLARE_NAMESPACE_KUPLAYER msg_font_style(QObject::tr("Network error,Please try later !")));
         a.quit();
         return -1;
     }
@@ -63,7 +64,7 @@ int main(int argc, char *argv[])
     splash->move(x,y);
     splash->show();
 
-    MainWidget w(pyinit.get(),ico_path);
+    DECLARE_NAMESPACE_KUPLAYER MainWidget w(pyinit.get(),ico_path);
     w.move(x,y);
     w.setIniFile(iniFile.get());
     splash->finish(&w);

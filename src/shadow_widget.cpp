@@ -35,7 +35,6 @@ ShadowWidget::ShadowWidget(QWidget *parent)
 
 ShadowWidget::~ShadowWidget()
 {
-    delete desk;
 }
 
 void ShadowWidget::change_skin(QString pic_name)

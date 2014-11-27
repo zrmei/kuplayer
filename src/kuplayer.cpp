@@ -141,8 +141,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     connect(pImpl->control_widget,SIGNAL(stop_clicked()),pImpl->player,SLOT(mStop()));
     connect(pImpl->control_widget,SIGNAL(backward_clicked()),pImpl->player,SLOT(mSeekBack()));
     connect(pImpl->control_widget,SIGNAL(foreward_clicked()),pImpl->player,SLOT(mSeekFore()));
-    connect(pImpl->control_widget,SIGNAL(xuan_ji_clcked(QString,QString)),
-            pImpl->xuan_ji_widget,SLOT(on_xuan_ji_show(QString,QString)));
+    connect(pImpl->control_widget,SIGNAL(xuan_ji_clcked(QString,QString)),pImpl->xuan_ji_widget,SLOT(on_xuan_ji_show(QString,QString)));
     connect(pImpl->control_widget,SIGNAL(vol_up_clicked()),pImpl->player,SLOT(vol_up()));
     connect(pImpl->control_widget,SIGNAL(vol_down_clicked()),pImpl->player,SLOT(vol_down()));
     connect(pImpl->player_widget,SIGNAL(escape_clicked()),this,SLOT(on_Fullscreen_changed()));
@@ -156,9 +155,10 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     if(pImpl->pyinit->show_list.size()){
         for(int i=0;i<5;++i){
             auto *tmp = new mThread(i,
-                 bind(&PyScript::connect_img_url,pImpl->pyinit,pImpl->pyinit->show_list[i],pImpl->name[i]));
-            connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
-                    this,SLOT(on_loadImage_started(int,const QStringList&)));
+                 bind(&PyScript::connect_img_url,pImpl->pyinit,
+                      pImpl->pyinit->show_list[i],pImpl->name[i]));
+            connect(tmp,SIGNAL(mfinished(int,QStringList)),
+                    this,SLOT(on_loadImage_started(int,QStringList)));
             tmp->start();
         }
     }
@@ -260,7 +260,7 @@ void MainWidget::on_play_finished(bool real)//false 播放正常结束 true 中�
     return;
 }
 
-void MainWidget::on_loadImage_started(int page, const QStringList& list)
+void MainWidget::on_loadImage_started(int page, QStringList list)
 {
     LoadImage *download = new LoadImage(page);
     download->setFileName(list);
@@ -276,8 +276,8 @@ void MainWidget::on_nextPage_loaded(CLASS type)
         QString url = pImpl->pyinit->gotoNextPage(pImpl->name[type],pImpl->pages[type]++)[0];
         auto *tmp = new mThread(type,bind(&PyScript::connect_img_url,
                                           pImpl->pyinit,url,pImpl->name[type]));
-        connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
-                this,SLOT(on_loadImage_started(int,const QStringList&)));
+        connect(tmp,SIGNAL(mfinished(int,QStringList)),
+                this,SLOT(on_loadImage_started(int,QStringList)));
         tmp->start();
         pImpl->can_update[type] = false;
     }
@@ -307,8 +307,8 @@ void MainWidget::on_url_triggered(QString name,QString url)
         auto *tmp = new mThread(::NONE
                                 ,bind(&PyScript::getAll,pImpl->pyinit
                                           ,pImpl->stacked_widget->currentIndex(),url));
-        connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
-                pImpl->xuan_ji_widget,SLOT(on_list_changed(int,const QStringList&)));
+        connect(tmp,SIGNAL(mfinished(int,QStringList)),
+                pImpl->xuan_ji_widget,SLOT(on_list_changed(int,QStringList)));
         pImpl->title_widget->turepage(PLAYER);
         tmp->start();
         pImpl->player->mPlay();
@@ -354,8 +354,8 @@ void MainWidget::change_url(CLASS classes,int type,QString name)
     auto *tmp = new mThread(classes,
                             bind(&PyScript::connect_img_url,
                                  pImpl->pyinit, url, pImpl->name[classes]));
-    connect(tmp,SIGNAL(mfinished(int,const QStringList&)),
-            this,SLOT(on_loadImage_started(int,const QStringList&)));
+    connect(tmp,SIGNAL(mfinished(int, QStringList)),
+            this,SLOT(on_loadImage_started(int, QStringList)));
     tmp->start();
     qobject_cast<ListWidget*>(pImpl->stacked_widget->widget(classes))->reset();
 }

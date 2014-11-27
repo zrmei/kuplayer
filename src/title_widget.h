@@ -15,10 +15,9 @@
 #define TITLE_WIDGET_WIDTH 100
 #define TITLE_CONTROL_HEIGHT 29
 class QMouseEvent;
-class QHBoxLayout;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
-class PushButton;
+struct TitleWidget_Impl;
 
 class TypeLabel final : public QLabel
 {
@@ -56,26 +55,14 @@ public:
     explicit TitleWidget(QWidget *parent_ = 0);
     virtual ~TitleWidget();
     void set_text(QString);
-    inline QString get_text(){return title->text();}
+    QString get_text() const;
 public slots:
     void turepage(int);
     void turepage(QString);
 private:
-    PushButton *btn_min;
-    PushButton *btn_close;
-    PushButton *btn_skin;
-    PushButton *btn_menu;
-    QLabel *title;
-    QLabel *logo;
-    QHBoxLayout *down_title_layout;
-    QHBoxLayout *up_title_layout;
-#ifdef HAS_LOGO
-    QHBoxLayout *right_title_layout;
-#endif
-    QList<TypeLabel*> *labels_store;
-    QList<PushButton*> *push_button_store;
     QStringList  down_title{tr("TVShow"),tr("Movies"),tr("Variety"),
         tr("Music"),tr("Cartoon"),tr("Player")};
+    std::shared_ptr<TitleWidget_Impl> pImpl;
 
 };
 

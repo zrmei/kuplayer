@@ -18,31 +18,51 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QVBoxLayout>
 #include <QAction>
 
+struct DECLARE_NAMESPACE_KUPLAYER PlayListWidget_Impl
+{
+    QAction *play_next_key;
+    QAction *play_prev_key;
+    QGridLayout *scroll_layout;
+    PushButton *btn_close;
+    QList<SelectLabel*> *label_store;
+      
+    PlayListWidget_Impl()
+        : scroll_layout(new QGridLayout)
+        , btn_close(new PushButton)
+        , label_store(new QList<SelectLabel*>)
+    {}
+    ~PlayListWidget_Impl()
+    {
+        delete_list(label_store);
+        delete btn_close;
+        delete scroll_layout;
+    }
+};
+
 PlayListWidget::PlayListWidget(QWidget *parent)
     : ShadowWidget(parent)
-    , label_store(new QList<SelectLabel*>())
+    , pImpl(new PlayListWidget_Impl())
 {
     setAttribute(Qt::WA_QuitOnClose,false);
     setWindowModality(Qt::ApplicationModal);
 
-    up_title_layout = new QHBoxLayout;
+    QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
 
-    btn_close = new PushButton;
-    btn_close->setPicName(":/sysbutton/close");
-    connect(btn_close,SIGNAL(clicked()),this,SLOT(hide()));
-    up_title_layout->addWidget(btn_close,0,Qt::AlignTop);
+    pImpl->btn_close->setPicName(":/sysbutton/close");
+    connect(pImpl->btn_close,SIGNAL(clicked()),this,SLOT(hide()));
+    up_title_layout->addWidget(pImpl->btn_close,0,Qt::AlignTop);
     up_title_layout->addStretch();
     QVBoxLayout *main_layout = new QVBoxLayout(this);
 
-    view = new QScrollArea;
+    QScrollArea *view = new QScrollArea;
     view->setWidgetResizable(true);
     view->setContentsMargins(0,0,0,0);
-    viewWidgetContents = new QWidget(view);
-    scroll_layout = new QGridLayout();
+    QWidget *viewWidgetContents = new QWidget(view);
+    pImpl->scroll_layout = new QGridLayout();
     QVBoxLayout *tmp_layout = new QVBoxLayout(viewWidgetContents);
-    scroll_layout->setContentsMargins(0,0,0,0);
-    tmp_layout->addLayout(scroll_layout);
+    pImpl->scroll_layout->setContentsMargins(0,0,0,0);
+    tmp_layout->addLayout(pImpl->scroll_layout);
     tmp_layout->addStretch();
 
     view->setWidget(viewWidgetContents);
@@ -57,23 +77,21 @@ PlayListWidget::PlayListWidget(QWidget *parent)
     viewWidgetContents->setFixedWidth(380);
     setFixedSize(400,300);
 
-    play_next_key = new QAction(this);
-    play_next_key->setShortcut(QKeySequence(Qt::Key_PageDown));
-    connect(play_next_key,SIGNAL(triggered()),SLOT(on_playNext_clicked()));
+    pImpl->play_next_key = new QAction(this);
+    pImpl->play_next_key->setShortcut(QKeySequence(Qt::Key_PageDown));
+    connect(pImpl->play_next_key,SIGNAL(triggered()),SLOT(on_playNext_clicked()));
 
-    play_prev_key = new QAction(this);
-    play_prev_key->setShortcut(QKeySequence(Qt::Key_PageUp));
-    connect(play_prev_key,SIGNAL(triggered()),SLOT(on_playPrev_clicked()));
+    pImpl->play_prev_key = new QAction(this);
+    pImpl->play_prev_key->setShortcut(QKeySequence(Qt::Key_PageUp));
+    connect(pImpl->play_prev_key,SIGNAL(triggered()),SLOT(on_playPrev_clicked()));
 
 }
 PlayListWidget::~PlayListWidget()
 {
-    delete_list(label_store);
-    delete btn_close;
-    delete up_title_layout;
-    delete scroll_layout;
-    delete viewWidgetContents;
-    delete view;
+}
+QList<QAction*> PlayListWidget::init_action()
+{
+    return {{pImpl->play_next_key,pImpl->play_prev_key}};
 }
 
 void PlayListWidget::sort(const QStringList& list)
@@ -106,9 +124,9 @@ void PlayListWidget::on_list_changed(int,const QStringList& list)
 {
     play_list.clear();
     currentIndex = 0;
-    while (label_store->size()){
-        delete label_store->at(0);
-        label_store->removeAt(0);
+    while (pImpl->label_store->size()){
+        delete pImpl->label_store->at(0);
+        pImpl->label_store->removeAt(0);
     }
     if(list.isEmpty()){
         return;
@@ -121,18 +139,18 @@ void PlayListWidget::on_list_changed(int,const QStringList& list)
         SelectLabel *sl = new SelectLabel(std::get<1>(i),std::get<2>(i));
         connect(sl,SIGNAL(be_selected(QString,QString)),
                 this,SLOT(this_click(QString,QString)));
-        label_store->append(sl);
-        scroll_layout->addWidget(sl,row,ccol);
+        pImpl->label_store->append(sl);
+        pImpl->scroll_layout->addWidget(sl,row,ccol);
         sl->setFixedHeight(32);
         ++ccol;
     };
     func_add_label( *(play_list.begin()) );
 
-    label_store->at(0)->adjustSize();
-    if(label_store->at(0)->width() > 50){
+    pImpl->label_store->at(0)->adjustSize();
+    if(pImpl->label_store->at(0)->width() > 50){
         col = 0;
     }else{
-        col = 360 / (label_store->at(0)->width()+15)-1;
+        col = 360 / (pImpl->label_store->at(0)->width()+15)-1;
     }
     for_each(play_list.begin()+1,play_list.end(),func_add_label);
 }
@@ -153,7 +171,7 @@ void PlayListWidget::this_click(QString name,QString url)
     for(int i=0;i<play_list.size();++i){
         if(std::get<1>(play_list[i]) == name){
             currentIndex = i;
-            label_store->at(i)->set_selected(true);
+            pImpl->label_store->at(i)->set_selected(true);
             emit click(name,url);
             return;
         }
@@ -166,7 +184,7 @@ void PlayListWidget::on_playNext_clicked()
         currentIndex = play_list.size()-1;
         return;
     }
-    label_store->at(currentIndex)->set_selected(true);
+    pImpl->label_store->at(currentIndex)->set_selected(true);
     emit click(std::get<1>(play_list[currentIndex]),
                std::get<2>(play_list[currentIndex]));
 }
@@ -178,7 +196,7 @@ void PlayListWidget::on_playPrev_clicked()
         currentIndex = 0;
         return;
     }
-    label_store->at(currentIndex)->set_selected(true);
+    pImpl->label_store->at(currentIndex)->set_selected(true);
     emit click(std::get<1>(play_list[currentIndex]),
                std::get<2>(play_list[currentIndex]));
 }

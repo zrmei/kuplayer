@@ -4,27 +4,27 @@
 <context>
     <name>mei::kuplayer::ControlWidget</name>
     <message>
-        <location filename="src/control_widget.cpp" line="84"/>
+        <location filename="src/control_widget.cpp" line="89"/>
         <source>Backward</source>
         <translation>快退</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="88"/>
+        <location filename="src/control_widget.cpp" line="93"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="92"/>
+        <location filename="src/control_widget.cpp" line="97"/>
         <source>Play/Pause</source>
         <translation>播放/暂停</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="96"/>
+        <location filename="src/control_widget.cpp" line="101"/>
         <source>Foreward</source>
         <translation>快进</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="103"/>
+        <location filename="src/control_widget.cpp" line="108"/>
         <source>Episode</source>
         <translation>选集</translation>
     </message>
@@ -32,123 +32,142 @@
 <context>
     <name>mei::kuplayer::MainWidget</name>
     <message>
-        <location filename="src/kuplayer.cpp" line="166"/>
+        <location filename="src/kuplayer.cpp" line="167"/>
         <source>kuplayer: free for youku!</source>
         <translation>酷播：免费的优酷播放器！</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="204"/>
+        <location filename="src/kuplayer.cpp" line="205"/>
         <source>kuplayer</source>
         <translation>酷播</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="205"/>
+        <location filename="src/kuplayer.cpp" line="206"/>
         <source>Showing by double-click !</source>
         <translation>双击这显示！</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="212"/>
-        <location filename="src/kuplayer.cpp" line="375"/>
+        <location filename="src/kuplayer.cpp" line="213"/>
+        <location filename="src/kuplayer.cpp" line="374"/>
         <source>Exit</source>
-        <translation>退出</translation>
+        <translation></translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="213"/>
+        <location filename="src/kuplayer.cpp" line="214"/>
         <source>Really want to quit?</source>
         <translation>是否真的要退出？</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="315"/>
-        <location filename="src/kuplayer.cpp" line="325"/>
+        <location filename="src/kuplayer.cpp" line="316"/>
+        <location filename="src/kuplayer.cpp" line="326"/>
         <source>Currently playing:</source>
         <translation>正在播放：</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="373"/>
+        <location filename="src/kuplayer.cpp" line="372"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="374"/>
+        <location filename="src/kuplayer.cpp" line="373"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
 </context>
 <context>
-    <name>mei::kuplayer::MenuWidget</name>
+    <name>QObject</name>
     <message>
-        <location filename="src/main_menu.cpp" line="55"/>
-        <source>Basic Settings</source>
-        <translation>基本设置</translation>
-    </message>
-    <message>
-        <location filename="src/main_menu.cpp" line="64"/>
-        <source>About</source>
-        <translation>关于</translation>
-    </message>
-</context>
-<context>
-    <name>mei::kuplayer::QObject</name>
-    <message>
-        <location filename="src/main.cpp" line="51"/>
+        <location filename="src/main.cpp" line="52"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="52"/>
+        <location filename="src/main.cpp" line="53"/>
         <source>Network error,Please try later !</source>
         <translation>当前网络差，请检查网络设置，稍后再试！</translation>
+    </message>
+    <message>
+        <location filename="src/main_menu.cpp" line="67"/>
+        <location filename="src/main_menu.cpp" line="103"/>
+        <location filename="src/main_menu.cpp" line="108"/>
+        <source>Basic Settings</source>
+        <translation>基本设置</translation>
+    </message>
+    <message>
+        <location filename="src/main_menu.cpp" line="76"/>
+        <location filename="src/main_menu.cpp" line="104"/>
+        <location filename="src/main_menu.cpp" line="110"/>
+        <source>About</source>
+        <translation>关于</translation>
+    </message>
+    <message>
+        <location filename="src/main_menu.cpp" line="103"/>
+        <location filename="src/main_menu.cpp" line="109"/>
+        <source>Play Settings</source>
+        <translation>播放设置</translation>
+    </message>
+    <message>
+        <location filename="src/main_menu.cpp" line="104"/>
+        <location filename="src/main_menu.cpp" line="111"/>
+        <source>Save</source>
+        <translation>保存</translation>
+    </message>
+    <message>
+        <location filename="src/main_menu.cpp" line="105"/>
+        <location filename="src/main_menu.cpp" line="112"/>
+        <source>Cancel</source>
+        <translation>取消</translation>
     </message>
 </context>
 <context>
     <name>mei::kuplayer::TitleWidget</name>
     <message>
-        <location filename="src/title_widget.cpp" line="111"/>
+        <location filename="src/title_widget.cpp" line="126"/>
         <source>Close</source>
         <translation>关闭</translation>
     </message>
     <message>
-        <location filename="src/title_widget.cpp" line="115"/>
+        <location filename="src/title_widget.cpp" line="130"/>
         <source>Min</source>
         <translation>最小化</translation>
     </message>
     <message>
-        <location filename="src/title_widget.cpp" line="119"/>
+        <location filename="src/title_widget.cpp" line="134"/>
         <source>Skin</source>
         <translation>皮肤</translation>
     </message>
     <message>
-        <location filename="src/title_widget.cpp" line="123"/>
+        <location filename="src/title_widget.cpp" line="138"/>
         <source>Menu</source>
         <translation>菜单</translation>
     </message>
     <message>
-        <location filename="src/title_widget.h" line="78"/>
+        <location filename="src/title_widget.h" line="63"/>
         <source>TVShow</source>
         <translation>电视剧</translation>
     </message>
     <message>
-        <location filename="src/title_widget.h" line="78"/>
+        <location filename="src/title_widget.h" line="63"/>
         <source>Movies</source>
         <translation>电影</translation>
     </message>
     <message>
-        <location filename="src/title_widget.h" line="78"/>
+        <location filename="src/title_widget.h" line="63"/>
         <source>Variety</source>
         <translation>综艺</translation>
     </message>
     <message>
-        <location filename="src/title_widget.h" line="79"/>
+        <location filename="src/title_widget.h" line="64"/>
         <source>Music</source>
         <translation>音乐</translation>
     </message>
     <message>
-        <location filename="src/title_widget.h" line="79"/>
+        <location filename="src/title_widget.h" line="64"/>
         <source>Cartoon</source>
         <translation>动漫</translation>
     </message>
     <message>
-        <location filename="src/title_widget.h" line="79"/>
+        <location filename="src/title_widget.h" line="64"/>
         <source>Player</source>
         <translation>播放器</translation>
     </message>
@@ -229,34 +248,6 @@ p, li { white-space: pre-wrap; }
         <location filename="src/base_set_weidget.ui" line="266"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;changed when restart !&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;下次启动时更改！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>mei::kuplayer::down_widget_</name>
-    <message>
-        <location filename="src/main_menu.cpp" line="79"/>
-        <source>Basic Settings</source>
-        <translation>基本设置</translation>
-    </message>
-    <message>
-        <location filename="src/main_menu.cpp" line="79"/>
-        <source>Play Settings</source>
-        <translation>播放设置</translation>
-    </message>
-    <message>
-        <location filename="src/main_menu.cpp" line="80"/>
-        <source>About</source>
-        <translation>关于</translation>
-    </message>
-    <message>
-        <location filename="src/main_menu.cpp" line="80"/>
-        <source>Save</source>
-        <translation>保存</translation>
-    </message>
-    <message>
-        <location filename="src/main_menu.cpp" line="80"/>
-        <source>Cancel</source>
-        <translation>取消</translation>
     </message>
 </context>
 <context>
