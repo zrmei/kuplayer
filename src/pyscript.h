@@ -14,18 +14,19 @@ class QStringList;
 class QString;
 #include <QMap>
 #include <mutex>
-#include <boost/noncopyable.hpp>
+
 #include <boost/python.hpp>
 #include <python2.7/Python.h>
 
 #ifndef PYTHON_DONOT_CATCH_EXCEPTION
 #define PYTHON_CATCH_EXCEPTION_BEGIN try{
-#define PYTHON_CATCH_EXCEPTION_END }catch(boost::python::error_already_set){\
-printf("\n=================================================================\nThe [%d] line in file\
-[%s] has error\n",__LINE__,__FILE__); PyErr_Print();\
-printf("\n=================================================================\n");}//
+#define PYTHON_CATCH_EXCEPTION_END(return_value) }catch(boost::python::error_already_set){\
+printf("\n=================================================================\n\
+The [%d] line in file[%s] has error\n",__LINE__,__FILE__); PyErr_Print();\
+printf("\n=================================================================\n");\
+return return_value;}
 #else
-#define PYTHON_CATCH_EXCEPTION_BEGIN std::lock_guard<std::mutex> lock(mu);
+#define PYTHON_CATCH_EXCEPTION_BEGIN
 #define PYTHON_CATCH_EXCEPTION_END
 #endif
 namespace Python{

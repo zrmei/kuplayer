@@ -17,7 +17,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QDebug>
 
 
-struct DECLARE_NAMESPACE_KUPLAYER DetailLabel_Impl
+struct DECLARE_NAMESPACE_KUPLAYER(DetailLabel_Impl)
 {
     Label *lblImg_;
     Label *lblTitle_;

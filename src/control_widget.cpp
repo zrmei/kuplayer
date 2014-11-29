@@ -17,7 +17,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QTime>
 
 
-struct DECLARE_NAMESPACE_KUPLAYER ControlWidget_Impl
+struct DECLARE_NAMESPACE_KUPLAYER(ControlWidget_Impl)
 {
     Q_DISABLE_COPY(ControlWidget_Impl)
     
@@ -38,7 +38,33 @@ struct DECLARE_NAMESPACE_KUPLAYER ControlWidget_Impl
      
      ControlWidget_Impl()
      {
+         time_current = new QLabel;
+         time_current->setText("00:00:00");
          
+         QPalette text_palette;
+         text_palette.setColor(QPalette::WindowText, QColor(255, 255, 255));
+         time_current->setPalette(text_palette);
+         time_current->setMinimumWidth(65);
+            
+         backward_ = new ControlLabel(":/control/backward");
+         backward_->setToolTip(ControlWidget::tr("Backward"));
+         
+         stop_ = new ControlLabel(":/control/stop");
+         stop_->setToolTip(ControlWidget::tr("Stop"));
+         
+         play_pause = new ControlLabel(":/control/play");
+         play_pause->setToolTip(ControlWidget::tr("Play/Pause"));
+         
+         foreward_ = new ControlLabel(":/control/foreward");
+         foreward_->setToolTip(ControlWidget::tr("Foreward"));
+         
+         time_all = new QLabel;
+         time_all->setText("00:00:00");
+         time_all->setMinimumWidth(65);
+         time_all->setPalette(text_palette);
+         
+         xuan_ji = new SelectLabel(ControlWidget::tr("Episode"),"");
+         xuan_ji->setFixedSize(60,30);
      }
 
      ~ControlWidget_Impl()
@@ -78,35 +104,11 @@ ControlWidget::ControlWidget(QWidget *parent)
     : QWidget(parent)
     , pImpl(new ControlWidget_Impl())
 {
-    pImpl->time_current = new QLabel;
-    pImpl->time_current->setText("00:00:00");
-    QPalette text_palette = pImpl->time_current->palette();
-    text_palette.setColor(QPalette::WindowText, QColor(255, 255, 255));
-    pImpl->time_current->setPalette(text_palette);
-    pImpl->time_current->setMinimumWidth(65);
 
-    pImpl->backward_ = new ControlLabel(":/control/backward");
-    pImpl->backward_->setToolTip(tr("Backward"));
     connect(pImpl->backward_,SIGNAL(clicked()),this,SIGNAL(backward_clicked()));
-    
-    pImpl->stop_ = new ControlLabel(":/control/stop");
-    pImpl->stop_->setToolTip(tr("Stop"));
     connect(pImpl->stop_,SIGNAL(clicked()),this,SIGNAL(stop_clicked()));
-    
-    pImpl->play_pause = new ControlLabel(":/control/play");
-    pImpl->play_pause->setToolTip(tr("Play/Pause"));
     connect(pImpl->play_pause,SIGNAL(clicked()),this,SLOT(on_play_pause_triggered()));
-    
-    pImpl->foreward_ = new ControlLabel(":/control/foreward");
-    pImpl->foreward_->setToolTip(tr("Foreward"));
     connect(pImpl->foreward_,SIGNAL(clicked()),this,SIGNAL(foreward_clicked()));
-
-    pImpl->time_all = new QLabel;
-    pImpl->time_all->setText("00:00:00");
-    pImpl->time_all->setPalette(text_palette);
-    pImpl->time_all->setMinimumWidth(65);
-    pImpl->xuan_ji = new SelectLabel(tr("Episode"),"");
-    pImpl->xuan_ji->setFixedSize(60,30);
     connect(pImpl->xuan_ji,SIGNAL(be_selected(QString,QString)),this,SIGNAL(xuan_ji_clcked(QString,QString)));
 
     init_actions();

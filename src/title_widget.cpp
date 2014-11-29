@@ -97,7 +97,7 @@ void TypeLabel::painterInfo(int top_color, int middle_color, int bottom_color)
 
 
 /***********************************************************************************/
-struct DECLARE_NAMESPACE_KUPLAYER TitleWidget_Impl
+struct DECLARE_NAMESPACE_KUPLAYER(TitleWidget_Impl)
 {
     PushButton *btn_min;
     PushButton *btn_close;

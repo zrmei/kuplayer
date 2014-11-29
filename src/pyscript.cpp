@@ -35,7 +35,7 @@ bool PyScript::GetVideoUrls(QString keyurl,QString format)
                                  keyurl.toStdString().c_str(),
                                  format.toStdString().c_str()
                                  );
-    PYTHON_CATCH_EXCEPTION_END
+    PYTHON_CATCH_EXCEPTION_END(false)
 
     return i == 0 ? false : true;
 }
@@ -48,16 +48,11 @@ bool PyScript::getShowList()
     list tmp;
     PYTHON_CATCH_EXCEPTION_BEGIN
         tmp = python::call_method<list>(module,"getShowList");
-    }catch(boost::python::error_already_set){
-    printf("\n=================================================================\nThe [%d] line in file\
-    [%s] has error\n",__LINE__,__FILE__); PyErr_Print();\
-    printf("\n=================================================================\n");
-        return false;
-    }
+    PYTHON_CATCH_EXCEPTION_END(false)
     for(ssize_t i= 0; i<python::len(tmp);++i){
         show_list.append(QString(extract<char*>(tmp[i])));
     }
-        qDebug() << show_list;
+    qDebug() << show_list;
     return true;
 }
 
@@ -68,14 +63,14 @@ PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time
     std::shared_ptr<Python::PyThreadStateLock> pylock;
     
     python::str p("");
+    return_list.clear();
     PYTHON_CATCH_EXCEPTION_BEGIN
             p = python::call_method<str>(module,"GetUrlByname"
                                          ,show_list[name].toStdString().c_str()
                                          ,locate.toStdString().c_str()
                                          ,classes.toStdString().c_str()
                                          ,time.toStdString().c_str());
-    PYTHON_CATCH_EXCEPTION_END
-    return_list.clear();
+    PYTHON_CATCH_EXCEPTION_END(return_list)
     return_list << QString(extract<char*>(p));
     return return_list;
 }
@@ -91,7 +86,7 @@ QStringList PyScript::connect_img_url(QString url, QString name)
     tmp= python::call_method<list>(module
                                    ,"connect_img_url"
                                    ,url.toStdString().c_str());
-    PYTHON_CATCH_EXCEPTION_END
+    PYTHON_CATCH_EXCEPTION_END(return_list)
 
     if(python::len(tmp)){
         if(next_page_.contains(name)){
@@ -113,7 +108,7 @@ QStringList PyScript::gotoNextPage(QString name, int index)
     return_list.clear();
     PYTHON_CATCH_EXCEPTION_BEGIN
     return_list  << next_page_.value(name)+QString::number(index)+".html";
-    PYTHON_CATCH_EXCEPTION_END
+    PYTHON_CATCH_EXCEPTION_END(return_list)
     
     return return_list;
 }
@@ -129,7 +124,7 @@ QStringList PyScript::getplayUrl(QString url)
     sstr = python::call_method<list>(module
                                      ,"getplayUrl"
                                      ,url.toStdString().c_str());
-    PYTHON_CATCH_EXCEPTION_END
+    PYTHON_CATCH_EXCEPTION_END(return_list)
     if(python::len(sstr)){
            return_list <<QString(extract<char*>(sstr[0]));
     }else{
@@ -160,10 +155,10 @@ QStringList PyScript::getAll(CLASS classes,QString url)
     
     python::list sstr;
     PYTHON_CATCH_EXCEPTION_BEGIN
-            sstr = python::call_method<list>(module
-                                             ,func.toStdString().c_str()
-                                             ,url.toStdString().c_str());
-    PYTHON_CATCH_EXCEPTION_END
+    sstr = python::call_method<list>(module
+                                     ,func.toStdString().c_str()
+                                     ,url.toStdString().c_str());
+    PYTHON_CATCH_EXCEPTION_END(return_list)
     for(ssize_t i=0;i<python::len(sstr); ++i){
         return_list << QString(extract<char*>(sstr[i]));
     }

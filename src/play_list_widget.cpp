@@ -18,7 +18,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QVBoxLayout>
 #include <QAction>
 
-struct DECLARE_NAMESPACE_KUPLAYER PlayListWidget_Impl
+struct DECLARE_NAMESPACE_KUPLAYER(PlayListWidget_Impl)
 {
     QAction *play_next_key;
     QAction *play_prev_key;
@@ -104,10 +104,11 @@ void PlayListWidget::sort(const QStringList& list)
         second.clear();
         tmp = list[i].split("$$");
         first = tmp[0];
-
-        auto j = find_if(first.begin(),first.end(),comp);
-        auto k = find_if_not(j,first.end(),comp);
-        second.insert(0,j,k-j);
+        
+        auto digit_begin = find_if(first.begin(),first.end(),comp);
+        auto digit_end = find_if_not(digit_begin,first.end(),comp);
+        std::copy(digit_begin,digit_end,std::back_inserter(second));
+        
         play_list.append(list_map{std::make_tuple<QString,QString,QString>(
                                       QString("%1").arg(second.toInt(),10,10,QChar('0')),
                                       std::move(first),

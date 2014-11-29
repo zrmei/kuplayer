@@ -18,7 +18,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QVBoxLayout>
 #include <QScrollBar>
 
-struct DECLARE_NAMESPACE_KUPLAYER AreaWidget_Impl
+struct DECLARE_NAMESPACE_KUPLAYER(AreaWidget_Impl)
 {
     QGridLayout *scroll_layout;
     mScrollArea *view;
@@ -43,7 +43,7 @@ struct DECLARE_NAMESPACE_KUPLAYER AreaWidget_Impl
     }
 };
 
-struct DECLARE_NAMESPACE_KUPLAYER ListWidget_Impl
+struct DECLARE_NAMESPACE_KUPLAYER(ListWidget_Impl)
 {
     /*存储指针，退出时释放资源*/
     QList<SelectLabel*> *locate_labels;
@@ -181,15 +181,15 @@ void ListWidget::init_locate(QHBoxLayout *locate_layout)
         pImpl->locate_name<<"日本";
         break;
     }
-   
-    for(int i=0; i<pImpl->locate_name.size(); ++i){
-        SelectLabel *label = new SelectLabel(pImpl->locate_name[i],"");
+    for_each(pImpl->locate_name.begin(),pImpl->locate_name.end(),
+             [&](QStringList::value_type locate_name){
+        SelectLabel *label = new SelectLabel(locate_name,"");
         label->setFixedSize(60,25);
         pImpl->locate_labels->append(label);
         locate_layout->addWidget(label,0,Qt::AlignTop);
         connect(label,SIGNAL(be_selected(QString,QString)),
                 this,SLOT(locate_only_one(QString,QString)));
-    }
+    });
     if(pImpl->locate_labels->size()){
         pImpl->locate_labels->at(0)->set_selected(true);
     }
@@ -225,15 +225,15 @@ void ListWidget::init_type(QHBoxLayout *type_layout)
     default:
         break;
     }
-
-    for(int i=0; i<pImpl->type_name.size(); ++i){
-        SelectLabel *label = new SelectLabel(pImpl->type_name.at(i),"");
+    for_each(pImpl->type_name.begin(),pImpl->type_name.end(),
+             [&](QStringList::value_type type_name){
+        SelectLabel *label = new SelectLabel(type_name,"");
         label->setFixedSize(60,25);
         pImpl->type_labels->append(label);
         type_layout->addWidget(label);
         connect(label,SIGNAL(be_selected(QString,QString)),
                 this,SLOT(type_only_one(QString,QString)));
-    }
+    });
     if(pImpl->type_labels->size()){
         pImpl->type_labels->at(0)->set_selected(true);
     }
@@ -243,14 +243,15 @@ void ListWidget::init_type(QHBoxLayout *type_layout)
 
 void ListWidget::init_time(QHBoxLayout *time_layout)
 {
-    for(int i=0; i<pImpl->time_name.size(); ++i){
-        SelectLabel *label = new SelectLabel(pImpl->time_name[i],"");
+    for_each(pImpl->time_name.begin(),pImpl->time_name.end(),
+             [&](QStringList::value_type time_name){
+        SelectLabel *label = new SelectLabel(time_name,"");
         label->setFixedSize(60,25);
         pImpl->time_labels->append(label);
         time_layout->addWidget(label,0,Qt::AlignBottom);
         connect(label,SIGNAL(be_selected(QString,QString)),
                 this,SLOT(time_only_one(QString,QString)));
-    }
+    });
     if(pImpl->time_labels->size()){
         pImpl->time_labels->at(0)->set_selected(true);
     }
@@ -290,14 +291,3 @@ void ListWidget::time_only_one(QString time,QString)
 
     emit clicked(type_,2,time);
 }
-
-
-
-
-
-
-
-
-
-
-

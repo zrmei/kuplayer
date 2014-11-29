@@ -50,7 +50,7 @@ this->layout()->setContentsMargins(0,0,0,0);
 
 
 
-struct DECLARE_NAMESPACE_KUPLAYER MainWidget_Impl
+struct DECLARE_NAMESPACE_KUPLAYER(MainWidget_Impl)
 {
     Q_DISABLE_COPY(MainWidget_Impl)
     
