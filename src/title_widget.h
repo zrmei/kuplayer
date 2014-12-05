@@ -19,7 +19,7 @@ class QMouseEvent;
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 struct TitleWidget_Impl;
 
-class TypeLabel  : public QLabel
+class TypeLabel final : public QLabel
 {
     Q_OBJECT
 public:

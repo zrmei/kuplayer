@@ -12,7 +12,7 @@
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
-class SelectLabel  : public QLabel
+class SelectLabel final : public QLabel
 {
     Q_OBJECT
 signals:

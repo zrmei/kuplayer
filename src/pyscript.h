@@ -31,7 +31,7 @@ return return_value;}
 #endif
 namespace Python{
 
-class pyinit 
+class pyinit final
 {
     Q_DISABLE_COPY(pyinit)
 public:
@@ -52,7 +52,7 @@ private:
     PyObject* _module;
 };
 
-class PyThreadStateLock 
+class PyThreadStateLock final
 {
     Q_DISABLE_COPY(PyThreadStateLock)
 public:
@@ -65,7 +65,7 @@ private:
 }
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
-class PyScript 
+class PyScript final
 {
     Q_DISABLE_COPY(PyScript)
     

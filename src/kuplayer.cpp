@@ -400,4 +400,3 @@ void MainWidget::to_inifile()
     pImpl->iniFile->setValue("setting/start_when_pc_on",pImpl->setting->start_when_pc_on);
     pImpl->iniFile->setValue("setting/language",pImpl->setting->language);
 }
-

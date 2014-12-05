@@ -13,7 +13,7 @@
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 struct SkinWidget_Impl;
 
-class SkinWidget  : public ShadowWidget
+class SkinWidget final : public ShadowWidget
 {
     Q_OBJECT
 signals:

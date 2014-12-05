@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*-coding:utf-8-*-
 
+import urllib
 import urllib2
 import re
 import threading
@@ -28,7 +29,14 @@ def getVideoUrls(raw_url, f='normal'):
         return 1
 
 def OpenUrl(url):
-    response = urllib2.urlopen(url)
+    user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0'
+    headers={'User-Agent' : user_agent}
+    values = {'name' : 'MeiZhaorui(Mason)',
+              'location' : 'China',
+              'language' : 'Python2.7' }
+    data = urllib.urlencode(values)
+    req = urllib2.Request(url, data,headers)
+    response = urllib2.urlopen(req)
     return response.read()
 
 def downUrl(the_page, re_qb, key=-2, source=1):
