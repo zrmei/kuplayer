@@ -13,7 +13,7 @@
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
-class PushButton final : public QPushButton
+class PushButton  : public QPushButton
 {
     Q_OBJECT
 public:

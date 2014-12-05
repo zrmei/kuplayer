@@ -89,7 +89,7 @@ ControlLabel::ControlLabel(QString name,QWidget *parent)
 {
     setObjectName(name.split("/").last());
     setPixmap(QPixmap(name).scaled(26,26));
-    setFixedSize(30,30);
+    setFixedSize(this->pixmap()->size());
 }
 void ControlLabel::mousePressEvent(QMouseEvent *ev)
 {

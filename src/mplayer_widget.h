@@ -42,7 +42,7 @@ private:
     QFile list_file{qApp->applicationDirPath()+"/.playlist"};
 };
 
-class RendererWidget final : public QtAV::WidgetRenderer
+class RendererWidget  : public QtAV::WidgetRenderer
 {
     Q_OBJECT
 signals:

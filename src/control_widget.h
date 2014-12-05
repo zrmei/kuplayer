@@ -17,7 +17,7 @@ KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class SelectLabel;
 struct ControlWidget_Impl;
 
-class ControlLabel final : public QLabel
+class ControlLabel  : public QLabel
 {
     Q_OBJECT
 signals:

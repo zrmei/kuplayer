@@ -22,7 +22,7 @@ KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 typedef unsigned int CLASS;
 
-class LoadImage final : public QObject
+class LoadImage  : public QObject
 {
     Q_OBJECT
 

@@ -44,7 +44,7 @@ private:
     std::shared_ptr<AreaWidget_Impl> pImpl;
 };
 
-class ListWidget final : public QWidget
+class ListWidget  : public QWidget
 {
     Q_OBJECT
 signals:
