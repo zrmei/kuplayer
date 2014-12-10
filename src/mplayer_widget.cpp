@@ -10,7 +10,7 @@
 #include "mplayer_widget.h"
 USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
-#include <AudioOutput.h>
+#include <QtAV/AVPlayer.h>
 
 /****************************************************************/
 MPlayer::MPlayer(QObject *parent)
@@ -49,13 +49,12 @@ void MPlayer::mPlay()
         mStarted();
     }
 }
-
 void MPlayer::mStarted()
 {
     if(play_list.size()){
-                play(play_list.at(0));
+        play(play_list.at(0));
         play_list.removeAt(0);
-        emit mSetDuration(duration());
+        QTimer::singleShot(800,this,SLOT(setDuration()));
     }else{
         emit mFinished(false);
     }
@@ -66,6 +65,11 @@ void MPlayer::mStop()
     play_list.clear();
     stop();
     emit mFinished(true);
+}
+
+void MPlayer::setDuration()
+{
+    emit mSetDuration(duration());
 }
 
 void MPlayer::mSeekBack()

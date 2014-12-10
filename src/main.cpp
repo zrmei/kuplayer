@@ -34,10 +34,11 @@ int main(int argc, char *argv[])
     std::shared_ptr<QSettings> iniFile(new QSettings(
                                            QDir::homePath()+"/.kuplayer/kuplayer.conf",
                                            QSettings::IniFormat));
-    if(iniFile->value("setting/language",true).toBool())
+    if(iniFile->value("setting/language",true).toBool()){
         translator.load(QString(":/qm/kuplayer_zn"));
-    else
+    }else{
         translator.load(QString(":/qm/kuplayer_en"));
+    }
     a.installTranslator(&translator);
     
     QString ico_path = QDir::homePath()+"/.kuplayer/kuplayer.ico";

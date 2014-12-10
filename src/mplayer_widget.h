@@ -32,6 +32,8 @@ public slots:
     void mSeekBack();
     void mSeekFore();
     void setPlayList();
+    
+    void setDuration();
 
     void vol_down();
     void vol_up();

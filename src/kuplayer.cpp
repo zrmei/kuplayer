@@ -20,6 +20,7 @@
 #include "play_list_widget.h"
 #include "main_menu.h"
 #include "system_notify.h"
+
 USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
 #include <QStackedWidget>
