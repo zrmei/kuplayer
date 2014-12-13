@@ -2,4 +2,4 @@ kuplayer:一个基于对优酷网站的分析获得播放地址，经过播放�
 
 引用的相关开源库：https://github.com/wang-bin/QtAV
 
-![image](https://github.com/listener/kuplayer/blob/master/.main.png)
+![image](https://code.csdn.net/GuXingXueYing_123/kuplayer/tree/master/.main.png)

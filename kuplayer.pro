@@ -62,13 +62,10 @@ unix: {
     INCLUDEPATH += /usr/include/gdk-pixbuf-2.0/
     INCLUDEPATH += /usr/include/python2.7/
 
-    INCLUDEPATH += $$PWD/resources/includes
-    INCLUDEPATH += $$PWD/resources/includes/QtAV
-
     LIBS += $$PWD/resources/libs/libboost_python.a
     LIBS += $$PWD/resources/libs/libboost_system.a
 
-    LIBS += -lnotify -lpython2.7
+    LIBS += -lnotify -lpython2.7 
 
     LIBS += -L$$PWD/resources/libs  -loptions_64
 }

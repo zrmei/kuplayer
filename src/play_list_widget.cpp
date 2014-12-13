@@ -183,6 +183,7 @@ void PlayListWidget::on_playNext_clicked()
     ++currentIndex;
     if(currentIndex >= play_list.size()){
         currentIndex = play_list.size()-1;
+        emit click(QString(),QString());
         return;
     }
     pImpl->label_store->at(currentIndex)->set_selected(true);
@@ -195,6 +196,7 @@ void PlayListWidget::on_playPrev_clicked()
     --currentIndex;
     if(currentIndex < 0){
         currentIndex = 0;
+        emit click(QString(),QString());
         return;
     }
     pImpl->label_store->at(currentIndex)->set_selected(true);

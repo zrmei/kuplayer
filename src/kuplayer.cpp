@@ -249,13 +249,15 @@ void MainWidget::on_Fullscreen_changed()
 
 void MainWidget::on_play_finished(bool real)//false 播放正常结束 true 中断播放
 {
+    pImpl->control_widget->on_time_changed(0);
+    pImpl->control_widget->on_douration_changed(0);
     if(real){
         Control_Widget->isRuning = false;
     }else if(pImpl->control_widget->isRuning
              && pImpl->setting->auto_play_next ){
         pImpl->xuan_ji_widget->on_playNext_clicked();
     }
-    if(!pImpl->player->isPlaying() && is_full_screen){
+    if(is_full_screen && !pImpl->setting->auto_play_next){
         on_Fullscreen_changed();
     }
     return;
@@ -304,9 +306,9 @@ void MainWidget::on_url_triggered(QString name,QString url)
     if(url.startsWith(SHOW_PAGE)){
         url = pImpl->pyinit->getplayUrl(url)[0];
     }
-    if(!url.isEmpty() && pImpl->pyinit->GetVideoUrls(url,pImpl->setting->default_video_format)){
-        auto *tmp = new mThread(::NONE
-                                ,bind(&PyScript::getAll,pImpl->pyinit
+    if(!url.isEmpty() && pImpl->pyinit->GetVideoUrls(
+                url,pImpl->setting->default_video_format)){
+        auto *tmp = new mThread(NONE,bind(&PyScript::getAll,pImpl->pyinit
                                           ,pImpl->stacked_widget->currentIndex(),url));
         connect(tmp,SIGNAL(mfinished(int,QStringList)),
                 pImpl->xuan_ji_widget,SLOT(on_list_changed(int,QStringList)));
@@ -320,8 +322,14 @@ void MainWidget::on_url_triggered(QString name,QString url)
 }
 void MainWidget::url_ji_triggered(QString name,QString url)
 {
-    if(pImpl->pyinit->GetVideoUrls(url,pImpl->setting->default_video_format)){
-        pImpl->stacked_widget->setCurrentIndex(5);
+    if(name == url){
+        if(is_full_screen){
+            on_Fullscreen_changed();
+        }
+        return;
+    }else if(pImpl->pyinit->GetVideoUrls(
+                 url,pImpl->setting->default_video_format)){
+        pImpl->stacked_widget->setCurrentIndex(PLAYER);
         Control_Widget->isRuning = true;
         pImpl->player->mPlay();
         SHOW_MSG(tr("Currently playing:")
