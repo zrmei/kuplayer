@@ -167,12 +167,16 @@ void ControlWidget::init_actions()
 void ControlWidget::on_play_pause_triggered(bool)
 {
     if(!isRuning) return;
+    
+    static const QPixmap pause = QPixmap(":/control/pause").scaled(26,26);
+    static const QPixmap play = QPixmap(":/control/play").scaled(26,26);
+    
     if(pImpl->play_pause->objectName() == "play"){
         pImpl->play_pause->setObjectName("pause");
-        pImpl->play_pause->setPixmap(QString(":/control/pause"));
+        pImpl->play_pause->setPixmap(pause);
     }else{
         pImpl->play_pause->setObjectName("play");
-        pImpl->play_pause->setPixmap(QString(":/control/play"));
+        pImpl->play_pause->setPixmap(play);
     }
 }
 

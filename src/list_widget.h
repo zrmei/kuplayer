@@ -9,8 +9,8 @@
 #define LIST_WIDGET_H
 #include "common.h"
 #include <QScrollArea>
-
 class QHBoxLayout;
+
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class DetailLabel;
 class SelectLabel;
