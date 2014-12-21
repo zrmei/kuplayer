@@ -10,7 +10,7 @@
 
 #include <QApplication>
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && defined(USE_NOTIFY)
 #ifdef signals //主要是以下包括的头文件中有signals的变量名不这
 #undef signals //样的话不能通过编译因为在QT中signals中关键字。
 #include <libnotify/notify.h>

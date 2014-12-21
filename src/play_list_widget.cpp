@@ -17,6 +17,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QGridLayout>
 #include <QVBoxLayout>
 #include <QAction>
+#include <QScrollBar>
 
 struct DECLARE_NAMESPACE_KUPLAYER(PlayListWidget_Impl)
 {
@@ -45,7 +46,12 @@ PlayListWidget::PlayListWidget(QWidget *parent)
 {
     setAttribute(Qt::WA_QuitOnClose,false);
     setWindowModality(Qt::ApplicationModal);
-
+    
+    QPalette text_palette = palette();
+    text_palette.setColor(QPalette::Window, QColor(225, 225, 225));
+    text_palette.setColor(QPalette::Background,QColor(255,255,255,120));
+    setPalette(text_palette);
+    
     QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
 
@@ -69,8 +75,7 @@ PlayListWidget::PlayListWidget(QWidget *parent)
     main_layout->addLayout(up_title_layout);
     main_layout->addWidget(view);
     main_layout->setSpacing(0);
-    QPalette text_palette = palette();
-    text_palette.setColor(QPalette::Background, QColor(230, 230, 230));
+
     viewWidgetContents->setPalette(text_palette);
     main_layout->setContentsMargins(5,5,5,5);
 
@@ -148,7 +153,7 @@ void PlayListWidget::on_list_changed(int,const QStringList& list)
     func_add_label( *(play_list.begin()) );
 
     pImpl->label_store->at(0)->adjustSize();
-    if(pImpl->label_store->at(0)->width() > 50){
+    if(pImpl->label_store->at(0)->width() > 80){
         col = 0;
     }else{
         col = 360 / (pImpl->label_store->at(0)->width()+15)-1;

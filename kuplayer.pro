@@ -4,19 +4,19 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets network av
+QT += core gui widgets network av
 
 
-TARGET = kuplayer
+TARGET = mikuplayer
 TEMPLATE = app
 
 PRECOMPILED_HEADER = src/common.h
 
-QMAKE_CXXFLAGS += -std=c++11 -Wextra
+QMAKE_CXXFLAGS += -std=c++11 -Werror
 QMAKE_CXXFLAGS_DEBUG += -O0 -g3
-QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT -Werror -s -O3
+QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT  
 
-QMAKE_LFLAGS += -Wl,-rpath,./lib
+QMAKE_LFLAGS += -Wl,-rpath,"./lib"
 QMAKE_LFLAGS_RELEASE += -Wl,-s
 
 SOURCES += src/control_widget.cpp \
@@ -57,18 +57,26 @@ HEADERS  += src/common.h \
     src/gloal_func.h
 
 unix: {
-    INCLUDEPATH += /usr/include/glib-2.0/
-    INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include/
-    INCLUDEPATH += /usr/include/gdk-pixbuf-2.0/
     INCLUDEPATH += /usr/include/python2.7/
-
     LIBS += $$PWD/resources/libs/libboost_python.a
     LIBS += $$PWD/resources/libs/libboost_system.a
 
-    LIBS += -lnotify -lpython2.7 
+    LIBS += -lpython2.7 
 
-    LIBS += -L$$PWD/resources/libs  -loptions_64
+    exists( /usr/include/libnotify/notify.h ) {
+        INCLUDEPATH += /usr/include/glib-2.0/
+        INCLUDEPATH += /usr/lib/x86_64-linux-gnu/glib-2.0/include/
+        INCLUDEPATH += /usr/include/gdk-pixbuf-2.0/
+
+        LIBS += -lnotify 
+        DEFINES += USE_NOTIFY
+    }else{
+        message("Can not find libnotify.so. You can: sudo apt-get install libnotify4-dev")
+    }
 }
+
+LIBS += -L$$PWD/resources/libs  -loptions_64
+
 RESOURCES += \
     src/kuplayer.qrc
 

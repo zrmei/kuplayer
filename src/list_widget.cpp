@@ -103,6 +103,7 @@ AreaWidget::AreaWidget(QWidget *parent)
     main_layout->setSpacing(0);
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Background, QColor(230, 230, 230));
+    text_palette.setColor(QPalette::Background,QColor(255,255,255,0));
     pImpl->viewWidgetContents->setPalette(text_palette);
 }
 AreaWidget::~AreaWidget()

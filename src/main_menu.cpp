@@ -38,7 +38,11 @@ MenuWidget::MenuWidget(QWidget *parent)
 {
     setAttribute(Qt::WA_QuitOnClose,false);
     setWindowModality(Qt::ApplicationModal);
-    setMinimumSize(600,430);
+    setMinimumSize(600,400);
+    
+    QPalette text_palette = palette();
+    text_palette.setColor(QPalette::Background,QColor(255,255,255,50));
+    setPalette(text_palette);
     
     QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
@@ -50,7 +54,7 @@ MenuWidget::MenuWidget(QWidget *parent)
     
     pImpl->down_widget->setAutoFillBackground(true);
     QVBoxLayout *main_layout = new QVBoxLayout(this);
-    main_layout->addLayout(up_title_layout);
+    main_layout->addLayout(up_title_layout);    
     main_layout->addWidget(pImpl->down_widget);
     main_layout->setSpacing(0);
     main_layout->setContentsMargins(5,5,5,5);
@@ -160,6 +164,7 @@ down_widget_::down_widget_(QWidget *parent)
     left_widget->setAutoFillBackground(true);
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Window, QColor(225, 225, 225));
+    text_palette.setColor(QPalette::Background,QColor(255,255,255,120));
     left_widget->setPalette(text_palette);
     
     QVBoxLayout *left_layout = new QVBoxLayout(left_widget);
@@ -171,12 +176,14 @@ down_widget_::down_widget_(QWidget *parent)
     left_layout->setContentsMargins(0,0,0,0);
     
     text_palette.setColor(QPalette::Window,QColor(240,240,240));
+    text_palette.setColor(QPalette::Background,QColor(255,255,255,50));
     
     right_widget = new QStackedWidget;
     right_widget->setAutoFillBackground(true);
     right_widget->setPalette(text_palette);
     
     connect(pImpl->base_ui->comboBox,SIGNAL(currentIndexChanged(int)),SLOT(LanguageChanged(int)));
+        
     right_widget->addWidget(pImpl->base_set_widget);
     right_widget->setCurrentIndex(0);
     right_widget->addWidget(pImpl->play_set_widget_);

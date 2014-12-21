@@ -72,9 +72,10 @@ SkinWidget::SkinWidget(QWidget *parent)
     main_layout->addWidget(pImpl->view);
     main_layout->setSpacing(0);
     main_layout->setContentsMargins(5,5,5,5);
+    
     QPalette text_palette = palette();
-    text_palette.setColor(QPalette::Background, QColor(230, 230, 230));
-    viewWidgetContents->setPalette(text_palette);
+    text_palette.setColor(QPalette::Background,QColor(255,255,255,50));
+    setPalette(text_palette);
 
     setMinimumSize(800,430);
     find_file(PIC_PATH);

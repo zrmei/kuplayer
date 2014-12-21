@@ -40,7 +40,7 @@ this->layout()->setContentsMargins(5,5,5,5);
 pImpl->stacked_widget->setContentsMargins(0,0,0,0);\
 this->layout()->setContentsMargins(0,0,0,0);
 
-#if defined(Q_OS_LINUX)
+#if defined(Q_OS_LINUX) && defined(USE_NOTIFY)
     #define SHOW_MSG(name)  notification_show(name,tr("kuplayer"),pImpl->ico_path);
 #elif defined(Q_OS_WIN32)
     #define SHOW_MSG(name)  trayicon->showMessage(tr("kuplayer")\
@@ -48,8 +48,6 @@ this->layout()->setContentsMargins(0,0,0,0);
 #endif // define Q_OS_LINUX
 
 #define Control_Widget (*(pImpl->player_widget))
-
-
 
 struct DECLARE_NAMESPACE_KUPLAYER(MainWidget_Impl)
 {
@@ -122,6 +120,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
 
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Window,QColor(240,240,240));
+    text_palette.setColor(QPalette::Background,QColor(255,255,255,100));
     pImpl->stacked_widget->setPalette(text_palette);
     for(CLASS i=0;i<5;++i){
         ListWidget *l = new ListWidget(i);

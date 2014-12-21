@@ -73,12 +73,13 @@ void SelectLabel::set_selected(bool is_selected)
 void SelectLabel::paintEvent(QPaintEvent *ev)
 {
     QLabel::paintEvent(ev);
+    static auto old = this->styleSheet();
     if(mouse_pressed){
         setStyleSheet("background-color:#25BCDA");
         THIS_WIDGET_COLOR(255,255,255);
 
     }else{
-        setStyleSheet("background-color:#f0f0f0");
+        setStyleSheet(old);
         THIS_WIDGET_COLOR(0,0,0);
 
     }
