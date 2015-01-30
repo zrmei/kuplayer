@@ -8,9 +8,16 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <QObject>
+#include <QDebug>
+#include <QTimer>
+#include <QPainter>
+#include <QApplication>
+
 #include <algorithm>
 #include <functional>
 #include <memory>
+
 using std::for_each;
 using std::find_if;
 using std::find_if_not;
@@ -29,11 +36,6 @@ using std::function;
 #define DECLARE_NAMESPACE_KUPLAYER(class_name) class_name
 #endif
 
-#include <QObject>
-#include <QDebug>
-#include <QTimer>
-#include <QPainter>
-#include <QApplication>
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 

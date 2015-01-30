@@ -83,7 +83,7 @@ DetailLabel::DetailLabel(QWidget *parent)
     connect(pImpl->lblTitle_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));
 }
 
-DetailLabel::DetailLabel(QPixmap img, QString title, QString url, QWidget *parent)
+DetailLabel::DetailLabel(QPixmap img, const QString &title, const QString &url, QWidget *parent)
     : DetailLabel(parent)
 {
     set_Pixmap(std::move(img));

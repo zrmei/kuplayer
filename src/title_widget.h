@@ -57,8 +57,8 @@ public:
     void set_text(QString);
     QString get_text() const;
 public slots:
-    void turepage(int);
-    void turepage(QString);
+    void on_turepage_triggered(int);
+    void on_turepage_triggered(QString);
 private:
     QStringList  down_title{tr("TVShow"),tr("Movies"),tr("Variety"),
         tr("Music"),tr("Cartoon"),tr("Player")};

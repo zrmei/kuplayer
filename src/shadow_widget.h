@@ -24,7 +24,6 @@ class ShadowWidget : public QWidget
 public:
     explicit ShadowWidget(QWidget *parent = 0);
     virtual ~ShadowWidget();
-public slots:
     void change_skin(QString);
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *);
@@ -60,16 +59,15 @@ protected:
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
 private:
-    void region(const QPoint &cursorPoint);
-    void SetCursorStyle(const QPoint &cursorGlobalPoint);
-    void SetDrayMove(QPoint gloPoint);
+    void setCursorStyle(const QPoint &cursorGlobalPoint);
+    void setDrayMove(QPoint gloPoint);
 private:
-    bool isLeftPressDown{false};
+    bool m_isLeftPressDown{false};
     QPoint m_ptPressGlobal{0,0};
-    Direction dir{NONE};
+    Direction dir{M_NONE};
     const Direction
     TOP = 0x01,BOTTOM = 0x02,LEFT = 0x04,RIGHT = 0x08,LEFTTOP = 0x05,
-    LEFTBOTTOM = 0x06,RIGHTBOTTOM = 0x0A,RIGHTTOP = 0x09,NONE = 0x00;
+    LEFTBOTTOM = 0x06,RIGHTBOTTOM = 0x0A,RIGHTTOP = 0x09,M_NONE = 0x00;
 
 };
 #endif// CAN_RESIZE

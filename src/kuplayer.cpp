@@ -104,7 +104,7 @@ struct DECLARE_NAMESPACE_KUPLAYER(MainWidget_Impl)
 
 MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *parent)
 #ifdef CAN_RESIZE
-    : MainWidget(parent)
+    : ResizedWidget(parent)
 #else
     : ShadowWidget(parent)
 #endif
@@ -124,7 +124,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     pImpl->stacked_widget->setPalette(text_palette);
     for(CLASS i=0;i<5;++i){
         ListWidget *l = new ListWidget(i);
-        connect(l,SIGNAL(clicked(CLASS,int,QString)),this,SLOT(change_url(CLASS,int,QString)));
+        connect(l,SIGNAL(clicked(CLASS,int,QString)),this,SLOT(on_url_changed(CLASS,int,QString)));
         connect(l,SIGNAL(load_next_page(CLASS)),this,SLOT(on_nextPage_loaded(CLASS)));
         pImpl->stacked_widget->addWidget(l);
     }
@@ -132,7 +132,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     main_layout->addWidget(pImpl->stacked_widget);
     main_layout->setSpacing(0);
 
-    connect(pImpl->xuan_ji_widget,SIGNAL(click(QString,QString)),this,SLOT(url_ji_triggered(QString,QString)));
+    connect(pImpl->xuan_ji_widget,SIGNAL(click(QString,QString)),this,SLOT(on_url_ji_triggered(QString,QString)));
     connect(pImpl->skin_widget,SIGNAL(skin_change_clicked(QString)),this,SLOT(on_skin_changed(QString)));
     connect(pImpl->player,SIGNAL(mFinished(bool)),this,SLOT(on_play_finished(bool)));
     connect(pImpl->player,SIGNAL(positionChanged(qint64)),pImpl->control_widget,SLOT(on_time_changed(qint64)));
@@ -146,11 +146,11 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     connect(pImpl->control_widget,SIGNAL(vol_down_clicked()),pImpl->player,SLOT(vol_down()));
     connect(pImpl->player_widget,SIGNAL(escape_clicked()),this,SLOT(on_Fullscreen_changed()));
     connect(pImpl->player_widget->renderer,SIGNAL(double_clicked()),this,SLOT(on_Fullscreen_changed()));
-    connect(pImpl->title_widget,SIGNAL(skin_clicked()),pImpl->skin_widget,SLOT(on_this_show()));
-    connect(pImpl->title_widget,SIGNAL(close_clicked()),this,SLOT(show_normal_or_close()));
+    connect(pImpl->title_widget,SIGNAL(skin_clicked()),pImpl->skin_widget,SLOT(on_showed()));
+    connect(pImpl->title_widget,SIGNAL(close_clicked()),this,SLOT(on_title_widget_closed()));
     connect(pImpl->title_widget,SIGNAL(min_clicked()),this,SLOT(on_showMin_clicked()));
     connect(pImpl->title_widget,SIGNAL(ture_page(int)),pImpl->stacked_widget,SLOT(setCurrentIndex(int)));
-    connect(pImpl->title_widget,SIGNAL(menu_clicked()),pImpl->main_menu,SLOT(on_this_show()));
+    connect(pImpl->title_widget,SIGNAL(menu_clicked()),pImpl->main_menu,SLOT(on_showed()));
 
     if(pImpl->pyinit->show_list.size()){
         for(int i=0;i<5;++i){
@@ -166,7 +166,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     addActions(pImpl->xuan_ji_widget->init_action());
     SHOW_MSG(tr("kuplayer: free for youku!"));
     SHOW_WINDOW_NORMAL
-    pImpl->title_widget->turepage(PLAYER);
+    pImpl->title_widget->on_turepage_triggered(PLAYER);
 }
 
 MainWidget::~MainWidget()
@@ -181,7 +181,7 @@ void MainWidget::setIniFile(QSettings *iniFile)
     init_trayicon();
 }
 
-void MainWidget::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
+void MainWidget::on_trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
 {
     switch(reason)
     {
@@ -199,7 +199,7 @@ void MainWidget::trayIcon_clicked(QSystemTrayIcon::ActivationReason reason)
     }
 }
 #include <QMessageBox>
-void MainWidget::show_normal_or_close()
+void MainWidget::on_title_widget_closed()
 {
     if(pImpl->setting->min_or_close){
         pImpl->trayicon->showMessage(tr("kuplayer"),
@@ -267,7 +267,7 @@ void MainWidget::on_loadImage_started(int page, QStringList list)
     LoadImage *download = new LoadImage(page);
     download->setFileName(list);
     connect(download,SIGNAL(loadImageFinished(CLASS,QPixmap,QString,QString)),
-            this,SLOT(loadImageFinished(CLASS,QPixmap,QString,QString)));
+            this,SLOT(on_loadImage_finished(CLASS,QPixmap,QString,QString)));
     download->start();
 }
 
@@ -285,7 +285,7 @@ void MainWidget::on_nextPage_loaded(CLASS type)
     }
 }
 
-void MainWidget::loadImageFinished(CLASS index,QPixmap pix, QString name, QString url)
+void MainWidget::on_loadImage_finished(CLASS index,QPixmap pix, QString name, QString url)
 {
     if(name.isEmpty() && url.isEmpty()){
         pImpl->can_update[index] = true;
@@ -311,7 +311,7 @@ void MainWidget::on_url_triggered(QString name,QString url)
                                           ,pImpl->stacked_widget->currentIndex(),url));
         connect(tmp,SIGNAL(mfinished(int,QStringList)),
                 pImpl->xuan_ji_widget,SLOT(on_list_changed(int,QStringList)));
-        pImpl->title_widget->turepage(PLAYER);
+        pImpl->title_widget->on_turepage_triggered(PLAYER);
         tmp->start();
         pImpl->player->mPlay();
         Control_Widget->isRuning = true;
@@ -319,7 +319,7 @@ void MainWidget::on_url_triggered(QString name,QString url)
         pImpl->title_widget->set_text(name);
     }
 }
-void MainWidget::url_ji_triggered(QString name,QString url)
+void MainWidget::on_url_ji_triggered(QString name,QString url)
 {
     if(name == url){
         if(is_full_screen){
@@ -338,7 +338,7 @@ void MainWidget::url_ji_triggered(QString name,QString url)
     }
 }
 
-void MainWidget::change_url(CLASS classes,int type,QString name)
+void MainWidget::on_url_changed(CLASS classes,int type,QString name)
 {
     if(name =="全部"){
         name = "";
@@ -374,7 +374,7 @@ void MainWidget::init_trayicon()
     pImpl->trayicon->show();
     pImpl->trayicon->setToolTip("kuplayer");
     connect(pImpl->trayicon,SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this,SLOT(trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
+            this,SLOT(on_trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
     QMenu *tray_menu = new QMenu;
     pImpl->trayicon->setContextMenu(tray_menu);
     auto*   set_action = tray_menu->addAction(tr("Settings"));

@@ -126,6 +126,7 @@ void ShadowWidget::drawWindowShadow(QPainter &painter)
 ResizedWidget::ResizedWidget(QWidget *parent)
     : ShadowWidget(parent)
 {
+    setMouseTracking(true);
 }
 
 ResizedWidget::~ResizedWidget()
@@ -133,44 +134,42 @@ ResizedWidget::~ResizedWidget()
 
 }
 #include <QApplication>
-void MainWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-    ShadowWidget::mouseReleaseEvent(event);
+void ResizedWidget::mouseReleaseEvent(QMouseEvent *event)
+{  
     if(event->button() == Qt::LeftButton) {
-        isLeftPressDown = false;
-        releaseMouse();
-        dir = NONE;
+        m_isLeftPressDown = false;
+        dir = M_NONE;
         setCursor(QCursor(Qt::ArrowCursor));
     }
+    ShadowWidget::mouseReleaseEvent(event);
 }
 
-void MainWidget::mousePressEvent(QMouseEvent *event)
-{
-    ShadowWidget::mousePressEvent(event);
+void ResizedWidget::mousePressEvent(QMouseEvent *event)
+{  
     switch(event->button()) {
     case Qt::LeftButton:
-        isLeftPressDown = true;
+        m_isLeftPressDown = true;
         m_ptPressGlobal = event->globalPos();
     default:
         break;
     }
+    ShadowWidget::mousePressEvent(event);
 }
 
-void MainWidget::mouseMoveEvent(QMouseEvent *event)
+void ResizedWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    ShadowWidget::mouseMoveEvent(event);
     QPoint currentGlobalPoint = event->globalPos();
-    if(!isLeftPressDown) {
-        region(currentGlobalPoint);
-    } else if(dir != NONE){
-        SetDrayMove(currentGlobalPoint);
+    qDebug() <<"m_isLeftPressDown: " << m_isLeftPressDown;
+    if(!m_isLeftPressDown) {
+        setCursorStyle(currentGlobalPoint);
+    } else if(dir != M_NONE){
+        setDrayMove(currentGlobalPoint);
         m_ptPressGlobal  = currentGlobalPoint;
-    }else{
-        setCursor(QCursor(Qt::ArrowCursor));
     }
+    ShadowWidget::mouseMoveEvent(event);
 }
 
-void MainWidget::SetDrayMove(QPoint gloPoint)
+void ResizedWidget::setDrayMove(QPoint gloPoint)
 {
     //计算偏差
     int ndX = gloPoint.x() - m_ptPressGlobal.x();
@@ -197,9 +196,10 @@ void MainWidget::SetDrayMove(QPoint gloPoint)
     setGeometry(rectWindow);
 }
 #define PADDING 5
-void MainWidget::region(const QPoint &cursorGlobalPoint)
+#include <QMessageBox>
+void ResizedWidget::setCursorStyle(const QPoint &cursorGlobalPoint)
 {
-    QRect rect = rect();
+    QRect rect = this->rect();
     QPoint tl = mapToGlobal(rect.topLeft());
     QPoint rb = mapToGlobal(rect.bottomRight());
     int x = cursorGlobalPoint.x();
@@ -208,48 +208,55 @@ void MainWidget::region(const QPoint &cursorGlobalPoint)
     if(tl.x() + PADDING >= x && tl.x() <= x && tl.y() + PADDING >= y && tl.y() <= y) {
         // 左上角
         dir = LEFTTOP;
-//        qDebug()<<"setCursor(QCursor(Qt::SizeFDiagCursor));";
+        qDebug()<<"setCursor(QCursor(Qt::SizeFDiagCursor));";
         setCursor(QCursor(Qt::SizeFDiagCursor));
+        return;
     } else if(x >= rb.x() - PADDING && x <= rb.x() && y >= rb.y() - PADDING && y <= rb.y()) {
         // 右下角
         dir = RIGHTBOTTOM;
-//        qDebug()<<"setCursor(QCursor(Qt::SizeFDiagCursor));";
+        qDebug()<<"setCursor(QCursor(Qt::SizeFDiagCursor));";
         setCursor(QCursor(Qt::SizeFDiagCursor));
+        return;
     } else if(x <= tl.x() + PADDING && x >= tl.x() && y >= rb.y() - PADDING && y <= rb.y()) {
         //左下角
         dir = LEFTBOTTOM;
-//        qDebug()<<"setCursor(QCursor(Qt::SizeBDiagCursor));";
+        qDebug()<<"setCursor(QCursor(Qt::SizeBDiagCursor));";
         setCursor(QCursor(Qt::SizeBDiagCursor));
+        return;
     } else if(x <= rb.x() && x >= rb.x() - PADDING && y >= tl.y() && y <= tl.y() + PADDING) {
         // 右上角
         dir = RIGHTTOP;
-//          qDebug()<<"setCursor(QCursor(Qt::SizeBDiagCursor));";
+          qDebug()<<"setCursor(QCursor(Qt::SizeBDiagCursor));";
         setCursor(QCursor(Qt::SizeBDiagCursor));
+        return;
     } else if(x <= tl.x() + PADDING && x >= tl.x()) {
         // 左边
         dir = LEFT;
-//          qDebug()<<"setCursor(QCursor(Qt::SizeHorCursor));";
+          qDebug()<<"setCursor(QCursor(Qt::SizeHorCursor));";
         setCursor(QCursor(Qt::SizeHorCursor));
+        return;
     } else if( x <= rb.x() && x >= rb.x() - PADDING) {
         // 右边
         dir = RIGHT;
-//        qDebug()<<"setCursor(QCursor(Qt::SizeHorCursor));";
+        qDebug()<<"setCursor(QCursor(Qt::SizeHorCursor));";
         setCursor(QCursor(Qt::SizeHorCursor));
+        return;
     }else if(y >= tl.y() && y <= tl.y() + PADDING){
         // 上边
         dir = TOP;
-//        qDebug()<<"setCursor(QCursor(Qt::SizeVerCursor));";
+        qDebug()<<"setCursor(QCursor(Qt::SizeVerCursor));";
         setCursor(QCursor(Qt::SizeVerCursor));
+        return;
     } else if(y <= rb.y() && y >= rb.y() - PADDING) {
         // 下边
         dir = BOTTOM;
-//        qDebug()<<"setCursor(QCursor(Qt::SizeVerCursor));";
+        qDebug()<<"setCursor(QCursor(Qt::SizeVerCursor));";
         setCursor(QCursor(Qt::SizeVerCursor));
-    }else {
-        // 默认
-        dir = NONE;
- //       qDebug()<<"setCursor(QCursor(Qt::ArrowCursor));";
-        setCursor(QCursor(Qt::ArrowCursor));
+        return;
     }
+    dir = M_NONE;
+    QMessageBox::about(this,"AAAAAAAAAAA","EEEEERRRROOORRRR");
+    qDebug()<<"setCursor(QCursor(Qt::ArrowCursor));";
+    setCursor(QCursor(Qt::ArrowCursor));
 }
 #endif

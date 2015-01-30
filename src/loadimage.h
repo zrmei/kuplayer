@@ -55,7 +55,7 @@ public:
             currentIndex = 0;
             deleteLater();
             return;
-        }else{
+        } else {
             request->setUrl(QUrl(list_->at(currentIndex)[1]));
             manager->get(*request);
         }
@@ -67,7 +67,9 @@ private slots:
         QPixmap pix;
         pix.loadFromData(reply->readAll());
         emit loadImageFinished(index,std::move(pix),
-                               list_->at(currentIndex)[0],list_->at(currentIndex)[2]);
+                               list_->at(currentIndex)[0],
+                               list_->at(currentIndex)[2]
+                );
         ++currentIndex;
         start();
     }

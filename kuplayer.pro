@@ -12,9 +12,9 @@ TEMPLATE = app
 
 PRECOMPILED_HEADER = src/common.h
 
-QMAKE_CXXFLAGS += -std=c++11 -Werror
+QMAKE_CXXFLAGS += -std=c++11 
 QMAKE_CXXFLAGS_DEBUG += -O0 -g3
-QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT  
+QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT  -Werror
 
 QMAKE_LFLAGS += -Wl,-rpath,"./lib"
 QMAKE_LFLAGS_RELEASE += -Wl,-s
@@ -56,6 +56,23 @@ HEADERS  += src/common.h \
     src/ui_control_classes.h \
     src/gloal_func.h
 
+RESOURCES += \
+    src/kuplayer.qrc
+
+RC_FILE = kuplayer.rc
+
+OTHER_FILES += \
+    kuplayer.ico \
+    kuplayer.rc
+
+FORMS += \
+    src/about_widget.ui \
+    src/base_set_weidget.ui \
+    src/play_set_widget.ui
+
+TRANSLATIONS += kuplayer_zn.ts
+
+
 unix: {
     INCLUDEPATH += /usr/include/python2.7/
     LIBS += $$PWD/resources/libs/libboost_python.a
@@ -73,22 +90,12 @@ unix: {
     }else{
         message("Can not find libnotify.so. You can: sudo apt-get install libnotify4-dev")
     }
+    
+    exists( /lib64 ){
+        LIBS += -L$$PWD/resources/libs  -loptions_64
+    }else{
+        LIBS += -L$$PWD/resources/libs  -loptions_32
+    }
 }
 
-LIBS += -L$$PWD/resources/libs  -loptions_64
 
-RESOURCES += \
-    src/kuplayer.qrc
-
-RC_FILE = kuplayer.rc
-
-OTHER_FILES += \
-    kuplayer.ico \
-    kuplayer.rc
-
-FORMS += \
-    src/about_widget.ui \
-    src/base_set_weidget.ui \
-    src/play_set_widget.ui
-
-TRANSLATIONS += kuplayer_zn.ts

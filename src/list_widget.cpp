@@ -138,7 +138,7 @@ ListWidget::ListWidget(CLASS type, QWidget *parent)
     , type_(type)
     , pImpl(new ListWidget_Impl())
 {
-    connect(down_list_widget,SIGNAL(load_next_page()),this,SLOT(load_next_page_()));
+    connect(down_list_widget,SIGNAL(load_next_page()),this,SLOT(on_nextpage_clicked()));
     /*以下初始化函数顺序不能改*/    
     QHBoxLayout *locate_layout = new QHBoxLayout;
     init_locate(locate_layout);
@@ -189,7 +189,7 @@ void ListWidget::init_locate(QHBoxLayout *locate_layout)
         pImpl->locate_labels->append(label);
         locate_layout->addWidget(label,0,Qt::AlignTop);
         connect(label,SIGNAL(be_selected(QString,QString)),
-                this,SLOT(locate_only_one(QString,QString)));
+                this,SLOT(on_locate_clicked(QString,QString)));
     });
     if(pImpl->locate_labels->size()){
         pImpl->locate_labels->at(0)->set_selected(true);
@@ -233,7 +233,7 @@ void ListWidget::init_type(QHBoxLayout *type_layout)
         pImpl->type_labels->append(label);
         type_layout->addWidget(label);
         connect(label,SIGNAL(be_selected(QString,QString)),
-                this,SLOT(type_only_one(QString,QString)));
+                this,SLOT(on_type_clicked(QString,QString)));
     });
     if(pImpl->type_labels->size()){
         pImpl->type_labels->at(0)->set_selected(true);
@@ -251,7 +251,7 @@ void ListWidget::init_time(QHBoxLayout *time_layout)
         pImpl->time_labels->append(label);
         time_layout->addWidget(label,0,Qt::AlignBottom);
         connect(label,SIGNAL(be_selected(QString,QString)),
-                this,SLOT(time_only_one(QString,QString)));
+                this,SLOT(on_time_clicked(QString,QString)));
     });
     if(pImpl->time_labels->size()){
         pImpl->time_labels->at(0)->set_selected(true);
@@ -260,7 +260,7 @@ void ListWidget::init_time(QHBoxLayout *time_layout)
     time_layout->setContentsMargins(5,0,0,0);
 }
 
-void ListWidget::locate_only_one(QString locate,QString)
+void ListWidget::on_locate_clicked(QString locate,QString)
 {
     int index = pImpl->locate_name.indexOf(locate);
     for(int i=0; i<pImpl->locate_name.size(); ++i){
@@ -271,7 +271,7 @@ void ListWidget::locate_only_one(QString locate,QString)
     emit clicked(type_,0,locate);
 }
 
-void ListWidget::type_only_one(QString type,QString)
+void ListWidget::on_type_clicked(QString type,QString)
 {
     int index = pImpl->type_name.indexOf(type);
     for(int i=0; i<pImpl->type_name.size(); ++i){
@@ -282,7 +282,7 @@ void ListWidget::type_only_one(QString type,QString)
     emit clicked(type_,1,type);
 }
 
-void ListWidget::time_only_one(QString time,QString)
+void ListWidget::on_time_clicked(QString time,QString)
 {
     int index = pImpl->time_name.indexOf(time);
     for(int i=0; i<pImpl->time_name.size(); ++i){

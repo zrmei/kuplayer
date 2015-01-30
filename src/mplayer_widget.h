@@ -10,10 +10,10 @@
 
 #include "common.h"
 
-#include <QtAV/QtAV.h>
-#include <QtAV/WidgetRenderer.h>
 #include <QApplication>
 #include <QFile>
+#include <QtAV/AVPlayer.h>
+#include <QtAV/WidgetRenderer.h>
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 

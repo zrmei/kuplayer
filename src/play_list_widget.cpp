@@ -27,14 +27,22 @@ struct DECLARE_NAMESPACE_KUPLAYER(PlayListWidget_Impl)
     PushButton *btn_close;
     QList<SelectLabel*> *label_store;
       
-    PlayListWidget_Impl()
-        : scroll_layout(new QGridLayout)
+    explicit PlayListWidget_Impl(QObject* parent = 0)
+        : play_next_key(new QAction(parent))
+        , play_prev_key(new QAction(parent))
+        , scroll_layout(new QGridLayout)
         , btn_close(new PushButton)
         , label_store(new QList<SelectLabel*>)
-    {}
+    {
+        btn_close->setPicName(":/sysbutton/close");
+        play_next_key->setShortcut(QKeySequence(Qt::Key_PageDown));
+        play_prev_key->setShortcut(QKeySequence(Qt::Key_PageUp));
+    }
     ~PlayListWidget_Impl()
     {
         delete_list(label_store);
+        delete play_next_key;
+        delete play_prev_key;
         delete btn_close;
         delete scroll_layout;
     }
@@ -55,7 +63,6 @@ PlayListWidget::PlayListWidget(QWidget *parent)
     QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
 
-    pImpl->btn_close->setPicName(":/sysbutton/close");
     connect(pImpl->btn_close,SIGNAL(clicked()),this,SLOT(hide()));
     up_title_layout->addWidget(pImpl->btn_close,0,Qt::AlignTop);
     up_title_layout->addStretch();
@@ -65,7 +72,7 @@ PlayListWidget::PlayListWidget(QWidget *parent)
     view->setWidgetResizable(true);
     view->setContentsMargins(0,0,0,0);
     QWidget *viewWidgetContents = new QWidget(view);
-    pImpl->scroll_layout = new QGridLayout();
+
     QVBoxLayout *tmp_layout = new QVBoxLayout(viewWidgetContents);
     pImpl->scroll_layout->setContentsMargins(0,0,0,0);
     tmp_layout->addLayout(pImpl->scroll_layout);
@@ -82,12 +89,7 @@ PlayListWidget::PlayListWidget(QWidget *parent)
     viewWidgetContents->setFixedWidth(380);
     setFixedSize(400,300);
 
-    pImpl->play_next_key = new QAction(this);
-    pImpl->play_next_key->setShortcut(QKeySequence(Qt::Key_PageDown));
     connect(pImpl->play_next_key,SIGNAL(triggered()),SLOT(on_playNext_clicked()));
-
-    pImpl->play_prev_key = new QAction(this);
-    pImpl->play_prev_key->setShortcut(QKeySequence(Qt::Key_PageUp));
     connect(pImpl->play_prev_key,SIGNAL(triggered()),SLOT(on_playPrev_clicked()));
 
 }
@@ -105,9 +107,9 @@ void PlayListWidget::sort(const QStringList& list)
     QString second;
     QStringList tmp;
     auto comp = [](QString::value_type it){return it.isDigit();};
-    for(int i=0; i<list.size();++i){
+    for_each(list.begin(),list.end(),[&](const QStringList::value_type& item){
         second.clear();
-        tmp = list[i].split("$$");
+        tmp = item.split("$$");
         first = tmp[0];
         
         auto digit_begin = find_if(first.begin(),first.end(),comp);
@@ -118,7 +120,7 @@ void PlayListWidget::sort(const QStringList& list)
                                       QString("%1").arg(second.toInt(),10,10,QChar('0')),
                                       std::move(first),
                                       std::move(tmp[1]))});
-    }
+    });
     std::sort(play_list.begin(),play_list.end(),
               [](list_map::const_iterator::value_type lvalue,
               list_map::const_iterator::value_type rvalue){

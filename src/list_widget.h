@@ -60,11 +60,11 @@ public:
     }
     inline void reset(){ down_list_widget->reset(); }
 private slots:
-    void locate_only_one(QString,QString);
-    void type_only_one(QString,QString);
-    void time_only_one(QString,QString);
+    void on_locate_clicked(QString,QString);
+    void on_type_clicked(QString,QString);
+    void on_time_clicked(QString,QString);
 
-    inline void load_next_page_(){ emit load_next_page(type_); }
+    inline void on_nextpage_clicked(){ emit load_next_page(type_); }
 
 private:
     void init_locate(QHBoxLayout *locate_layout);

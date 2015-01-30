@@ -8,6 +8,7 @@
 #ifndef DETAILLABEL_H
 #define DETAILLABEL_H
 #include "common.h"
+
 #include <QLabel>
 class QMouseEvent;
 
@@ -35,7 +36,7 @@ signals:
     void url_triggered(QString/*name*/,QString/*url*/);
 public:
     DetailLabel(QWidget *parent = 0);
-    DetailLabel(QPixmap, QString, QString, QWidget *parent = 0);
+    DetailLabel(QPixmap, const QString&, const QString&, QWidget *parent = 0);
     virtual ~DetailLabel();
 
     inline void set_Pixmap(QPixmap &&img);

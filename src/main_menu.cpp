@@ -63,7 +63,7 @@ MenuWidget::MenuWidget(QWidget *parent)
 MenuWidget::~MenuWidget()
 { }
 
-void MenuWidget::on_this_show()
+void MenuWidget::on_showed()
 {
     if(isHidden()){
         QPoint pos_ = QCursor::pos();
@@ -121,6 +121,19 @@ struct DECLARE_NAMESPACE_KUPLAYER(down_widget_Impl)
     {
         base_ui = base_set_widget->ui;
         play_ui = play_set_widget_->ui;
+        
+        base_set->setFixedSize(125,32);
+        label_sores->append(base_set);
+        base_set->set_selected(true);
+        
+        play_set->setFixedHeight(32);
+        label_sores->append(play_set);
+        
+        about_set->setFixedHeight(32);
+        label_sores->append(about_set);
+        
+        btn_save->setFixedSize(80,32);
+        btn_exit->setFixedSize(80,32);
     }
     
     ~down_widget_Impl()
@@ -136,29 +149,11 @@ down_widget_::down_widget_(QWidget *parent)
     : QWidget(parent)
     ,pImpl(new down_widget_Impl())
 {
-    pImpl->base_set->setFixedSize(125,32);
-    pImpl->label_sores->append(pImpl->base_set);
-    pImpl->base_set->set_selected(true);
-    connect(pImpl->base_set,SIGNAL(be_selected(QString,QString)),
-            this,SLOT(be_selected(QString,QString)));
-    
-    pImpl->play_set->setFixedHeight(32);
-    pImpl->label_sores->append(pImpl->play_set);
-    connect(pImpl->play_set,SIGNAL(be_selected(QString,QString)),
-            this,SLOT(be_selected(QString,QString)));
-    
-    pImpl->about_set->setFixedHeight(32);
-    pImpl->label_sores->append(pImpl->about_set);
-    connect(pImpl->about_set,SIGNAL(be_selected(QString,QString)),
-            this,SLOT(be_selected(QString,QString)));
-    
-    pImpl->btn_save->setFixedSize(80,32);
-    connect(pImpl->btn_save,SIGNAL(be_selected(QString,QString)),
-            this,SLOT(btn_selected(QString,QString)));
-    
-    pImpl->btn_exit->setFixedSize(80,32);
-    connect(pImpl->btn_exit,SIGNAL(be_selected(QString,QString)),
-            this,SLOT(btn_selected(QString,QString)));
+    connect(pImpl->base_set, SIGNAL(be_selected(QString,QString)), this,SLOT(be_selected(QString,QString))); 
+    connect(pImpl->play_set, SIGNAL(be_selected(QString,QString)), this,SLOT(be_selected(QString,QString)));   
+    connect(pImpl->about_set,SIGNAL(be_selected(QString,QString)), this,SLOT(be_selected(QString,QString)));
+    connect(pImpl->btn_save, SIGNAL(be_selected(QString,QString)), this,SLOT(btn_selected(QString,QString)));
+    connect(pImpl->btn_exit, SIGNAL(be_selected(QString,QString)), this,SLOT(btn_selected(QString,QString)));
     
     QWidget *left_widget = new QWidget;
     left_widget->setAutoFillBackground(true);
@@ -182,7 +177,8 @@ down_widget_::down_widget_(QWidget *parent)
     right_widget->setAutoFillBackground(true);
     right_widget->setPalette(text_palette);
     
-    connect(pImpl->base_ui->comboBox,SIGNAL(currentIndexChanged(int)),SLOT(LanguageChanged(int)));
+    connect(pImpl->base_ui->comboBox,SIGNAL(currentIndexChanged(int)),
+            SLOT(LanguageChanged(int)));
         
     right_widget->addWidget(pImpl->base_set_widget);
     right_widget->setCurrentIndex(0);

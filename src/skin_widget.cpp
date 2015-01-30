@@ -129,7 +129,7 @@ void SkinWidget::on_url_triggered(QString, QString index)
     emit skin_change_clicked(index);
 }
 
-void SkinWidget::on_this_show()
+void SkinWidget::on_showed()
 {
     if(isHidden()){
         QPoint pos_ = QCursor::pos();

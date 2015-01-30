@@ -84,7 +84,7 @@ struct DECLARE_NAMESPACE_KUPLAYER(ControlWidget_Impl)
 };
 
 /*****************************************************************************/
-ControlLabel::ControlLabel(QString name,QWidget *parent)
+ControlLabel::ControlLabel(const QString &name, QWidget *parent)
     : QLabel(parent)
 {
     setObjectName(name.split("/").last());

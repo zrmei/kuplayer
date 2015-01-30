@@ -36,13 +36,13 @@ public slots:
     void on_play_finished(bool);
     void on_loadImage_started(int, QStringList);
     void on_nextPage_loaded(CLASS);
-    void loadImageFinished(CLASS, QPixmap, QString, QString);
+    void on_loadImage_finished(CLASS, QPixmap, QString, QString);
     void on_url_triggered(QString, QString);
-    void url_ji_triggered(QString, QString);
-    void change_url(CLASS, int, QString);
+    void on_url_ji_triggered(QString, QString);
+    void on_url_changed(CLASS, int, QString);
 private slots:
-    void trayIcon_clicked(QSystemTrayIcon::ActivationReason);
-    void show_normal_or_close();
+    void on_trayIcon_clicked(QSystemTrayIcon::ActivationReason);
+    void on_title_widget_closed();
 private:
     void init_setting();
     void to_inifile();

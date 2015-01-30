@@ -22,7 +22,7 @@ public:
     explicit SkinWidget(QWidget *parent = 0);
     ~SkinWidget(){}
 public slots:
-    void on_this_show();
+    void on_showed();
     void on_url_triggered(QString,QString);
 
 private:

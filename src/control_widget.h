@@ -23,7 +23,7 @@ class ControlLabel final : public QLabel
 signals:
     void clicked();
 public:
-    ControlLabel(QString name,QWidget *parent=0);
+    ControlLabel(const QString& name,QWidget *parent=0);
 protected:
     void mousePressEvent(QMouseEvent *);
 };

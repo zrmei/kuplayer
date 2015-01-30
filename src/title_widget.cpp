@@ -190,14 +190,17 @@ TitleWidget::TitleWidget(QWidget *parent)
     connect(pImpl->btn_skin,SIGNAL(clicked()),this,SIGNAL(skin_clicked()));
     connect(pImpl->btn_menu,SIGNAL(clicked()),this,SIGNAL(menu_clicked()));
     
-    for_each(down_title.begin(),down_title.end(),[&](QStringList::value_type name){
+    for_each(down_title.cbegin(),down_title.cend(),
+             [&](const QStringList::value_type& name){
         TypeLabel *label = new TypeLabel(name);
         pImpl->down_title_layout->addWidget(label,0,Qt::AlignBottom|Qt::AlignHCenter);
         pImpl->labels_store->append(label);
-        connect(label,SIGNAL(clicked(QString)),SLOT(turepage(QString)));
+        connect(label,SIGNAL(clicked(QString)),SLOT(on_turepage_triggered(QString)));
     });
     pImpl->down_title_layout->addStretch();
-    set_no_margin(pImpl->down_title_layout);
+    pImpl->down_title_layout->setMargin(0);
+    pImpl->down_title_layout->setSpacing(2);
+    pImpl->down_title_layout->setContentsMargins(0,0,0,0);
     
     QVBoxLayout *left_layout = new QVBoxLayout;
     set_no_margin(left_layout);
@@ -228,7 +231,7 @@ QString TitleWidget::get_text() const
 {
     return pImpl->title->text();
 }
-void TitleWidget::turepage(int index)
+void TitleWidget::on_turepage_triggered(int index)
 {
     for_each(pImpl->labels_store->begin(),pImpl->labels_store->end(),
              [](QList<TypeLabel*>::value_type label){
@@ -237,10 +240,10 @@ void TitleWidget::turepage(int index)
     emit ture_page(index);
 }
 
-void TitleWidget::turepage(QString name)
+void TitleWidget::on_turepage_triggered(QString name)
 {
     unsigned int index = down_title.indexOf(name);
     if(index > PLAYER)
         index = PLAYER;
-    turepage(index);
+    on_turepage_triggered(index);
 }
