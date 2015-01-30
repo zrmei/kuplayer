@@ -157,7 +157,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
             auto *tmp = new mThread(i,
                  bind(&PyScript::connect_img_url,pImpl->pyinit,
                       pImpl->pyinit->show_list[i],pImpl->name[i]));
-            connect(tmp,SIGNAL(mfinished(int,QStringList)),
+            connect(tmp,SIGNAL(load_finished(int,QStringList)),
                     this,SLOT(on_loadImage_started(int,QStringList)));
             tmp->start();
         }
@@ -269,6 +269,7 @@ void MainWidget::on_loadImage_started(int page, QStringList list)
     connect(download,SIGNAL(loadImageFinished(CLASS,QPixmap,QString,QString)),
             this,SLOT(on_loadImage_finished(CLASS,QPixmap,QString,QString)));
     download->start();
+    emit load_finished(page);
 }
 
 
@@ -278,7 +279,7 @@ void MainWidget::on_nextPage_loaded(CLASS type)
         QString url = pImpl->pyinit->gotoNextPage(pImpl->name[type],pImpl->pages[type]++)[0];
         auto *tmp = new mThread(type,bind(&PyScript::connect_img_url,
                                           pImpl->pyinit,url,pImpl->name[type]));
-        connect(tmp,SIGNAL(mfinished(int,QStringList)),
+        connect(tmp,SIGNAL(load_finished(int,QStringList)),
                 this,SLOT(on_loadImage_started(int,QStringList)));
         tmp->start();
         pImpl->can_update[type] = false;
@@ -309,7 +310,7 @@ void MainWidget::on_url_triggered(QString name,QString url)
                 url,pImpl->setting->default_video_format)){
         auto *tmp = new mThread(NONE,bind(&PyScript::getAll,pImpl->pyinit
                                           ,pImpl->stacked_widget->currentIndex(),url));
-        connect(tmp,SIGNAL(mfinished(int,QStringList)),
+        connect(tmp,SIGNAL(load_finished(int,QStringList)),
                 pImpl->xuan_ji_widget,SLOT(on_list_changed(int,QStringList)));
         pImpl->title_widget->on_turepage_triggered(PLAYER);
         tmp->start();
@@ -362,7 +363,7 @@ void MainWidget::on_url_changed(CLASS classes,int type,QString name)
     auto *tmp = new mThread(classes,
                             bind(&PyScript::connect_img_url,
                                  pImpl->pyinit, url, pImpl->name[classes]));
-    connect(tmp,SIGNAL(mfinished(int, QStringList)),
+    connect(tmp,SIGNAL(load_finished(int, QStringList)),
             this,SLOT(on_loadImage_started(int, QStringList)));
     tmp->start();
     qobject_cast<ListWidget*>(pImpl->stacked_widget->widget(classes))->reset();

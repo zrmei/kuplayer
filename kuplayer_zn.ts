@@ -4,27 +4,27 @@
 <context>
     <name>mei::kuplayer::ControlWidget</name>
     <message>
-        <location filename="src/control_widget.cpp" line="89"/>
+        <location filename="src/control_widget.cpp" line="50"/>
         <source>Backward</source>
         <translation>快退</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="93"/>
+        <location filename="src/control_widget.cpp" line="53"/>
         <source>Stop</source>
         <translation>停止</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="97"/>
+        <location filename="src/control_widget.cpp" line="56"/>
         <source>Play/Pause</source>
         <translation>播放/暂停</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="101"/>
+        <location filename="src/control_widget.cpp" line="59"/>
         <source>Foreward</source>
         <translation>快进</translation>
     </message>
     <message>
-        <location filename="src/control_widget.cpp" line="108"/>
+        <location filename="src/control_widget.cpp" line="66"/>
         <source>Episode</source>
         <translation>选集</translation>
     </message>
@@ -48,9 +48,9 @@
     </message>
     <message>
         <location filename="src/kuplayer.cpp" line="213"/>
-        <location filename="src/kuplayer.cpp" line="374"/>
+        <location filename="src/kuplayer.cpp" line="383"/>
         <source>Exit</source>
-        <translation></translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="src/kuplayer.cpp" line="214"/>
@@ -58,18 +58,18 @@
         <translation>是否真的要退出？</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="316"/>
-        <location filename="src/kuplayer.cpp" line="326"/>
+        <location filename="src/kuplayer.cpp" line="319"/>
+        <location filename="src/kuplayer.cpp" line="335"/>
         <source>Currently playing:</source>
         <translation>正在播放：</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="372"/>
+        <location filename="src/kuplayer.cpp" line="381"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="373"/>
+        <location filename="src/kuplayer.cpp" line="382"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
@@ -77,44 +77,69 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="src/main.cpp" line="52"/>
+        <location filename="src/main.cpp" line="56"/>
         <source>Error</source>
         <translation>错误</translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="53"/>
+        <location filename="src/main.cpp" line="57"/>
         <source>Network error,Please try later !</source>
-        <translation>当前网络差，请检查网络设置，稍后再试！</translation>
+        <translation>网络连接错误，请重试，错误代码110</translation>
     </message>
     <message>
-        <location filename="src/main_menu.cpp" line="67"/>
-        <location filename="src/main_menu.cpp" line="103"/>
-        <location filename="src/main_menu.cpp" line="108"/>
+        <location filename="src/main.cpp" line="80"/>
+        <source>Initializing the TV channel ...</source>
+        <translation>正在初始化电视频道……</translation>
+    </message>
+    <message>
+        <location filename="src/main.cpp" line="84"/>
+        <source>Initializing the Movie channel...</source>
+        <translation>正在初始化电影频道……</translation>
+    </message>
+    <message>
+        <location filename="src/main.cpp" line="88"/>
+        <source>Initializing the Zongyi channel...</source>
+        <translation>正在初始化综艺频道……</translation>
+    </message>
+    <message>
+        <location filename="src/main.cpp" line="92"/>
+        <source>Initializing the Music channel...</source>
+        <translation>正在初始化音乐频道……</translation>
+    </message>
+    <message>
+        <location filename="src/main.cpp" line="97"/>
+        <source>Initializing the Comic channel...</source>
+        <translation>正在初始化动漫频道……</translation>
+    </message>
+    <message>
+        <location filename="src/main_menu.cpp" line="71"/>
+        <location filename="src/main_menu.cpp" line="107"/>
+        <location filename="src/main_menu.cpp" line="112"/>
         <source>Basic Settings</source>
         <translation>基本设置</translation>
     </message>
     <message>
-        <location filename="src/main_menu.cpp" line="76"/>
-        <location filename="src/main_menu.cpp" line="104"/>
-        <location filename="src/main_menu.cpp" line="110"/>
+        <location filename="src/main_menu.cpp" line="80"/>
+        <location filename="src/main_menu.cpp" line="108"/>
+        <location filename="src/main_menu.cpp" line="114"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
     <message>
-        <location filename="src/main_menu.cpp" line="103"/>
-        <location filename="src/main_menu.cpp" line="109"/>
+        <location filename="src/main_menu.cpp" line="107"/>
+        <location filename="src/main_menu.cpp" line="113"/>
         <source>Play Settings</source>
         <translation>播放设置</translation>
     </message>
     <message>
-        <location filename="src/main_menu.cpp" line="104"/>
-        <location filename="src/main_menu.cpp" line="111"/>
+        <location filename="src/main_menu.cpp" line="108"/>
+        <location filename="src/main_menu.cpp" line="115"/>
         <source>Save</source>
         <translation>保存</translation>
     </message>
     <message>
-        <location filename="src/main_menu.cpp" line="105"/>
-        <location filename="src/main_menu.cpp" line="112"/>
+        <location filename="src/main_menu.cpp" line="109"/>
+        <location filename="src/main_menu.cpp" line="116"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -202,22 +227,22 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="src/base_set_weidget.ui" line="28"/>
         <source>Startup Settings:</source>
-        <translation>启动设置：</translation>
+        <translation>启动选项</translation>
     </message>
     <message>
         <location filename="src/base_set_weidget.ui" line="76"/>
         <source>Automatically start at pc on</source>
-        <translation>系统启动时运行</translation>
+        <translation>开机自启动</translation>
     </message>
     <message>
         <location filename="src/base_set_weidget.ui" line="95"/>
         <source>When you close the client, turn off All</source>
-        <translation>关闭主窗口时，关闭后台程序</translation>
+        <translation>关闭客户端关闭所有后台应用</translation>
     </message>
     <message>
         <location filename="src/base_set_weidget.ui" line="132"/>
         <source>Closing main form:</source>
-        <translation>关闭主窗口：</translation>
+        <translation>关闭选项</translation>
     </message>
     <message>
         <location filename="src/base_set_weidget.ui" line="165"/>
@@ -227,12 +252,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="src/base_set_weidget.ui" line="178"/>
         <source>Exit</source>
-        <translation>退出程序</translation>
+        <translation>退出</translation>
     </message>
     <message>
         <location filename="src/base_set_weidget.ui" line="212"/>
         <source>Language:</source>
-        <translation>语言：</translation>
+        <translation>中文</translation>
     </message>
     <message>
         <location filename="src/base_set_weidget.ui" line="238"/>
@@ -247,7 +272,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="src/base_set_weidget.ui" line="266"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;changed when restart !&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;下次启动时更改！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#d50000;&quot;&gt;此选项需重新启动后才生效！&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>

@@ -24,7 +24,7 @@ class mThread : public QThread
     typedef unsigned int CLASS;
     typedef std::function<QStringList()> F;
 signals:
-    void mfinished(int,QStringList);
+    void load_finished(int,QStringList);
 public:
     mThread(const int& page,const F& func,QObject *parent=0)
         : QThread(parent)
@@ -34,7 +34,7 @@ public:
 protected:
     virtual void run()
     {
-        emit mfinished(page_,func_());
+        emit load_finished(page_,func_());
         deleteLater();
     }
  

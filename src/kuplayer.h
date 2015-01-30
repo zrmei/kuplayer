@@ -25,6 +25,8 @@ class MainWidget
 #endif
 {
     Q_OBJECT
+signals:
+    void load_finished(int);
 public:
     MainWidget(PyScript *pyinit, const QString&, QWidget *parent = 0);
     virtual ~MainWidget();

@@ -20,6 +20,10 @@
 #include <QTextCodec>
 #include <QDir>
 #include <QSettings>
+#include <thread>
+
+typedef unsigned int CLASS;
+const CLASS TV = 0,MOVIE = 1,ZONGYI = 2,MUSIC = 3,COMIC = 4,PLAYER = 5,NONE = 6;
 
 int main(int argc, char *argv[])
 {
@@ -58,20 +62,53 @@ int main(int argc, char *argv[])
     QDesktopWidget *desk = new QDesktopWidget;
     QSplashScreen *splash = new QSplashScreen(QPixmap(":/logo/welcome"),Qt::WindowStaysOnTopHint);
 
-    int x = (desk->screen(0)->width() - splash->width()) /2;
-    int y = (desk->screen(0)->height() - splash->height()) /2;
+    int x = (desk->screen(0)->width() - splash->width()) >> 1;
+    int y = (desk->screen(0)->height() - splash->height()) >> 1;
 
     splash->move(x,y);
     splash->show();
 
     DECLARE_NAMESPACE_KUPLAYER(MainWidget) w(pyinit.get(),ico_path);
+    
+    a.connect(&w,&DECLARE_NAMESPACE_KUPLAYER(MainWidget)::load_finished,[&](int index)
+    {
+        static int  time_ = 0;
+        static auto showMessage = bind(&QSplashScreen::showMessage,
+                                       splash,_1,Qt::AlignBottom|Qt::AlignRight,Qt::black);
+        switch (index) {
+        case 0:
+            showMessage(QObject::tr("Initializing the TV channel ..."));
+            ++ time_;
+            break;
+        case 1:
+            showMessage(QObject::tr("Initializing the Movie channel..."));
+            ++ time_;
+            break;
+        case 2:
+            showMessage(QObject::tr("Initializing the Zongyi channel..."));
+            ++ time_;
+            break;
+        case 3:
+            showMessage(QObject::tr("Initializing the Music channel..."));
+            ++ time_;
+            break;
+        case 4:
+            ++ time_;
+            showMessage(QObject::tr("Initializing the Comic channel..."));
+            break;
+        default:
+            break;
+        }
+        if(time_ == 5){ w.showNormal(); delete splash; delete desk; }
+        qDebug() <<"if can use , this will be see";
+    });
     w.move(x,y);
     w.setIniFile(iniFile.get());
-    splash->finish(&w);
-    w.show();
-
-    delete desk;
-    delete splash;
-
+    a.processEvents();
+    a.processEvents();
+    a.processEvents();
+    a.processEvents();
+    w.hide();
+    
     return a.exec();
 }
