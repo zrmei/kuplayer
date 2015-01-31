@@ -19,7 +19,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QAction>
 #include <QScrollBar>
 
-struct DECLARE_NAMESPACE_KUPLAYER(PlayListWidget_Impl)
+struct NAMESPACE_KUPLAYER::PlayListWidget_Impl
 {
     QAction *play_next_key;
     QAction *play_prev_key;

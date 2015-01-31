@@ -32,44 +32,44 @@
 <context>
     <name>mei::kuplayer::MainWidget</name>
     <message>
-        <location filename="src/kuplayer.cpp" line="167"/>
+        <location filename="src/kuplayer.cpp" line="170"/>
         <source>kuplayer: free for youku!</source>
         <translation>酷播：免费的优酷播放器！</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="205"/>
+        <location filename="src/kuplayer.cpp" line="208"/>
         <source>kuplayer</source>
         <translation>酷播</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="206"/>
+        <location filename="src/kuplayer.cpp" line="209"/>
         <source>Showing by double-click !</source>
         <translation>双击这显示！</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="213"/>
-        <location filename="src/kuplayer.cpp" line="383"/>
+        <location filename="src/kuplayer.cpp" line="216"/>
+        <location filename="src/kuplayer.cpp" line="386"/>
         <source>Exit</source>
         <translation>退出</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="214"/>
+        <location filename="src/kuplayer.cpp" line="217"/>
         <source>Really want to quit?</source>
         <translation>是否真的要退出？</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="319"/>
-        <location filename="src/kuplayer.cpp" line="335"/>
+        <location filename="src/kuplayer.cpp" line="322"/>
+        <location filename="src/kuplayer.cpp" line="338"/>
         <source>Currently playing:</source>
         <translation>正在播放：</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="381"/>
+        <location filename="src/kuplayer.cpp" line="384"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="src/kuplayer.cpp" line="382"/>
+        <location filename="src/kuplayer.cpp" line="385"/>
         <source>About</source>
         <translation>关于</translation>
     </message>
@@ -88,28 +88,43 @@
     </message>
     <message>
         <location filename="src/main.cpp" line="80"/>
-        <source>Initializing the TV channel ...</source>
-        <translation>正在初始化电视频道……</translation>
+        <source>Power on ...</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="84"/>
-        <source>Initializing the Movie channel...</source>
-        <translation>正在初始化电影频道……</translation>
+        <location filename="src/main.cpp" line="83"/>
+        <source>Loading core file ...</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="88"/>
-        <source>Initializing the Zongyi channel...</source>
-        <translation>正在初始化综艺频道……</translation>
+        <location filename="src/main.cpp" line="86"/>
+        <source>Loading module ...</source>
+        <translation></translation>
     </message>
     <message>
-        <location filename="src/main.cpp" line="92"/>
-        <source>Initializing the Music channel...</source>
-        <translation>正在初始化音乐频道……</translation>
+        <location filename="src/main.cpp" line="89"/>
+        <source>Initializing the TV module ...</source>
+        <translation>正在初始化电视模块……</translation>
+    </message>
+    <message>
+        <location filename="src/main.cpp" line="93"/>
+        <source>Initializing the Movie module...</source>
+        <translation>正在初始化电影模块……</translation>
+    </message>
+    <message>
+        <location filename="src/main.cpp" line="101"/>
+        <source>Initializing the Music module...</source>
+        <translation>正在初始化音乐模块……</translation>
+    </message>
+    <message>
+        <location filename="src/main.cpp" line="106"/>
+        <source>Initializing the Comic module...</source>
+        <translation>正在初始化动漫模块……</translation>
     </message>
     <message>
         <location filename="src/main.cpp" line="97"/>
-        <source>Initializing the Comic channel...</source>
-        <translation>正在初始化动漫频道……</translation>
+        <source>Initializing the Zongyi module...</source>
+        <translation>正在初始化综艺模块……</translation>
     </message>
     <message>
         <location filename="src/main_menu.cpp" line="71"/>

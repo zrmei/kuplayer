@@ -17,7 +17,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QTime>
 
 
-struct DECLARE_NAMESPACE_KUPLAYER(ControlWidget_Impl)
+struct NAMESPACE_KUPLAYER::ControlWidget_Impl
 {
     Q_DISABLE_COPY(ControlWidget_Impl)
     

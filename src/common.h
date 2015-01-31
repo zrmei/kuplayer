@@ -28,12 +28,12 @@ using std::function;
 #define KUPLAYER_NAMESPACE_BEGIN namespace mei { namespace kuplayer {
 #define KUPLAYER_NAMESPACE_END } }
 #define USR_NAMESPACE_KUPLAYER using namespace mei::kuplayer;
-#define DECLARE_NAMESPACE_KUPLAYER(class_name) mei::kuplayer::class_name
+#define NAMESPACE_KUPLAYER mei::kuplayer
 #else
 #define KUPLAYER_NAMESPACE_BEGIN 
 #define KUPLAYER_NAMESPACE_END 
 #define USR_NAMESPACE_KUPLAYER 
-#define DECLARE_NAMESPACE_KUPLAYER(class_name) class_name
+#define NAMESPACE_KUPLAYER
 #endif
 
 

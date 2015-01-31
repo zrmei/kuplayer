@@ -16,7 +16,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-struct DECLARE_NAMESPACE_KUPLAYER(MenuWidget_Impl)
+struct NAMESPACE_KUPLAYER::MenuWidget_Impl
 {
     PushButton *btn_close;
     down_widget_*down_widget;
@@ -88,7 +88,7 @@ void MenuWidget::init_setting(conf_info* info)
 
 /*********************************************************************************/
 
-struct DECLARE_NAMESPACE_KUPLAYER(down_widget_Impl)
+struct NAMESPACE_KUPLAYER::down_widget_Impl
 {
     conf_info *settings;
     SelectLabel *base_set;

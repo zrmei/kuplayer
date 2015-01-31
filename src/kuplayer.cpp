@@ -49,7 +49,7 @@ this->layout()->setContentsMargins(0,0,0,0);
 
 #define Control_Widget (*(pImpl->player_widget))
 
-struct DECLARE_NAMESPACE_KUPLAYER(MainWidget_Impl)
+struct NAMESPACE_KUPLAYER::MainWidget::MainWidget_Impl
 {
     Q_DISABLE_COPY(MainWidget_Impl)
     
@@ -125,7 +125,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     for(CLASS i=0;i<5;++i){
         ListWidget *l = new ListWidget(i);
         connect(l,SIGNAL(clicked(CLASS,int,QString)),this,SLOT(on_url_changed(CLASS,int,QString)));
-        connect(l,SIGNAL(load_next_page(CLASS)),this,SLOT(on_nextPage_loaded(CLASS)));
+        connect(l,SIGNAL(emit_next_page(CLASS)),this,SLOT(on_nextPage_loaded(CLASS)));
         pImpl->stacked_widget->addWidget(l);
     }
     pImpl->stacked_widget->addWidget(pImpl->player_widget);
@@ -269,7 +269,7 @@ void MainWidget::on_loadImage_started(int page, QStringList list)
     connect(download,SIGNAL(loadImageFinished(CLASS,QPixmap,QString,QString)),
             this,SLOT(on_loadImage_finished(CLASS,QPixmap,QString,QString)));
     download->start();
-    emit load_finished(page);
+    emit send_status(page);
 }
 
 

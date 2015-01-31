@@ -11,7 +11,6 @@
 #include "pyscript.h"
 #include "ui_control_classes.h"
 
-#include <QObject>
 #include <QApplication>
 #include <QDesktopWidget>
 #include <QSplashScreen>
@@ -20,10 +19,6 @@
 #include <QTextCodec>
 #include <QDir>
 #include <QSettings>
-#include <thread>
-
-typedef unsigned int CLASS;
-const CLASS TV = 0,MOVIE = 1,ZONGYI = 2,MUSIC = 3,COMIC = 4,PLAYER = 5,NONE = 6;
 
 int main(int argc, char *argv[])
 {
@@ -50,11 +45,11 @@ int main(int argc, char *argv[])
         QPixmap(":/logo/logo").save(ico_path);
     }
     
-    std::shared_ptr<DECLARE_NAMESPACE_KUPLAYER(PyScript)> pyinit = 
-            std::make_shared<DECLARE_NAMESPACE_KUPLAYER(PyScript)>();
+    std::shared_ptr<NAMESPACE_KUPLAYER::PyScript> pyinit = 
+            std::make_shared<NAMESPACE_KUPLAYER::PyScript>();
     if( !pyinit.get()->getShowList() ){
         QMessageBox::warning(NULL,QObject::tr("Error"),
-        DECLARE_NAMESPACE_KUPLAYER(msg_font_style)(QObject::tr("Network error,Please try later !")));
+        NAMESPACE_KUPLAYER::msg_font_style(QObject::tr("Network error,Please try later !")));
         a.quit();
         return -1;
     }
@@ -68,38 +63,44 @@ int main(int argc, char *argv[])
     splash->move(x,y);
     splash->show();
 
-    DECLARE_NAMESPACE_KUPLAYER(MainWidget) w(pyinit.get(),ico_path);
+    NAMESPACE_KUPLAYER::MainWidget w(pyinit.get(),ico_path);
     
-    a.connect(&w,&DECLARE_NAMESPACE_KUPLAYER(MainWidget)::load_finished,[&](int index)
+    a.connect(&w,&NAMESPACE_KUPLAYER::MainWidget::send_status,[&](int index)
     {
         static int  time_ = 0;
         static auto showMessage = bind(&QSplashScreen::showMessage,
-                                       splash,_1,Qt::AlignBottom|Qt::AlignRight,Qt::black);
+                                       splash,
+                                       _1,
+                                       Qt::AlignBottom|Qt::AlignRight,
+                                       Qt::black);
         switch (index) {
         case 0:
-            showMessage(QObject::tr("Initializing the TV channel ..."));
+            showMessage(QObject::tr("Initializing the TV module ..."));
             ++ time_;
             break;
         case 1:
-            showMessage(QObject::tr("Initializing the Movie channel..."));
+            showMessage(QObject::tr("Initializing the Movie module..."));
             ++ time_;
             break;
         case 2:
-            showMessage(QObject::tr("Initializing the Zongyi channel..."));
+            showMessage(QObject::tr("Initializing the Zongyi module..."));
             ++ time_;
             break;
         case 3:
-            showMessage(QObject::tr("Initializing the Music channel..."));
+            showMessage(QObject::tr("Initializing the Music module..."));
             ++ time_;
             break;
         case 4:
             ++ time_;
-            showMessage(QObject::tr("Initializing the Comic channel..."));
+            showMessage(QObject::tr("Initializing the Comic module..."));
             break;
         default:
             break;
         }
-        if(time_ == 5){ w.showNormal(); delete splash; delete desk; }
+        if(time_ == 5){ 
+            w.showNormal(); delete splash; delete desk; 
+            w.disconnect(SIGNAL(send_status(int)));
+        }
         qDebug() <<"if can use , this will be see";
     });
     w.move(x,y);

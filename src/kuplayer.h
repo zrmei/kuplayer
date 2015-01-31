@@ -15,7 +15,6 @@ class QSettings;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class PyScript;
-struct MainWidget_Impl;
 
 class MainWidget        
 #ifdef CAN_RESIZE
@@ -26,7 +25,7 @@ class MainWidget
 {
     Q_OBJECT
 signals:
-    void load_finished(int);
+    void send_status(int);
 public:
     MainWidget(PyScript *pyinit, const QString&, QWidget *parent = 0);
     virtual ~MainWidget();
@@ -51,6 +50,7 @@ private:
     void init_trayicon();
     
 private:
+    struct MainWidget_Impl;
     std::shared_ptr<MainWidget_Impl> pImpl;
 };
 

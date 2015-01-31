@@ -18,7 +18,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QVBoxLayout>
 #include <QScrollBar>
 
-struct DECLARE_NAMESPACE_KUPLAYER(AreaWidget_Impl)
+struct NAMESPACE_KUPLAYER::AreaWidget_Impl
 {
     QGridLayout *scroll_layout;
     mScrollArea *view;
@@ -43,7 +43,7 @@ struct DECLARE_NAMESPACE_KUPLAYER(AreaWidget_Impl)
     }
 };
 
-struct DECLARE_NAMESPACE_KUPLAYER(ListWidget_Impl)
+struct NAMESPACE_KUPLAYER::ListWidget_Impl
 {
     /*存储指针，退出时释放资源*/
     QList<SelectLabel*> *locate_labels;
@@ -54,7 +54,7 @@ struct DECLARE_NAMESPACE_KUPLAYER(ListWidget_Impl)
     QStringList type_name;
     QStringList time_name;
     
-    explicit ListWidget_Impl()
+    ListWidget_Impl()
         : locate_labels(new QList<SelectLabel*>)
         , type_labels(new QList<SelectLabel*>)
         , time_labels(new QList<SelectLabel*>)
@@ -80,7 +80,7 @@ void mScrollArea::wheelEvent(QWheelEvent *ev)
     if(verticalScrollBar()->value() > 100){
         int mid_min = verticalScrollBar()->maximum() * 0.95;
         if(verticalScrollBar()->value() >= mid_min){
-            emit load_next_page();
+            emit load_next_page_();
         }
     }
 }
@@ -91,7 +91,7 @@ AreaWidget::AreaWidget(QWidget *parent)
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
 
-    connect(pImpl->view,SIGNAL(load_next_page()),this,SIGNAL(load_next_page()));
+    connect(pImpl->view,SIGNAL(load_next_page_()),this,SIGNAL(load_next_page()));
     pImpl->view->setWidgetResizable(true);
     pImpl->view->setContentsMargins(0,0,0,0);
 
@@ -244,8 +244,8 @@ void ListWidget::init_type(QHBoxLayout *type_layout)
 
 void ListWidget::init_time(QHBoxLayout *time_layout)
 {
-    for_each(pImpl->time_name.begin(),pImpl->time_name.end(),
-             [&](QStringList::value_type time_name){
+    for_each(pImpl->time_name.cbegin(),pImpl->time_name.cend(),
+             [&](const QStringList::value_type& time_name){
         SelectLabel *label = new SelectLabel(time_name,"");
         label->setFixedSize(60,25);
         pImpl->time_labels->append(label);
