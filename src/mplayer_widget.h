@@ -21,18 +21,18 @@ class MPlayer : public QtAV::AVPlayer
 {
     Q_OBJECT
 signals:
-    void mFinished(bool);
+    void mFinished();
     void mSetDuration(qint64);
 public:
     MPlayer(QObject *parent = 0);
     virtual ~MPlayer();
     void mPlay();
-public slots:
     void mStop();
+public slots:
     void mSeekBack();
     void mSeekFore();
     void setPlayList();
-    
+    void play_pause(bool);
     void setDuration();
 
     void vol_down();

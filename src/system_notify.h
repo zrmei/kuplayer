@@ -15,19 +15,17 @@
 #undef signals //样的话不能通过编译因为在QT中signals中关键字。
 #include <libnotify/notify.h>
 #endif
-#define signals public //恢复关键字定义,信好是个宏定义
+#define signals public //恢复关键字定义,幸好是个宏定义
 
 
-bool notification_show(QString title,QString body,QString icon)
+bool notification_show(const QString& title,const QString& body,const QString& icon)
 {
-    GError *error = NULL;
-    NotifyNotification *notify_p;
+    GError *error = nullptr;
+    NotifyNotification *notify_p = nullptr;
     if (title == NULL)
         return false;
-    if(notify_is_initted() == FALSE){
-        if(notify_init("kuplayer") == FALSE){
+    if(notify_is_initted() == FALSE || notify_init("kuplayer") == FALSE){
             return false;
-        }
     }
     notify_p = notify_notification_new(
                 title.toStdString().c_str(),

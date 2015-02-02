@@ -36,13 +36,13 @@ using std::function;
 #define NAMESPACE_KUPLAYER
 #endif
 
-
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 const int SHADOW_WIDTH = 5;
 const int SHADOW_HEIGHT = 5;
 const int WINDOW_WIDTH = 1002;
 const int WINDOW_HEIGHT = 657;
+
 const QString SHOW_PAGE = "http://www.youku.com/show_page/";
 
 #if defined(__GNUC__) && !defined(__clang__) 
@@ -57,10 +57,6 @@ const QString SHOW_PAGE = "http://www.youku.com/show_page/";
 
 typedef unsigned int CLASS;
 const CLASS TV = 0,MOVIE = 1,ZONGYI = 2,MUSIC = 3,COMIC = 4,PLAYER = 5,NONE = 6;
-
-
-
-
 
 KUPLAYER_NAMESPACE_END // namespace end
 #endif

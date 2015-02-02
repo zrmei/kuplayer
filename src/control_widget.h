@@ -9,24 +9,11 @@
 #define CONTROL_WIDGET_H
 #include "common.h"
 
-#include <QLabel>
-class QMouseEvent;
+#include <QWidget>
 class QAction;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
-class SelectLabel;
-struct ControlWidget_Impl;
 
-class ControlLabel final : public QLabel
-{
-    Q_OBJECT
-signals:
-    void clicked();
-public:
-    ControlLabel(const QString& name,QWidget *parent=0);
-protected:
-    void mousePressEvent(QMouseEvent *);
-};
 
 class ControlWidget : public QWidget
 {
@@ -47,11 +34,11 @@ public:
     bool isRuning{false};
 public slots:
     void on_play_pause_triggered(bool);
-    void on_play_pause_triggered();
     void on_time_changed(qint64);
     void on_douration_changed(qint64);
 private:
     void init_actions();
+    struct ControlWidget_Impl;
     std::shared_ptr<ControlWidget_Impl> pImpl;
 };
 

@@ -11,7 +11,6 @@
 #include "shadow_widget.h"
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
-struct SkinWidget_Impl;
 
 class SkinWidget final : public ShadowWidget
 {
@@ -21,6 +20,7 @@ signals:
 public:
     explicit SkinWidget(QWidget *parent = 0);
     ~SkinWidget(){}
+
 public slots:
     void on_showed();
     void on_url_triggered(QString,QString);
@@ -28,9 +28,11 @@ public slots:
 private:
     void init_skin(QString name);
     void find_file(QString path);
+    
     QStringList pic_list;
-    const QString PIC_PATH =\
-            qApp->applicationDirPath()+"/sources/img/skin/";
+    QString PIC_PATH{qApp->applicationDirPath()+"/../sources/img/skin/"};
+    
+    struct SkinWidget_Impl;
     std::shared_ptr<SkinWidget_Impl> pImpl;
 };
 

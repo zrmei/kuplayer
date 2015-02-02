@@ -41,7 +41,7 @@ public:
         Py_InitializeEx(initsigs);
         PyEval_InitThreads();
         PyRun_SimpleString("import sys");
-        PyRun_SimpleString("sys.path.append('./pyscript/')");
+        PyRun_SimpleString("sys.path.append('../pyscript/')");
         _module = PyImport_ImportModule("py_kuplayer");
     }
     ~pyinit(){ /*Py_Finalize(); */}

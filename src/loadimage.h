@@ -20,7 +20,9 @@
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
-typedef unsigned int CLASS;
+#define KUPLAYER_RES_NAME   0
+#define KUPLAYER_PIC_URL    1
+#define KUPLAYER_ADDR_URL   2
 
 class LoadImage final : public QObject
 {
@@ -56,7 +58,8 @@ public:
             deleteLater();
             return;
         } else {
-            request->setUrl(QUrl(list_->at(currentIndex)[1]));
+
+            request->setUrl(QUrl(list_->at(currentIndex)[KUPLAYER_PIC_URL]));
             manager->get(*request);
         }
     }
@@ -64,12 +67,16 @@ public:
 private slots:
     void replyFinished(QNetworkReply *reply)
     {
+
+
         QPixmap pix;
         pix.loadFromData(reply->readAll());
-        emit loadImageFinished(index,std::move(pix),
-                               list_->at(currentIndex)[0],
-                               list_->at(currentIndex)[2]
-                );
+        emit loadImageFinished(
+                    index,
+                    std::move(pix)
+                    ,list_->at(currentIndex)[KUPLAYER_RES_NAME]
+                    ,list_->at(currentIndex)[KUPLAYER_ADDR_URL]
+                    );
         ++currentIndex;
         start();
     }
@@ -90,5 +97,9 @@ private:
     QNetworkAccessManager *manager;
 };
 
+#undef KUPLAYER_RES_NAME
+#undef KUPLAYER_RES_PIC_URL
+#undef KUPLAYER_RES_ADDR_URL
+    
 KUPLAYER_NAMESPACE_END //namespace end
 #endif // LOADIMAGE_H

@@ -18,7 +18,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QVBoxLayout>
 #include <QScrollBar>
 
-struct NAMESPACE_KUPLAYER::AreaWidget_Impl
+struct NAMESPACE_KUPLAYER::AreaWidget::AreaWidget_Impl
 {
     QGridLayout *scroll_layout;
     mScrollArea *view;
@@ -43,7 +43,7 @@ struct NAMESPACE_KUPLAYER::AreaWidget_Impl
     }
 };
 
-struct NAMESPACE_KUPLAYER::ListWidget_Impl
+struct NAMESPACE_KUPLAYER::ListWidget::ListWidget_Impl
 {
     /*存储指针，退出时释放资源*/
     QList<SelectLabel*> *locate_labels;
@@ -138,7 +138,9 @@ ListWidget::ListWidget(CLASS type, QWidget *parent)
     , type_(type)
     , pImpl(new ListWidget_Impl())
 {
-    connect(down_list_widget,SIGNAL(load_next_page()),this,SLOT(on_nextpage_clicked()));
+    connect(down_list_widget,
+            &AreaWidget::load_next_page,
+            [&](){ emit emit_next_page(type_); });
     /*以下初始化函数顺序不能改*/    
     QHBoxLayout *locate_layout = new QHBoxLayout;
     init_locate(locate_layout);

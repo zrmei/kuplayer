@@ -6,18 +6,21 @@
 
 QT += core gui widgets network av
 
-
-TARGET = mikuplayer
+TARGET = kuplayer
 TEMPLATE = app
 
 PRECOMPILED_HEADER = src/common.h
 
 QMAKE_CXXFLAGS += -std=c++11 
-QMAKE_CXXFLAGS_DEBUG += -O0 -g3
-QMAKE_CXXFLAGS_RELEASE += -DQT_NO_DEBUG_OUTPUT  -Werror
+QMAKE_CXXFLAGS_DEBUG += -O0 -g3 
+QMAKE_CXXFLAGS_RELEASE +=  -Werror -DQT_NO_DEBUG_OUTPUT
 
-QMAKE_LFLAGS += -Wl,-rpath,"./lib"
-QMAKE_LFLAGS_RELEASE += -Wl,-s
+DEFINES +=  AV_NO_DEBUG_OUTPUT
+
+QMAKE_LFLAGS += -Wl,-rpath,"../lib"
+
+QMAKE_LFLAGS_RELEASE += -Wl,-s -Wl,-O2
+
 
 SOURCES += src/control_widget.cpp \
     src/detail_label.cpp \
@@ -33,7 +36,8 @@ SOURCES += src/control_widget.cpp \
     src/shadow_widget.cpp \
     src/skin_widget.cpp \
     src/title_widget.cpp \
-    src/ui_control_classes.cpp
+    src/ui_control_classes.cpp \
+    src/control_label.cpp
 
 HEADERS  += src/common.h \
     src/control_widget.h \
@@ -54,12 +58,13 @@ HEADERS  += src/common.h \
     src/system_notify.h \
     src/title_widget.h \
     src/ui_control_classes.h \
-    src/gloal_func.h
+    src/gloal_func.h \
+    src/control_label.h
 
 RESOURCES += \
     src/kuplayer.qrc
 
-RC_FILE = kuplayer.rc
+RC_FILE += kuplayer.rc
 
 OTHER_FILES += \
     kuplayer.ico \
@@ -87,13 +92,13 @@ unix: {
 
         LIBS += -lnotify 
         DEFINES += USE_NOTIFY
-    }else{
+    } else {
         message("Can not find libnotify.so. You can: sudo apt-get install libnotify4-dev")
     }
     
     exists( /lib64 ){
         LIBS += -L$$PWD/resources/libs  -loptions_64
-    }else{
+    } else {
         LIBS += -L$$PWD/resources/libs  -loptions_32
     }
 }

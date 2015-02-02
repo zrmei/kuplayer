@@ -18,7 +18,9 @@ const char* const VERSION =\
 "\t******************************************\n";
 
 namespace opt{
+
 bool program_options(int argc,char *argv[],const char* version);
+
 }
 
 #endif // PROGRAM_OPTIONS_H

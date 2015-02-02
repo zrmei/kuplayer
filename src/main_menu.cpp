@@ -16,7 +16,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-struct NAMESPACE_KUPLAYER::MenuWidget_Impl
+struct NAMESPACE_KUPLAYER::MenuWidget::MenuWidget_Impl
 {
     PushButton *btn_close;
     down_widget_*down_widget;
@@ -88,7 +88,7 @@ void MenuWidget::init_setting(conf_info* info)
 
 /*********************************************************************************/
 
-struct NAMESPACE_KUPLAYER::down_widget_Impl
+struct NAMESPACE_KUPLAYER::down_widget_::down_widget_Impl
 {
     conf_info *settings;
     SelectLabel *base_set;
@@ -239,10 +239,10 @@ void down_widget_::LanguageChanged(int index)
 {
     pImpl->settings->language = ( index == 0 );
 }
-
+#define BUTTON_OK_STR 3
 void down_widget_::btn_selected(QString name, QString)
 {
-    if(name == pImpl->setting_strs[3]){
+    if(name == pImpl->setting_strs[BUTTON_OK_STR]){
         pImpl->settings->auto_play_next = pImpl->play_ui->checkBox_auto_play_next->isChecked();
         pImpl->settings->close_all = pImpl->base_ui->checkBox_close->isChecked();
         pImpl->settings->min_or_close = pImpl->base_ui->radioButton_min->isChecked();

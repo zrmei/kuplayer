@@ -37,21 +37,14 @@ ShadowWidget::~ShadowWidget()
 {
 }
 
+
 void ShadowWidget::change_skin(QString pic_name)
 {
-    static const QString PIC_PATH = qApp->applicationDirPath()+"/sources/img/skin/";
-    if(!QFileInfo(PIC_PATH).isDir()){
-    QSharedPointer<QDir> dir(new QDir());
-        dir->mkpath(PIC_PATH);
+    static const QString PIC_PATH{qApp->applicationDirPath()+"/../sources/img/skin/"};
+    skin = PIC_PATH + pic_name;
+    if(!QFileInfo(skin).isFile()){
+        pic_name = ":/skin/0";
     }
-    QString pic_path;
-    pic_path.insert(0,PIC_PATH);
-    pic_path.insert(pic_path.size(),pic_name);
-
-    if(!QFileInfo(pic_path).isFile()){
-        pic_path = ":/skin/0";
-    }
-    skin = pic_path;
     update();
 }
 

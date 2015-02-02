@@ -27,8 +27,6 @@ protected:
     virtual void leaveEvent(QEvent *);
 };
 
-struct DetailLabel_Impl;
-
 class DetailLabel : public QWidget
 {
     Q_OBJECT
@@ -48,6 +46,7 @@ private slots:
     void this_url_triggered();
 
 private:
+    struct DetailLabel_Impl;
     std::shared_ptr<DetailLabel_Impl> pImpl;
 };
 

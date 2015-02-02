@@ -7,6 +7,7 @@
  *********************************************/
 #include "common.h"
 #include "control_widget.h"
+#include "control_label.h"
 #include "select_label.h"
 USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 
@@ -17,7 +18,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QTime>
 
 
-struct NAMESPACE_KUPLAYER::ControlWidget_Impl
+struct NAMESPACE_KUPLAYER::ControlWidget::ControlWidget_Impl
 {
     Q_DISABLE_COPY(ControlWidget_Impl)
     
@@ -83,23 +84,6 @@ struct NAMESPACE_KUPLAYER::ControlWidget_Impl
      }
 };
 
-/*****************************************************************************/
-ControlLabel::ControlLabel(const QString &name, QWidget *parent)
-    : QLabel(parent)
-{
-    setObjectName(name.split("/").last());
-    setPixmap(QPixmap(name).scaled(26,26));
-    setFixedSize(30,30);
-}
-void ControlLabel::mousePressEvent(QMouseEvent *ev)
-{
-    QLabel::mousePressEvent(ev);
-    emit clicked();
-}
-
-/*****************************************************************************/
-
-
 ControlWidget::ControlWidget(QWidget *parent)
     : QWidget(parent)
     , pImpl(new ControlWidget_Impl())
@@ -107,7 +91,7 @@ ControlWidget::ControlWidget(QWidget *parent)
 
     connect(pImpl->backward_,SIGNAL(clicked()),this,SIGNAL(backward_clicked()));
     connect(pImpl->stop_,SIGNAL(clicked()),this,SIGNAL(stop_clicked()));
-    connect(pImpl->play_pause,SIGNAL(clicked()),this,SLOT(on_play_pause_triggered()));
+    connect(pImpl->play_pause,&ControlLabel::clicked,bind(&ControlWidget::on_play_pause_triggered,this,false));
     connect(pImpl->foreward_,SIGNAL(clicked()),this,SIGNAL(foreward_clicked()));
     connect(pImpl->xuan_ji,SIGNAL(be_selected(QString,QString)),this,SIGNAL(xuan_ji_clcked(QString,QString)));
 
@@ -145,7 +129,7 @@ void ControlWidget::init_actions()
 
     pImpl->pause_key = new QAction(this);
     pImpl->pause_key->setShortcut(QKeySequence(Qt::Key_Space));
-    connect(pImpl->pause_key,SIGNAL(triggered()),this,SLOT(on_play_pause_triggered()));
+    connect(pImpl->pause_key,SIGNAL(triggered(bool)),this,SLOT(on_play_pause_triggered(bool)));
 
     pImpl->foreward_key = new QAction(this);
     pImpl->foreward_key->setShortcut(QKeySequence(Qt::Key_Right));
@@ -167,34 +151,30 @@ void ControlWidget::init_actions()
 void ControlWidget::on_play_pause_triggered(bool)
 {
     if(!isRuning) return;
-    
-    static const QPixmap pause = QPixmap(":/control/pause").scaled(26,26);
-    static const QPixmap play = QPixmap(":/control/play").scaled(26,26);
+    static QPixmap pause = QPixmap(":/control/pause").scaled(26,26);
+    static QPixmap play = QPixmap(":/control/play").scaled(26,26);
     
     if(pImpl->play_pause->objectName() == "play"){
         pImpl->play_pause->setObjectName("pause");
         pImpl->play_pause->setPixmap(pause);
+        emit play_pause_clicked(false);
     }else{
         pImpl->play_pause->setObjectName("play");
         pImpl->play_pause->setPixmap(play);
-    }
-}
-
-void ControlWidget::on_play_pause_triggered()
-{
-    on_play_pause_triggered(true);
-    if(pImpl->play_pause->objectName() == "play")
-        emit play_pause_clicked(false);
-    else
         emit play_pause_clicked(true);
+    }
 }
 
 void ControlWidget::on_time_changed(qint64 pos)
 {
-    pImpl->time_current->setText(QTime(0, 0, 0).addMSecs(pos).toString("HH:mm:ss"));
+    static QTime t(0, 0, 0);
+    pImpl->time_current->setText(t.addMSecs(pos).toString("HH:mm:ss"));
+    t.setHMS(0,0,0);
 }
 
 void ControlWidget::on_douration_changed(qint64 pos)
 {
-    pImpl->time_all->setText(QTime(0, 0, 0).addMSecs(pos).toString("HH:mm:ss"));
+    static QTime t(0, 0, 0);
+    pImpl->time_all->setText(t.addMSecs(pos).toString("HH:mm:ss"));
+    t.setHMS(0,0,0);
 }

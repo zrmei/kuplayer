@@ -19,7 +19,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QAction>
 #include <QScrollBar>
 
-struct NAMESPACE_KUPLAYER::PlayListWidget_Impl
+struct NAMESPACE_KUPLAYER::PlayListWidget::PlayListWidget_Impl
 {
     QAction *play_next_key;
     QAction *play_prev_key;
@@ -96,6 +96,7 @@ PlayListWidget::PlayListWidget(QWidget *parent)
 PlayListWidget::~PlayListWidget()
 {
 }
+
 QList<QAction*> PlayListWidget::init_action()
 {
     return {{pImpl->play_next_key,pImpl->play_prev_key}};
@@ -131,6 +132,7 @@ void PlayListWidget::sort(const QStringList& list)
 void PlayListWidget::on_list_changed(int,const QStringList& list)
 {
     play_list.clear();
+    IsEnd = false;
     currentIndex = 0;
     while (pImpl->label_store->size()){
         delete pImpl->label_store->at(0);
@@ -191,6 +193,7 @@ void PlayListWidget::on_playNext_clicked()
     if(currentIndex >= play_list.size()){
         currentIndex = play_list.size()-1;
         emit click(QString(),QString());
+        IsEnd = true;
         return;
     }
     pImpl->label_store->at(currentIndex)->set_selected(true);
@@ -204,6 +207,7 @@ void PlayListWidget::on_playPrev_clicked()
     if(currentIndex < 0){
         currentIndex = 0;
         emit click(QString(),QString());
+        IsEnd = true;
         return;
     }
     pImpl->label_store->at(currentIndex)->set_selected(true);

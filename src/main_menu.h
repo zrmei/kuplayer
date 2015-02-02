@@ -24,9 +24,6 @@ struct conf_info
        bool language;
 };
 
-struct down_widget_Impl;
-struct MenuWidget_Impl;
-
 class MenuWidget : public ShadowWidget
 {
     Q_OBJECT
@@ -38,6 +35,7 @@ public slots:
     void show_about();
     void init_setting(conf_info *);
 private:
+    struct MenuWidget_Impl;
     std::shared_ptr<MenuWidget_Impl> pImpl;
 };
 
@@ -57,6 +55,7 @@ public slots:
 
 private:
     QStackedWidget *right_widget;
+    struct down_widget_Impl;
     std::shared_ptr<down_widget_Impl> pImpl;
 };
 

@@ -20,7 +20,7 @@ MPlayer::MPlayer(QObject *parent)
     :  QtAV::AVPlayer(parent)
 {
     connect(this,SIGNAL(stopped()),this,SLOT(mStarted()));
-#ifdef QT_NO_DEBUG_OUTPUT
+#ifdef AV_NO_DEBUG_OUTPUT
     QtAV::setLogLevel(QtAV::LogLevel::LogOff);
 #else
     QtAV::setLogLevel(QtAV::LogAll);
@@ -29,12 +29,13 @@ MPlayer::MPlayer(QObject *parent)
 
 MPlayer::~MPlayer()
 {
+    list_file.remove();
 }
 
 void MPlayer::setPlayList()
 {
     if(list_file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        QTextStream txtInput(&list_file);
+        static QTextStream txtInput(&list_file);
         play_list.clear();
         while(!txtInput.atEnd()){
             play_list.append(txtInput.readLine());
@@ -59,7 +60,7 @@ void MPlayer::mStarted()
         play_list.removeAt(0);
         QTimer::singleShot(800,this,SLOT(setDuration()));
     }else{
-        emit mFinished(false);
+        emit mFinished();
     }
 }
 
@@ -67,7 +68,15 @@ void MPlayer::mStop()
 {
     play_list.clear();
     stop();
-    emit mFinished(true);
+}
+
+void MPlayer::play_pause(bool p)
+{
+    if( isPlaying() ){
+        pause(p);
+    } else {
+        mPlay();
+    }
 }
 
 void MPlayer::setDuration()
@@ -91,18 +100,13 @@ void MPlayer::vol_up()
 {
     QtAV::AudioOutput *ao = audio();
     if (ao && ao->isAvailable()) {
-        qreal v = audio()->volume();
+        qreal v = ao->volume();
 #ifdef QT_NO_DEBUG_OUTPUT
         if(v >= 1.0)
             return;
 #endif
-        if(v > 0.5)
-            v += 0.1;
-        else if (v > 0.1)
-            v += 0.05;
-        else
-            v += 0.025;
-        audio()->setVolume(v);
+            v += 0.02;
+        ao->setVolume(v);
         qDebug("vol = %.3f", audio()->volume());
     }
 }
@@ -111,18 +115,13 @@ void MPlayer::vol_down()
 {
     QtAV::AudioOutput *ao = audio();
     if (ao && ao->isAvailable()) {
-        qreal v = audio()->volume();
+        qreal v = ao->volume();
 #ifdef QT_NO_DEBUG_OUTPUT
         if(v <= 0.0)
             return;
 #endif
-        if (v > 0.5)
-            v -= 0.1;
-        else if (v > 0.1)
-            v -= 0.05;
-        else
-            v -= 0.025;
-        audio()->setVolume(v);
+            v -= 0.02;
+        ao->setVolume(v);
         qDebug("vol = %.3f", audio()->volume());
     }
 }

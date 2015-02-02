@@ -17,7 +17,6 @@
 class QMouseEvent;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
-struct TitleWidget_Impl;
 
 class TypeLabel final : public QLabel
 {
@@ -60,8 +59,10 @@ public slots:
     void on_turepage_triggered(int);
     void on_turepage_triggered(QString);
 private:
-    QStringList  down_title{tr("TVShow"),tr("Movies"),tr("Variety"),
-        tr("Music"),tr("Cartoon"),tr("Player")};
+    QStringList down_title
+    {   tr("TVShow"),tr("Movies"),tr("Variety"),
+        tr("Music"),tr("Cartoon"),tr("Player")  };
+    struct TitleWidget_Impl;
     std::shared_ptr<TitleWidget_Impl> pImpl;
 
 };

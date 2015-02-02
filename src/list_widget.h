@@ -15,8 +15,7 @@ KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class DetailLabel;
 class SelectLabel;
 
-struct AreaWidget_Impl;
-struct ListWidget_Impl;
+
 
 class mScrollArea : public QScrollArea
 {
@@ -34,6 +33,7 @@ class AreaWidget : public QWidget
     Q_OBJECT
 signals:
     void load_next_page();
+    
 public:
     explicit AreaWidget(QWidget *parent=0);
     virtual ~AreaWidget();
@@ -41,6 +41,7 @@ public:
     void reset();
 
 private:
+    struct AreaWidget_Impl;
     std::shared_ptr<AreaWidget_Impl> pImpl;
 };
 
@@ -52,20 +53,18 @@ signals:
     void clicked(CLASS,int,QString);
     /*滚动区域的触发，返回的是当前的页面的类型（如电影）*/
     void emit_next_page(CLASS);
+    
 public:
     explicit ListWidget(CLASS type,QWidget *parent = 0);
     ~ListWidget();
-    inline void addDetailLabel(DetailLabel *label){
-        down_list_widget->addDetailLabel(label);
-    }
-    inline void reset(){ down_list_widget->reset(); }
+    void addDetailLabel(DetailLabel *label);
+    void reset();
+    
 private slots:
     void on_locate_clicked(QString,QString);
     void on_type_clicked(QString,QString);
     void on_time_clicked(QString,QString);
-
-    inline void on_nextpage_clicked(){ emit emit_next_page(type_); }
-
+    
 private:
     void init_locate(QHBoxLayout *locate_layout);
     void init_type(QHBoxLayout *type_layout);
@@ -74,8 +73,19 @@ private:
 private:
      AreaWidget *down_list_widget;
      CLASS type_;
+     struct ListWidget_Impl;
      std::shared_ptr<ListWidget_Impl> pImpl;
 };
+
+inline void ListWidget::addDetailLabel(DetailLabel *label)
+{
+    down_list_widget->addDetailLabel(label);
+}
+
+inline void ListWidget::reset()
+{ 
+    down_list_widget->reset(); 
+}
 
 KUPLAYER_NAMESPACE_END //namespace end
 #endif // LIST_layout_H
