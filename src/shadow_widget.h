@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/13
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -32,7 +32,7 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
     bool is_full_screen{false};
-    inline QString get_skin()const{return skin.split('/').last();}
+    inline QString get_skin()const;
 private:
     void drawWindowShadow(QPainter &painter);
 private:
@@ -45,6 +45,10 @@ private:
     std::shared_ptr<QList<QPixmap>> pixmaps;
 };
 
+inline QString ShadowWidget::get_skin() const
+{
+    return skin.split('/').last();
+}
 #ifdef CAN_RESIZE
 class ResizedWidget : public ShadowWidget
 {

@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     a.connect(&a,SIGNAL(lastWindowClosed()),&a,SLOT(quit()));
     
 
-	QTextCodec::setCodecForLocale(QTextCodec::codecForName("System")); 
+    QTextCodec::setCodecForLocale(QTextCodec::codecForName("System"));
     QTranslator   translator;
     std::shared_ptr<QSettings> iniFile(new QSettings(
                                            QDir::homePath()+"/.kuplayer/kuplayer.conf",
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
         QPixmap(":/logo/logo").save(ico_path);
     }
     
-    std::shared_ptr<NAMESPACE_KUPLAYER::PyScript> pyinit = 
+    std::shared_ptr<NAMESPACE_KUPLAYER::PyScript> pyinit =
             std::make_shared<NAMESPACE_KUPLAYER::PyScript>();
     if( !pyinit.get()->getShowList() ){
         QMessageBox::warning(NULL,QObject::tr("Error"),
@@ -98,9 +98,10 @@ int main(int argc, char *argv[])
         default:
             break;
         }
-        if(time_ == 5){ 
-            w.showNormal(); delete splash; delete desk; 
+        if(5 == time_){
+            w.showNormal();
             w.disconnect(SIGNAL(send_status(int)));
+            delete splash; delete desk;
         }
         qDebug() <<"if can use , this will be see";
     });

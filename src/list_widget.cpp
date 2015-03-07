@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/13
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -32,7 +32,13 @@ struct NAMESPACE_KUPLAYER::AreaWidget::AreaWidget_Impl
         , view(new mScrollArea)
         , viewWidgetContents(new QWidget)
         , label_stores(new QList<DetailLabel*>)
-    {        
+    {
+        view->setWidgetResizable(true);
+        view->setContentsMargins(0,0,0,0);
+    
+        scroll_layout->setContentsMargins(0,0,0,0);
+        viewWidgetContents->setLayout(scroll_layout);
+        view->setWidget(viewWidgetContents);
     }
     ~AreaWidget_Impl()
     {
@@ -73,34 +79,36 @@ struct NAMESPACE_KUPLAYER::ListWidget::ListWidget_Impl
 /****************************************************************************/
 mScrollArea::mScrollArea(QWidget *parent)
     : QScrollArea(parent)
-{}
+{
+    connect(verticalScrollBar(),SIGNAL(valueChanged(int)),SLOT(valueChanged(int)));
+}
 void mScrollArea::wheelEvent(QWheelEvent *ev)
 {
     QScrollArea::wheelEvent(ev);
-    if(verticalScrollBar()->value() > 100){
-        int mid_min = verticalScrollBar()->maximum() * 0.95;
-        if(verticalScrollBar()->value() >= mid_min){
+    valueChanged(verticalScrollBar()->value());
+}
+
+void mScrollArea::valueChanged(int value)
+{
+    static int mid_min;
+    mid_min = verticalScrollBar()->maximum() * 0.95;
+    if(value > 100 && value >= mid_min){
+            qDebug() << "emit load_next_page: value= " << value
+                        << "  mid_min=" << mid_min;
             emit load_next_page_();
-        }
     }
 }
+
 /*****************************************************************************/
 AreaWidget::AreaWidget(QWidget *parent)
     : QWidget(parent)
     , pImpl(new AreaWidget_Impl())
 {
     QVBoxLayout *main_layout = new QVBoxLayout(this);
-
-    connect(pImpl->view,SIGNAL(load_next_page_()),this,SIGNAL(load_next_page()));
-    pImpl->view->setWidgetResizable(true);
-    pImpl->view->setContentsMargins(0,0,0,0);
-
-    pImpl->scroll_layout->setContentsMargins(0,0,0,0);
-    pImpl->viewWidgetContents->setLayout(pImpl->scroll_layout);
-    pImpl->view->setWidget(pImpl->viewWidgetContents);
-
     main_layout->addWidget(pImpl->view);
     main_layout->setSpacing(0);
+    
+    connect(pImpl->view,SIGNAL(load_next_page_()),this,SIGNAL(load_next_page()));
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Background, QColor(230, 230, 230));
     text_palette.setColor(QPalette::Background,QColor(255,255,255,0));
@@ -138,9 +146,7 @@ ListWidget::ListWidget(CLASS type, QWidget *parent)
     , type_(type)
     , pImpl(new ListWidget_Impl())
 {
-    connect(down_list_widget,
-            &AreaWidget::load_next_page,
-            [&](){ emit emit_next_page(type_); });
+    connect(down_list_widget,&AreaWidget::load_next_page,[&](){ emit emit_next_page(type_);});
     /*以下初始化函数顺序不能改*/    
     QHBoxLayout *locate_layout = new QHBoxLayout;
     init_locate(locate_layout);
@@ -210,8 +216,7 @@ void ListWidget::init_type(QHBoxLayout *type_layout)
         break;
     case MOVIE:
         pImpl->type_name<<"武侠"<<"警匪"<<"犯罪"<<"科幻"<<"战争"<<"恐怖"<<"惊悚"
-                       <<"动作"<<"喜剧"
-                <<"爱情"<<"剧情"<<"冒险"<<"悬疑"<<"历史";
+                       <<"动作"<<"喜剧"<<"爱情"<<"剧情"<<"冒险"<<"悬疑"<<"历史";
         break;
     case ZONGYI:
         pImpl->type_name<<"优酷出品"<<"优酷牛人"<<"脱口秀"<<"真人秀"<<"选秀"

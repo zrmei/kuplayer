@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/13
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -150,10 +150,10 @@ void ControlWidget::init_actions()
 
 void ControlWidget::on_play_pause_triggered(bool)
 {
-    if(!isRuning) return;
     static QPixmap pause = QPixmap(":/control/pause").scaled(26,26);
     static QPixmap play = QPixmap(":/control/play").scaled(26,26);
     
+    qDebug() << "pImpl->play_pause->objectName(): " << pImpl->play_pause->objectName();
     if(pImpl->play_pause->objectName() == "play"){
         pImpl->play_pause->setObjectName("pause");
         pImpl->play_pause->setPixmap(pause);
@@ -165,16 +165,19 @@ void ControlWidget::on_play_pause_triggered(bool)
     }
 }
 
-void ControlWidget::on_time_changed(qint64 pos)
+static void setText(QLabel *label,qint64 pos)
 {
     static QTime t(0, 0, 0);
-    pImpl->time_current->setText(t.addMSecs(pos).toString("HH:mm:ss"));
+    label->setText(t.addMSecs(pos).toString("HH:mm:ss"));
     t.setHMS(0,0,0);
+}
+
+void ControlWidget::on_time_changed(qint64 pos)
+{
+   setText(pImpl->time_current,pos);
 }
 
 void ControlWidget::on_douration_changed(qint64 pos)
 {
-    static QTime t(0, 0, 0);
-    pImpl->time_all->setText(t.addMSecs(pos).toString("HH:mm:ss"));
-    t.setHMS(0,0,0);
+   setText(pImpl->time_all,pos);
 }

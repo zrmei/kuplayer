@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT += core gui widgets network av
+QT += core gui widgets network av avwidgets
 
 TARGET = kuplayer
 TEMPLATE = app
@@ -18,7 +18,6 @@ QMAKE_CXXFLAGS_RELEASE +=  -Werror -DQT_NO_DEBUG_OUTPUT
 DEFINES +=  AV_NO_DEBUG_OUTPUT
 
 QMAKE_LFLAGS += -Wl,-rpath,"../lib"
-
 QMAKE_LFLAGS_RELEASE += -Wl,-s -Wl,-O2
 
 

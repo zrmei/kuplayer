@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/22
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -37,6 +37,7 @@ struct NAMESPACE_KUPLAYER::PlayListWidget::PlayListWidget_Impl
         btn_close->setPicName(":/sysbutton/close");
         play_next_key->setShortcut(QKeySequence(Qt::Key_PageDown));
         play_prev_key->setShortcut(QKeySequence(Qt::Key_PageUp));
+        scroll_layout->setContentsMargins(0,0,0,0);
     }
     ~PlayListWidget_Impl()
     {
@@ -74,7 +75,6 @@ PlayListWidget::PlayListWidget(QWidget *parent)
     QWidget *viewWidgetContents = new QWidget(view);
 
     QVBoxLayout *tmp_layout = new QVBoxLayout(viewWidgetContents);
-    pImpl->scroll_layout->setContentsMargins(0,0,0,0);
     tmp_layout->addLayout(pImpl->scroll_layout);
     tmp_layout->addStretch();
 
@@ -99,15 +99,16 @@ PlayListWidget::~PlayListWidget()
 
 QList<QAction*> PlayListWidget::init_action()
 {
-    return {{pImpl->play_next_key,pImpl->play_prev_key}};
+    return { {pImpl->play_next_key,pImpl->play_prev_key} };
 }
 
 void PlayListWidget::sort(const QStringList& list)
 {
-    QString first;
-    QString second;
-    QStringList tmp;
-    auto comp = [](QString::value_type it){return it.isDigit();};
+    static QString first;
+    static QString second;
+    static QStringList tmp;
+    static auto comp = [](QString::value_type it){return it.isDigit();};
+    
     for_each(list.begin(),list.end(),[&](const QStringList::value_type& item){
         second.clear();
         tmp = item.split("$$");

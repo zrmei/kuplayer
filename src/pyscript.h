@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/10
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -21,8 +21,8 @@ class QString;
 #ifndef PYTHON_DONOT_CATCH_EXCEPTION
 #define PYTHON_CATCH_EXCEPTION_BEGIN try{
 #define PYTHON_CATCH_EXCEPTION_END(return_value) }catch(boost::python::error_already_set){\
-printf("\n=================================================================\n\
-The [%d] line in file[%s] has error\n",__LINE__,__FILE__); PyErr_Print();\
+printf("\n=================================================================\n"\
+"The [%d] line function[%s] in file[%s] has error\n",__LINE__,__func__,__FILE__); PyErr_Print();\
 printf("\n=================================================================\n");\
 return return_value;}
 #else

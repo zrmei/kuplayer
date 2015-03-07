@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/14
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -24,6 +24,20 @@ struct NAMESPACE_KUPLAYER::DetailLabel::DetailLabel_Impl
     QString  url_;
     QVBoxLayout *verticalLayout;
     
+    DetailLabel_Impl()
+        : lblImg_(new Label)
+        , lblTitle_(new Label)
+        , verticalLayout(new QVBoxLayout)
+
+    {
+        verticalLayout->setSpacing(0);
+        lblImg_->setAlignment(Qt::AlignCenter);
+        lblTitle_->setMaximumHeight(36);
+        lblTitle_->setAlignment(Qt::AlignHCenter| Qt::AlignBottom);
+        
+        verticalLayout->addWidget(lblImg_);
+        verticalLayout->addWidget(lblTitle_);
+    }
     ~DetailLabel_Impl()
     {
         delete lblImg_;
@@ -64,19 +78,6 @@ DetailLabel::DetailLabel(QWidget *parent)
     , pImpl(new DetailLabel_Impl())
 {
     QHBoxLayout *horizontalLayout = new QHBoxLayout(this);
-    pImpl->verticalLayout = new QVBoxLayout;
-    pImpl->verticalLayout->setSpacing(0);
-
-    pImpl->lblImg_ = new Label;
-    pImpl->lblImg_->setAlignment(Qt::AlignCenter);
-
-    pImpl->verticalLayout->addWidget(pImpl->lblImg_);
-
-    pImpl->lblTitle_= new Label;
-    pImpl->lblTitle_->setMaximumHeight(36);
-    pImpl->lblTitle_->setAlignment(Qt::AlignHCenter| Qt::AlignBottom);
-
-    pImpl->verticalLayout->addWidget(pImpl->lblTitle_);
     horizontalLayout->addLayout(pImpl->verticalLayout);
 
     connect(pImpl->lblImg_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));

@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/15
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -12,8 +12,8 @@
 
 #include <QApplication>
 #include <QFile>
-#include <QtAV/AVPlayer.h>
-#include <QtAV/WidgetRenderer.h>
+#include <QtAV>
+#include <QtAVWidgets>
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 

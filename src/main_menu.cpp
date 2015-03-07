@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/24
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -24,7 +24,9 @@ struct NAMESPACE_KUPLAYER::MenuWidget::MenuWidget_Impl
     MenuWidget_Impl()
         : btn_close(new PushButton)
         , down_widget(new down_widget_)
-    {}
+    {
+        btn_close->setPicName(":/sysbutton/close");
+    }
     ~MenuWidget_Impl()
     {
         delete btn_close;
@@ -47,7 +49,6 @@ MenuWidget::MenuWidget(QWidget *parent)
     QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
     
-    pImpl->btn_close->setPicName(":/sysbutton/close");
     connect(pImpl->btn_close,SIGNAL(clicked()),this,SLOT(hide()));
     up_title_layout->addWidget(pImpl->btn_close,0,Qt::AlignTop);
     up_title_layout->addStretch();

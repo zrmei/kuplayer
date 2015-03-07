@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/13
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -26,6 +26,8 @@ public:
     mScrollArea(QWidget *parent=0);
 protected:
     virtual void wheelEvent(QWheelEvent *);
+private slots:
+    void valueChanged(int);
 };
 
 class AreaWidget : public QWidget

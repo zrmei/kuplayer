@@ -1,7 +1,7 @@
 /*********************************************
 *     MadeBy : MeiZhaorui(Mason)
 *     E-Mail : listener_mei@163.com
-*      Phone : (0)131-5898-7498
+*      Phone : (+86)131-5898-7498
 *       Date : 2014/10/13
 *       host : Ubuntu x86_64 3.13.0-37
  *********************************************/
@@ -43,8 +43,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #if defined(Q_OS_LINUX) && defined(USE_NOTIFY)
 #define SHOW_MSG(name)  notification_show(name,tr("kuplayer"),pImpl->ico_path);
 #elif defined(Q_OS_WIN32)
-#define SHOW_MSG(name)  trayicon->showMessage(tr("kuplayer")\
-    ,QString(name),QSystemTrayIcon::Information);
+#define SHOW_MSG(name)  trayicon->showMessage(tr("kuplayer"),QString(name),QSystemTrayIcon::Information);
 #endif // define Q_OS_LINUX
 
 #define Control_Widget (*(pImpl->player_widget))
@@ -53,23 +52,23 @@ struct NAMESPACE_KUPLAYER::MainWidget::MainWidget_Impl
 {
     Q_DISABLE_COPY(MainWidget_Impl)
     
-    PyScript   *pyinit;
-    PlayListWidget   *xuan_ji_widget;
-    SkinWidget   *skin_widget;
-    QSettings   *iniFile;
-    TitleWidget   *title_widget;
-    QStackedWidget   *stacked_widget;
+    PyScript        *pyinit;
+    PlayListWidget  *xuan_ji_widget;
+    SkinWidget      *skin_widget;
+    QSettings       *iniFile;
+    TitleWidget     *title_widget;
+    QStackedWidget  *stacked_widget;
     MPlayerWidget   *player_widget;
-    MPlayer   *player;
-    MenuWidget   *main_menu;
-    QSystemTrayIcon   *trayicon;
-    conf_info   *setting;
+    MPlayer         *player;
+    MenuWidget      *main_menu;
+    QSystemTrayIcon *trayicon;
+    conf_info       *setting;
     ControlWidget   *control_widget;
     
     const QStringList   name;
     const    QString&   ico_path;
-    QBitArray   can_update{5,true};
-    std::array<int,5>  pages{ {2,2,2,2,2} };     
+            QBitArray   can_update{5,true};
+    std::array<int,5>   pages{ {2,2,2,2,2} };     
     std::array<std::tuple<QString,QString,QString>,5> locate_class_time;
     
     MainWidget_Impl(PyScript* pyinit,const QString &ico_path)
@@ -122,7 +121,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     text_palette.setColor(QPalette::Window,QColor(240,240,240));
     text_palette.setColor(QPalette::Background,QColor(255,255,255,100));
     pImpl->stacked_widget->setPalette(text_palette);
-    for(CLASS i=0;i<5;++i){
+    for(CLASS i=0 ; i<5 ; ++i ){
         ListWidget *l = new ListWidget(i);
         connect(l,SIGNAL(clicked(CLASS,int,QString)),this,SLOT(on_url_changed(CLASS,int,QString)));
         connect(l,SIGNAL(emit_next_page(CLASS)),this,SLOT(on_nextPage_loaded(CLASS)));
@@ -205,7 +204,7 @@ void MainWidget::on_title_widget_closed()
         on_showMin_clicked();
         return;
     }
-    static auto button = QMessageBox::question(
+    auto button = QMessageBox::question(
                 this,
                 tr("Exit"),
                 msg_font_style(tr("Really want to quit?"))); 
@@ -248,18 +247,28 @@ void MainWidget::on_Fullscreen_changed()
     is_full_screen = !is_full_screen;
 }
 
+bool MainWidget::is_fullscreen_can_changed()
+{
+    return is_full_screen 
+            && ( !pImpl->setting->auto_play_next
+                 || pImpl->xuan_ji_widget->IsEnd) ;
+}
+
+bool MainWidget::is_can_auto_play_next()
+{
+    return pImpl->setting->auto_play_next
+                && (*(pImpl->player_widget))->isRuning ;
+}
+
 void MainWidget::on_play_finished()
 {
     pImpl->control_widget->on_time_changed(0);
     pImpl->control_widget->on_douration_changed(0);
     
-    if( pImpl->setting->auto_play_next
-            && Control_Widget->isRuning ) {
+    if( is_can_auto_play_next() ) {
         pImpl->xuan_ji_widget->on_playNext_clicked();
     }
-    if(is_full_screen 
-            && ( !pImpl->setting->auto_play_next
-                 || pImpl->xuan_ji_widget->IsEnd ) ) {
+    if( is_fullscreen_can_changed() ) {
         on_Fullscreen_changed();
     }
 }
@@ -350,13 +359,16 @@ void MainWidget::on_url_triggered(QString name,QString url)
 }
 void MainWidget::on_url_ji_triggered(QString name,QString url)
 {
+    static bool good{false};
+    
     if(name == url){
         if(is_full_screen){
             on_Fullscreen_changed();
         }
         return;
-    }else if(pImpl->pyinit->GetVideoUrls(
-                 url,pImpl->setting->default_video_format)){
+    }
+    good = pImpl->pyinit->GetVideoUrls(url,pImpl->setting->default_video_format);
+    if(good){
         pImpl->stacked_widget->setCurrentIndex(PLAYER);
         Control_Widget->isRuning = true;
         pImpl->player->mPlay();
@@ -420,7 +432,15 @@ void MainWidget::init_trayicon()
     auto*  exit_action = tray_menu->addAction(tr("Exit"));
     connect(set_action,SIGNAL(triggered()),pImpl->main_menu,SLOT(show()));
     connect(about_action,SIGNAL(triggered()),pImpl->main_menu,SLOT(show_about()));
-    connect(exit_action,SIGNAL(triggered()),this,SLOT(close()));
+    connect(exit_action,&QAction::triggered,[&](){
+        auto button = QMessageBox::question(
+                    this,
+                    tr("Exit"),
+                    msg_font_style(tr("Really want to quit?"))); 
+        if(button == QMessageBox::StandardButton::Yes) {
+            close();
+        }
+    });
 }
 
 void MainWidget::init_setting()
