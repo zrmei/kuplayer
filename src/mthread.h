@@ -24,26 +24,24 @@ class mThread : public QThread
     typedef unsigned int CLASS;
     typedef std::function<QStringList()> F;
 signals:
-    void load_finished(int,QStringList);
+    void load_finished(int, QStringList);
 public:
-    mThread(const int& page,const F& func,QObject *parent=0)
+    mThread(const int &page, const F &func, QObject *parent = 0)
         : QThread(parent)
         , page_(page)
         , func_(func)
     {}
 protected:
-    virtual void run()
-    {
-        emit load_finished(page_,func_());
+    virtual void run() {
+        emit load_finished(page_, func_());
         deleteLater();
     }
- 
+
 private:
-    ~mThread()
-    {
+    ~mThread() {
         qDebug() << "thread over" << page_;
     }
-    
+
     CLASS page_;
     F func_;
 

@@ -14,14 +14,13 @@ class QStackedWidget;
 
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
-struct conf_info
-{
+struct conf_info {
     QString default_video_format;
-       bool start_when_pc_on;
-       bool close_all;
-       bool min_or_close;
-       bool auto_play_next;
-       bool language;
+    bool start_when_pc_on;
+    bool close_all;
+    bool min_or_close;
+    bool auto_play_next;
+    bool language;
 };
 
 class MenuWidget : public ShadowWidget
@@ -46,11 +45,11 @@ class down_widget_ : public QWidget
 public:
     explicit down_widget_(QWidget *parent = 0);
     ~down_widget_();
-    QStackedWidget* operator->(){ return right_widget;}
+    QStackedWidget *operator->() { return right_widget;}
 public slots:
     void init_setting(conf_info *);
-    void be_selected(QString,QString);
-    void btn_selected(QString,QString);
+    void be_selected(QString, QString);
+    void btn_selected(QString, QString);
     void LanguageChanged(int);
 
 private:

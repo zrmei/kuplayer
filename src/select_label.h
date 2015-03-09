@@ -16,9 +16,9 @@ class SelectLabel final : public QLabel
 {
     Q_OBJECT
 signals:
-    void be_selected(QString,QString);
+    void be_selected(QString, QString);
 public:
-    SelectLabel(QString name,QString url="",QWidget *parent=0);
+    SelectLabel(QString name, QString url = "", QWidget *parent = 0);
     virtual ~SelectLabel();
     void set_selected(bool);
 protected:
@@ -27,8 +27,8 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *ev);
 private:
-    bool mouse_pressed{false};
-    bool be_select{false};
+    bool mouse_pressed {false};
+    bool be_select {false};
     QString url_;
 };
 

@@ -21,22 +21,22 @@ class QString;
 #ifndef PYTHON_DONOT_CATCH_EXCEPTION
 #define PYTHON_CATCH_EXCEPTION_BEGIN try{
 #define PYTHON_CATCH_EXCEPTION_END(return_value) }catch(boost::python::error_already_set){\
-printf("\n=================================================================\n"\
-"The [%d] line function[%s] in file[%s] has error\n",__LINE__,__func__,__FILE__); PyErr_Print();\
-printf("\n=================================================================\n");\
-return return_value;}
+        printf("\n=================================================================\n"\
+               "The [%d] line function[%s] in file[%s] has error\n",__LINE__,__func__,__FILE__); PyErr_Print();\
+        printf("\n=================================================================\n");\
+        return return_value;}
 #else
 #define PYTHON_CATCH_EXCEPTION_BEGIN
 #define PYTHON_CATCH_EXCEPTION_END
 #endif
-namespace Python{
+namespace Python
+{
 
 class pyinit final
 {
     Q_DISABLE_COPY(pyinit)
 public:
-    pyinit(int initsigs = 1)
-    {
+    pyinit(int initsigs = 1) {
         assert(initsigs == 0 || initsigs == 1);
         Py_InitializeEx(initsigs);
         PyEval_InitThreads();
@@ -44,20 +44,20 @@ public:
         PyRun_SimpleString("sys.path.append('../pyscript/')");
         _module = PyImport_ImportModule("py_kuplayer");
     }
-    ~pyinit(){ /*Py_Finalize(); */}
+    ~pyinit() { /*Py_Finalize(); */}
     inline bool isInitialized() { return Py_IsInitialized();}
     static void err_print() { PyErr_Print(); }
-    inline PyObject* module() { return _module; }
+    inline PyObject *module() { return _module; }
 private:
-    PyObject* _module;
+    PyObject *_module;
 };
 
 class PyThreadStateLock final
 {
     Q_DISABLE_COPY(PyThreadStateLock)
 public:
-    PyThreadStateLock(){ state = PyGILState_Ensure( ); }
-    ~PyThreadStateLock(){ PyGILState_Release( state ); }
+    PyThreadStateLock() { state = PyGILState_Ensure(); }
+    ~PyThreadStateLock() { PyGILState_Release(state); }
 private:
     PyGILState_STATE state;
 };
@@ -68,27 +68,27 @@ KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class PyScript final
 {
     Q_DISABLE_COPY(PyScript)
-    
+
     using dict = boost::python::dict;
     using list = boost::python::list;
 public:
     PyScript();
     ~PyScript();
     bool getShowList();
-    bool GetVideoUrls(QString keyurl,QString format);
-    
-    QStringList connect_img_url(QString,QString);
-    QStringList getUrlByName(CLASS,QString,QString,QString);
-    QStringList gotoNextPage(QString name,int index);
+    bool GetVideoUrls(QString keyurl, QString format);
+
+    QStringList connect_img_url(QString, QString);
+    QStringList getUrlByName(CLASS, QString, QString, QString);
+    QStringList gotoNextPage(QString name, int index);
     QStringList getplayUrl(QString);
-    QStringList getAll(CLASS,QString);
+    QStringList getAll(CLASS, QString);
 
     QStringList show_list;
 private:
     Python::pyinit *init_;
     PyObject *module;
     QStringList return_list;
-    QMap<QString,QString> next_page_;
+    QMap<QString, QString> next_page_;
 
     std::mutex mu;
 };

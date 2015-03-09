@@ -19,21 +19,19 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QPixmap>
 #include <QDir>
 
-struct NAMESPACE_KUPLAYER::SkinWidget::SkinWidget_Impl
-{
-    QList<DetailLabel*> *label_store;
+struct NAMESPACE_KUPLAYER::SkinWidget::SkinWidget_Impl {
+    QList<DetailLabel *> *label_store;
     QScrollArea *view;
     QGridLayout *scroll_layout;
     PushButton *btn_close;
-    
+
     SkinWidget_Impl()
-        : label_store(new QList<DetailLabel*>)
+        : label_store(new QList<DetailLabel *>)
         , view(new QScrollArea)
         , scroll_layout(new QGridLayout)
         , btn_close(new PushButton)
     {}
-    ~SkinWidget_Impl()
-    {
+    ~SkinWidget_Impl() {
         delete_list(label_store);
         delete view;
         delete scroll_layout;
@@ -45,39 +43,30 @@ SkinWidget::SkinWidget(QWidget *parent)
     : ShadowWidget(parent)
     , pImpl(new SkinWidget_Impl())
 {
-    setAttribute(Qt::WA_QuitOnClose,false);
+    setAttribute(Qt::WA_QuitOnClose, false);
     setWindowModality(Qt::ApplicationModal);
-
     QHBoxLayout *up_title_layout = new QHBoxLayout;
     set_no_margin(up_title_layout);
-
     pImpl->btn_close->setPicName(":/sysbutton/close");
-    connect(pImpl->btn_close,SIGNAL(clicked()),this,SLOT(hide()));
-    up_title_layout->addWidget(pImpl->btn_close,0,Qt::AlignTop);
+    connect(pImpl->btn_close, SIGNAL(clicked()), this, SLOT(hide()));
+    up_title_layout->addWidget(pImpl->btn_close, 0, Qt::AlignTop);
     up_title_layout->addStretch();
-
     QVBoxLayout *main_layout = new QVBoxLayout(this);
-
     pImpl->view->setWidgetResizable(true);
-    pImpl->view->setContentsMargins(0,0,0,0);
-
+    pImpl->view->setContentsMargins(0, 0, 0, 0);
     QWidget *viewWidgetContents = new QWidget(pImpl->view);
-    
-    pImpl->scroll_layout->setContentsMargins(0,0,0,0);
+    pImpl->scroll_layout->setContentsMargins(0, 0, 0, 0);
     pImpl->scroll_layout->setSpacing(2);
     viewWidgetContents->setLayout(pImpl->scroll_layout);
     pImpl->view->setWidget(viewWidgetContents);
-
     main_layout->addLayout(up_title_layout);
     main_layout->addWidget(pImpl->view);
     main_layout->setSpacing(0);
-    main_layout->setContentsMargins(5,5,5,5);
-    
+    main_layout->setContentsMargins(5, 5, 5, 5);
     QPalette text_palette = palette();
-    text_palette.setColor(QPalette::Background,QColor(255,255,255,50));
+    text_palette.setColor(QPalette::Background, QColor(255, 255, 255, 50));
     setPalette(text_palette);
-
-    setMinimumSize(800,430);
+    setMinimumSize(800, 430);
     find_file(PIC_PATH);
 }
 
@@ -85,22 +74,23 @@ void SkinWidget::find_file(QString path)
 {
     QDir picdir(path);
     QStringList filters;
-    filters << "*.bmp" << "*.jpg" << "*.png"<<"*.gif";
+    filters << "*.bmp" << "*.jpg" << "*.png" << "*.gif";
     picdir.setNameFilters(filters);
-    if (!picdir.exists())
-        return;
 
-    picdir.setFilter(QDir::Dirs|QDir::Files);
+    if (!picdir.exists()) {
+        return;
+    }
+
+    picdir.setFilter(QDir::Dirs | QDir::Files);
     picdir.setSorting(QDir::DirsFirst);
     QFileInfoList list = picdir.entryInfoList();
-
-    for_each(list.begin(),list.end(),
-             [&](QFileInfoList::value_type fileInfo){
-        if(pic_list.count(fileInfo.fileName())
-                || (fileInfo.fileName()==".")
-                || (fileInfo.fileName()=="..") ){
+    for_each(list.begin(), list.end(),
+    [&](QFileInfoList::value_type fileInfo) {
+        if (pic_list.count(fileInfo.fileName())
+            || (fileInfo.fileName() == ".")
+            || (fileInfo.fileName() == "..")) {
             return;
-        }else{
+        } else {
             pic_list.append(fileInfo.fileName());
             init_skin(fileInfo.fileName());
         }
@@ -109,15 +99,16 @@ void SkinWidget::find_file(QString path)
 
 void SkinWidget::init_skin(QString name)
 {
-    static int row{0},col{0};
+    static int row {0}, col {0};
     QString pic = PIC_PATH + name;
-    auto *l = new DetailLabel(QPixmap(pic).scaled(QSize(170,96)),QString(),name);
-    connect(l,SIGNAL(url_triggered(QString,QString)),
-            this,SLOT(on_url_triggered(QString,QString)));
+    auto *l = new DetailLabel(QPixmap(pic).scaled(QSize(170, 96)), QString(), name);
+    connect(l, SIGNAL(url_triggered(QString, QString)),
+            this, SLOT(on_url_triggered(QString, QString)));
     pImpl->label_store->append(l);
-    pImpl->scroll_layout->addWidget(l,row,col);
+    pImpl->scroll_layout->addWidget(l, row, col);
     ++col;
-    if(col == 4){
+
+    if (col == 4) {
         ++row;
         col = 0;
     }
@@ -131,12 +122,12 @@ void SkinWidget::on_url_triggered(QString, QString index)
 
 void SkinWidget::on_showed()
 {
-    if(isHidden()){
+    if (isHidden()) {
         QPoint pos_ = QCursor::pos();
-        move(pos_.x()+30,pos_.y()+120);
+        move(pos_.x() + 30, pos_.y() + 120);
         show();
         find_file(PIC_PATH);
-    }else{
+    } else {
         hide();
     }
 }

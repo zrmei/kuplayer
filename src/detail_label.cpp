@@ -17,13 +17,12 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QDebug>
 
 
-struct NAMESPACE_KUPLAYER::DetailLabel::DetailLabel_Impl
-{
+struct NAMESPACE_KUPLAYER::DetailLabel::DetailLabel_Impl {
     Label *lblImg_;
     Label *lblTitle_;
     QString  url_;
     QVBoxLayout *verticalLayout;
-    
+
     DetailLabel_Impl()
         : lblImg_(new Label)
         , lblTitle_(new Label)
@@ -33,13 +32,11 @@ struct NAMESPACE_KUPLAYER::DetailLabel::DetailLabel_Impl
         verticalLayout->setSpacing(0);
         lblImg_->setAlignment(Qt::AlignCenter);
         lblTitle_->setMaximumHeight(36);
-        lblTitle_->setAlignment(Qt::AlignHCenter| Qt::AlignBottom);
-        
+        lblTitle_->setAlignment(Qt::AlignHCenter | Qt::AlignBottom);
         verticalLayout->addWidget(lblImg_);
         verticalLayout->addWidget(lblTitle_);
     }
-    ~DetailLabel_Impl()
-    {
+    ~DetailLabel_Impl() {
         delete lblImg_;
         delete lblTitle_;
         delete verticalLayout;
@@ -56,8 +53,10 @@ Label::Label(QWidget *parent)
 void Label::mouseDoubleClickEvent(QMouseEvent *ev)
 {
     QLabel::mouseDoubleClickEvent(ev);
-    if (ev->button() == Qt::LeftButton)
+
+    if (ev->button() == Qt::LeftButton) {
         emit clicked();
+    }
 }
 void Label::enterEvent(QEvent *ev)
 {
@@ -79,9 +78,8 @@ DetailLabel::DetailLabel(QWidget *parent)
 {
     QHBoxLayout *horizontalLayout = new QHBoxLayout(this);
     horizontalLayout->addLayout(pImpl->verticalLayout);
-
-    connect(pImpl->lblImg_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));
-    connect(pImpl->lblTitle_,SIGNAL(clicked()),this,SLOT(this_url_triggered()));
+    connect(pImpl->lblImg_, SIGNAL(clicked()), this, SLOT(this_url_triggered()));
+    connect(pImpl->lblTitle_, SIGNAL(clicked()), this, SLOT(this_url_triggered()));
 }
 
 DetailLabel::DetailLabel(QPixmap img, const QString &title, const QString &url, QWidget *parent)
@@ -94,17 +92,17 @@ DetailLabel::DetailLabel(QPixmap img, const QString &title, const QString &url, 
 
 DetailLabel::~DetailLabel()
 {
-//    qDebug() <<"DetailLabel("<<lblTitle_->text()<<") deleted";
+    //    qDebug() <<"DetailLabel("<<lblTitle_->text()<<") deleted";
 }
 void DetailLabel::this_url_triggered()
 {
-    emit url_triggered(pImpl->lblTitle_->text(),pImpl->url_);
+    emit url_triggered(pImpl->lblTitle_->text(), pImpl->url_);
 }
 
 void DetailLabel::set_Pixmap(QPixmap &&img)
 {
     pImpl->lblImg_->setPixmap(img);
-    setFixedSize(img.width()+20,img.height()+36);
+    setFixedSize(img.width() + 20, img.height() + 36);
 }
 
 void DetailLabel::set_Title(const QString &title)

@@ -15,19 +15,19 @@ KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class PushButton;
 class SelectLabel;
 
-typedef QList<std::tuple<QString,QString,QString>> list_map;
+typedef QList<std::tuple<QString, QString, QString>> list_map;
 
 class PlayListWidget : public ShadowWidget
 {
     Q_OBJECT
 signals:
-    void click(QString,QString);
+    void click(QString, QString);
 public:
     explicit PlayListWidget(QWidget *parent = 0);
     ~PlayListWidget();
     void sort(const QStringList &list);
-    QList<QAction*> init_action();
-    bool IsEnd{false};
+    QList<QAction *> init_action();
+    bool IsEnd {false};
 public slots:
     void on_list_changed(int, const QStringList &);
     void on_xuan_ji_show(QString, QString);
@@ -38,8 +38,8 @@ protected:
 private slots:
     void this_click(QString name, QString url);
 private:
-    int col{1};
-    int currentIndex{0};
+    int col {1};
+    int currentIndex {0};
     list_map  play_list;
     struct PlayListWidget_Impl;
     std::shared_ptr<PlayListWidget_Impl> pImpl;

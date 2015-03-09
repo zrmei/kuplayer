@@ -30,7 +30,7 @@ protected:
 
 private:
     //枚举按钮的几种状态
-    enum ButtonStatus{NORMAL, ENTER, PRESS, NOSTATUS};
+    enum ButtonStatus {NORMAL, ENTER, PRESS, NOSTATUS};
     ButtonStatus status;
     QString pic_name;
 
@@ -38,6 +38,6 @@ private:
     int btn_height; //按钮高度
     bool is_left_pressed; //按钮左键是否按下
 };
-    
+
 KUPLAYER_NAMESPACE_END // namespace end
 #endif // PUSH_BUTTON_H

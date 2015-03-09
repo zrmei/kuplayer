@@ -16,18 +16,18 @@ class QSettings;
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class PyScript;
 
-class MainWidget        
+class MainWidget
 #ifdef CAN_RESIZE
- : public ResizedWidget
+    : public ResizedWidget
 #else
- : public ShadowWidget
+    : public ShadowWidget
 #endif
 {
     Q_OBJECT
 signals:
     void send_status(int);
 public:
-    MainWidget(PyScript *pyinit, const QString&, QWidget *parent = 0);
+    MainWidget(PyScript *pyinit, const QString &, QWidget *parent = 0);
     virtual ~MainWidget();
     void setIniFile(QSettings *);
 public slots:
@@ -48,11 +48,11 @@ private slots:
 private:
     bool is_fullscreen_can_changed();
     bool is_can_auto_play_next();
-    
+
     void init_setting();
     void to_inifile();
     void init_trayicon();
-    
+
 private:
     struct MainWidget_Impl;
     std::shared_ptr<MainWidget_Impl> pImpl;

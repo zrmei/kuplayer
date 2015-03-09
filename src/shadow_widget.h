@@ -31,15 +31,15 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *);
     virtual void mouseReleaseEvent(QMouseEvent *);
     virtual void paintEvent(QPaintEvent *);
-    bool is_full_screen{false};
+    bool is_full_screen {false};
     inline QString get_skin()const;
 private:
     void drawWindowShadow(QPainter &painter);
 private:
     QString skin;
-    bool is_max{false};
+    bool is_max {false};
     QRect original_rect;
-    bool isLeftPressDown{false};
+    bool isLeftPressDown {false};
     QPoint m_ptPressGlobal;
     std::shared_ptr<QDesktopWidget> desk;
     std::shared_ptr<QList<QPixmap>> pixmaps;
@@ -66,12 +66,12 @@ private:
     void setCursorStyle(const QPoint &cursorGlobalPoint);
     void setDrayMove(QPoint gloPoint);
 private:
-    bool m_isLeftPressDown{false};
-    QPoint m_ptPressGlobal{0,0};
-    Direction dir{M_NONE};
+    bool m_isLeftPressDown {false};
+    QPoint m_ptPressGlobal {0, 0};
+    Direction dir {M_NONE};
     const Direction
-    TOP = 0x01,BOTTOM = 0x02,LEFT = 0x04,RIGHT = 0x08,LEFTTOP = 0x05,
-    LEFTBOTTOM = 0x06,RIGHTBOTTOM = 0x0A,RIGHTTOP = 0x09,M_NONE = 0x00;
+    TOP = 0x01, BOTTOM = 0x02, LEFT = 0x04, RIGHT = 0x08, LEFTTOP = 0x05,
+    LEFTBOTTOM = 0x06, RIGHTBOTTOM = 0x0A, RIGHTTOP = 0x09, M_NONE = 0x00;
 
 };
 #endif// CAN_RESIZE

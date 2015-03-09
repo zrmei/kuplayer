@@ -29,67 +29,59 @@ class LoadImage final : public QObject
     Q_OBJECT
 
 signals:
-    void loadImageFinished(CLASS/*视频种类*/,QPixmap/*图片*/,
-                           QString/*图片名称*/,QString/*所指url*/);
+    void loadImageFinished(CLASS/*视频种类*/, QPixmap/*图片*/,
+                           QString/*图片名称*/, QString/*所指url*/);
 public:
-    LoadImage(CLASS index,QObject *parent = 0)
+    LoadImage(CLASS index, QObject *parent = 0)
         : index(index)
         , currentIndex(0)
         , list_(new QList<QStringList>)
         , request(new QNetworkRequest)
-        , manager(new QNetworkAccessManager)
-    {
+        , manager(new QNetworkAccessManager) {
         Q_UNUSED(parent);
-        connect(manager,SIGNAL(finished(QNetworkReply*)),
-                this,SLOT(replyFinished(QNetworkReply*)));
+        connect(manager, SIGNAL(finished(QNetworkReply *)),
+                this, SLOT(replyFinished(QNetworkReply *)));
     }
 
-    void setFileName(const QStringList& listname,QString separator="$$")
-    {
-        for(int i=0; i<listname.size(); ++i){
+    void setFileName(const QStringList &listname, QString separator = "$$") {
+        for (int i = 0; i < listname.size(); ++i) {
             list_->append(listname[i].split(separator));
         }
     }
-    inline void start()
-    {
-        if(currentIndex == list_->length()){
-            emit loadImageFinished(index,QPixmap(),"","");
+    inline void start() {
+        if (currentIndex == list_->length()) {
+            emit loadImageFinished(index, QPixmap(), "", "");
             currentIndex = 0;
             deleteLater();
             return;
         } else {
-
             request->setUrl(QUrl(list_->at(currentIndex)[KUPLAYER_PIC_URL]));
             manager->get(*request);
         }
     }
 
 private slots:
-    void replyFinished(QNetworkReply *reply)
-    {
-
-
+    void replyFinished(QNetworkReply *reply) {
         QPixmap pix;
         pix.loadFromData(reply->readAll());
         emit loadImageFinished(
-                    index,
-                    std::move(pix)
-                    ,list_->at(currentIndex)[KUPLAYER_RES_NAME]
-                    ,list_->at(currentIndex)[KUPLAYER_ADDR_URL]
-                    );
+            index,
+            std::move(pix)
+            , list_->at(currentIndex)[KUPLAYER_RES_NAME]
+            , list_->at(currentIndex)[KUPLAYER_ADDR_URL]
+        );
         ++currentIndex;
         start();
     }
-    
+
 private:
-    virtual ~LoadImage()
-    {
-        qDebug() << "delete loadimage:"<<index;
+    virtual ~LoadImage() {
+        qDebug() << "delete loadimage:" << index;
         delete request;
         delete manager;
         delete list_;
     }
-    
+
     int index;
     int currentIndex;
     QList<QStringList>    *list_;
@@ -100,6 +92,6 @@ private:
 #undef KUPLAYER_RES_NAME
 #undef KUPLAYER_RES_PIC_URL
 #undef KUPLAYER_RES_ADDR_URL
-    
+
 KUPLAYER_NAMESPACE_END //namespace end
 #endif // LOADIMAGE_H

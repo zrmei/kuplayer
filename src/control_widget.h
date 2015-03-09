@@ -23,15 +23,15 @@ signals:
     void stop_clicked();
     void play_pause_clicked(bool);
     void foreward_clicked();
-    void xuan_ji_clcked(QString,QString);
+    void xuan_ji_clcked(QString, QString);
     void vol_up_clicked();
     void vol_down_clicked();
     void vol_mute_clicked();
 public:
     explicit ControlWidget(QWidget *parent = 0);
     virtual ~ControlWidget();
-    QList<QAction*> reg_actions();
-    bool isRuning{false};
+    QList<QAction *> reg_actions();
+    bool isRuning {false};
 public slots:
     void on_play_pause_triggered(bool);
     void on_time_changed(qint64);

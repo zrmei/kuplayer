@@ -22,7 +22,7 @@ class TypeLabel final : public QLabel
 {
     Q_OBJECT
 public:
-    explicit TypeLabel(QString title,QWidget *paren=0);
+    explicit TypeLabel(QString title, QWidget *paren = 0);
     virtual ~TypeLabel();
     void setMousePress(bool mouse_press);
 signals:
@@ -37,8 +37,8 @@ private:
     void painterInfo(int, int, int);
 
 private:
-    bool mouse_hover{false};
-    bool mouse_pressed{false};
+    bool mouse_hover {false};
+    bool mouse_pressed {false};
 };
 
 class TitleWidget : public QWidget
@@ -59,9 +59,10 @@ public slots:
     void on_turepage_triggered(int);
     void on_turepage_triggered(QString);
 private:
-    QStringList down_title
-    {   tr("TVShow"),tr("Movies"),tr("Variety"),
-        tr("Music"),tr("Cartoon"),tr("Player")  };
+    QStringList down_title {
+        tr("TVShow"), tr("Movies"), tr("Variety"),
+        tr("Music"), tr("Cartoon"), tr("Player")
+    };
     struct TitleWidget_Impl;
     std::shared_ptr<TitleWidget_Impl> pImpl;
 

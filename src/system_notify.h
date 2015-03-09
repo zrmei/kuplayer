@@ -18,25 +18,30 @@
 #define signals public //恢复关键字定义,幸好是个宏定义
 
 
-bool notification_show(const QString& title,const QString& body,const QString& icon)
+bool notification_show(const QString &title, const QString &body, const QString &icon)
 {
     GError *error = nullptr;
     NotifyNotification *notify_p = nullptr;
-    if (title == NULL)
-        return false;
-    if(notify_is_initted() == FALSE || notify_init("kuplayer") == FALSE){
-            return false;
-    }
-    notify_p = notify_notification_new(
-                title.toStdString().c_str(),
-                body.toStdString().c_str(),
-                icon.toStdString().c_str());
-    notify_notification_set_timeout(notify_p, 8000);
-    notify_notification_set_urgency(notify_p,NOTIFY_URGENCY_NORMAL);
 
-    if (notify_notification_show(notify_p, &error) == FALSE){
+    if (title == NULL) {
         return false;
     }
+
+    if (notify_is_initted() == FALSE || notify_init("kuplayer") == FALSE) {
+        return false;
+    }
+
+    notify_p = notify_notification_new(
+                   title.toStdString().c_str(),
+                   body.toStdString().c_str(),
+                   icon.toStdString().c_str());
+    notify_notification_set_timeout(notify_p, 8000);
+    notify_notification_set_urgency(notify_p, NOTIFY_URGENCY_NORMAL);
+
+    if (notify_notification_show(notify_p, &error) == FALSE) {
+        return false;
+    }
+
     notify_uninit();
     return true;
 }

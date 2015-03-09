@@ -30,9 +30,9 @@ using std::function;
 #define USR_NAMESPACE_KUPLAYER using namespace mei::kuplayer;
 #define NAMESPACE_KUPLAYER mei::kuplayer
 #else
-#define KUPLAYER_NAMESPACE_BEGIN 
-#define KUPLAYER_NAMESPACE_END 
-#define USR_NAMESPACE_KUPLAYER 
+#define KUPLAYER_NAMESPACE_BEGIN
+#define KUPLAYER_NAMESPACE_END
+#define USR_NAMESPACE_KUPLAYER
 #define NAMESPACE_KUPLAYER
 #endif
 
@@ -45,18 +45,18 @@ const int WINDOW_HEIGHT = 657;
 
 const QString SHOW_PAGE = "http://www.youku.com/show_page/";
 
-#if defined(__GNUC__) && !defined(__clang__) 
-    #if (__GNUC__ < 4) || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
-        #error Please use gcc4.6.0 or higher to support some new feature.
-    #endif
+#if defined(__GNUC__) && !defined(__clang__)
+#if (__GNUC__ < 4) || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
+#error Please use gcc4.6.0 or higher to support some new feature.
+#endif
 #elif defined(__clang__)
-    #if (__clang_major__ < 3) || (__clang_major__ == 3 && __clang_minor__ < 4)
-        #error Please use clang3.5.0 or higher to support some new feature.
-    #endif
+#if (__clang_major__ < 3) || (__clang_major__ == 3 && __clang_minor__ < 4)
+#error Please use clang3.5.0 or higher to support some new feature.
+#endif
 #endif
 
 typedef unsigned int CLASS;
-const CLASS TV = 0,MOVIE = 1,ZONGYI = 2,MUSIC = 3,COMIC = 4,PLAYER = 5,NONE = 6;
+const CLASS TV = 0, MOVIE = 1, ZONGYI = 2, MUSIC = 3, COMIC = 4, PLAYER = 5, NONE = 6;
 
 KUPLAYER_NAMESPACE_END // namespace end
 #endif

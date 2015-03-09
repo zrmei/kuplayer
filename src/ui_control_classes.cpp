@@ -26,7 +26,7 @@ play_set_widget::play_set_widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::play_set_widget)
 {
-    ui->setupUi(this);    
+    ui->setupUi(this);
 }
 play_set_widget::~play_set_widget()
 {
@@ -34,7 +34,7 @@ play_set_widget::~play_set_widget()
 }
 /*******************************************************************************************/
 
-about_widget::about_widget( QWidget *parent) :
+about_widget::about_widget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::about_widget)
 {

@@ -41,7 +41,7 @@ private slots:
     void mStarted();
 private:
     QStringList play_list;
-    QFile list_file{qApp->applicationDirPath()+"/.playlist"};
+    QFile list_file {qApp->applicationDirPath() + "/.playlist"};
 };
 
 class RendererWidget final : public QtAV::WidgetRenderer
@@ -50,7 +50,7 @@ class RendererWidget final : public QtAV::WidgetRenderer
 signals:
     void double_clicked();
 public:
-    RendererWidget(QWidget *parent=0)
+    RendererWidget(QWidget *parent = 0)
         : QtAV::WidgetRenderer(parent)
     {}
 protected:
@@ -65,14 +65,14 @@ class MPlayerWidget : public QWidget
 signals:
     void escape_clicked();
 public:
-    MPlayerWidget(QWidget *parent=0);
+    MPlayerWidget(QWidget *parent = 0);
     ~MPlayerWidget();
-    ControlWidget* operator->() const
+    ControlWidget *operator->() const
     {return control_widget;}
 protected:
     virtual void keyPressEvent(QKeyEvent *);
 public:
-     ControlWidget *control_widget;
+    ControlWidget *control_widget;
     RendererWidget *renderer;
 };
 

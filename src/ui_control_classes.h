@@ -25,7 +25,7 @@ class base_set_weidget : public QWidget
 public:
     explicit base_set_weidget(QWidget *parent = 0);
     ~base_set_weidget();
-    
+
     Ui::base_set_weidget *ui;
 };
 
@@ -53,7 +53,7 @@ public:
     ~about_widget();
     Ui::about_widget *ui;
 private slots:
-    void on_label_linkActivated(const QString &link);   
+    void on_label_linkActivated(const QString &link);
 };
 
 KUPLAYER_NAMESPACE_END // namespace end

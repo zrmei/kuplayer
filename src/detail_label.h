@@ -20,7 +20,7 @@ class Label : public QLabel
 signals:
     void clicked();
 public:
-    explicit Label(QWidget * parent = 0);
+    explicit Label(QWidget *parent = 0);
 protected:
     virtual void mouseDoubleClickEvent(QMouseEvent *);
     virtual void enterEvent(QEvent *);
@@ -31,15 +31,15 @@ class DetailLabel : public QWidget
 {
     Q_OBJECT
 signals:
-    void url_triggered(QString/*name*/,QString/*url*/);
+    void url_triggered(QString/*name*/, QString/*url*/);
 public:
     DetailLabel(QWidget *parent = 0);
-    DetailLabel(QPixmap, const QString&, const QString&, QWidget *parent = 0);
+    DetailLabel(QPixmap, const QString &, const QString &, QWidget *parent = 0);
     virtual ~DetailLabel();
 
     inline void set_Pixmap(QPixmap &&img);
-    inline void set_Url(const QString& url);
-    inline void set_Title(const QString& title);
+    inline void set_Url(const QString &url);
+    inline void set_Title(const QString &title);
     QString text() const;
 
 private slots:

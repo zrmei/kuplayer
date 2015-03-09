@@ -19,19 +19,19 @@ signals:
     void skin_change_clicked(QString);
 public:
     explicit SkinWidget(QWidget *parent = 0);
-    ~SkinWidget(){}
+    ~SkinWidget() {}
 
 public slots:
     void on_showed();
-    void on_url_triggered(QString,QString);
+    void on_url_triggered(QString, QString);
 
 private:
     void init_skin(QString name);
     void find_file(QString path);
-    
+
     QStringList pic_list;
-    QString PIC_PATH{qApp->applicationDirPath()+"/../sources/img/skin/"};
-    
+    QString PIC_PATH {qApp->applicationDirPath() + "/../sources/img/skin/"};
+
     struct SkinWidget_Impl;
     std::shared_ptr<SkinWidget_Impl> pImpl;
 };
