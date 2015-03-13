@@ -144,12 +144,14 @@ void PlayListWidget::on_list_changed(int, const QStringList &list)
         ++ccol;
     };
     func_add_label(*(play_list.begin()));
-    pImpl->label_store->at(0)->adjustSize();
+    static SelectLabel *item = nullptr;
+    item = pImpl->label_store->at(0);
+    item->adjustSize();
 
-    if (pImpl->label_store->at(0)->width() > 80) {
+    if (item->width() > 80) {
         col = 0;
     } else {
-        col = 360 / (pImpl->label_store->at(0)->width() + 15) - 1;
+        col = 360 / (item->width() + 15) - 1;
     }
 
     for_each(play_list.begin() + 1, play_list.end(), func_add_label);
