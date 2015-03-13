@@ -33,9 +33,9 @@ protected:
     virtual void paintEvent(QPaintEvent *);
     bool is_full_screen {false};
     inline QString get_skin()const;
-private:
+
     void drawWindowShadow(QPainter &painter);
-private:
+
     QString skin;
     bool is_max {false};
     QRect original_rect;

@@ -31,12 +31,14 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QTranslator>
 #include <QSettings>
 #include <QMenu>
+#include <QDesktopWidget>
 
 #define SHOW_WINDOW_NORMAL \
     this->showNormal();\
     pImpl->stacked_widget->setContentsMargins(3,0,3,3);\
     this->layout()->setContentsMargins(5,5,5,5);
 #define SHOW_WINDOW_MAXSIZE \
+    setWindowState( Qt::WindowFullScreen );\
     pImpl->stacked_widget->setContentsMargins(0,0,0,0);\
     this->layout()->setContentsMargins(0,0,0,0);
 
@@ -151,8 +153,10 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     if (pImpl->pyinit->show_list.size()) {
         for (int class_index = 0; class_index < 5; ++class_index) {
             auto *tmp = new mThread(class_index,
-                                    bind(&PyScript::connect_img_url, pImpl->pyinit,
-                                         pImpl->pyinit->show_list[i], pImpl->name[i]));
+                                    bind(&PyScript::connect_img_url,
+                                         pImpl->pyinit,
+                                         pImpl->pyinit->show_list[class_index],
+                                         pImpl->name[class_index]));
             connect(tmp, SIGNAL(load_finished(int, QStringList)),
                     this, SLOT(on_loadImage_started(int, QStringList)));
             tmp->start();
@@ -247,6 +251,7 @@ void MainWidget::on_Fullscreen_changed()
         pImpl->title_widget->hide();
         Control_Widget->hide();
         SHOW_WINDOW_MAXSIZE
+
     }
 
     is_full_screen = !is_full_screen;
@@ -442,6 +447,7 @@ void MainWidget::init_trayicon()
     pImpl->trayicon->setToolTip("kuplayer");
     connect(pImpl->trayicon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(on_trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
+
     QMenu *tray_menu = new QMenu;
     pImpl->trayicon->setContextMenu(tray_menu);
     auto   *set_action = tray_menu->addAction(tr("Settings"));

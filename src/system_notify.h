@@ -21,28 +21,37 @@
 bool notification_show(const QString &title, const QString &body, const QString &icon)
 {
     GError *error = nullptr;
-    NotifyNotification *notify_p = nullptr;
+    static NotifyNotification *notify_p = nullptr;
 
     if (title == NULL) {
+        qDebug() << __LINE__ << ": init notify fail ! title is null " ;
         return false;
     }
 
-    if (notify_is_initted() == FALSE || notify_init("kuplayer") == FALSE) {
-        return false;
-    }
+    if (notify_is_initted() == FALSE) {
+        if (notify_init("kuplayer") == FALSE) {
+            qDebug() << __LINE__ << ": kuplayer notify init fail ! " ;
+            return false;
+        }
 
-    notify_p = notify_notification_new(
-                   title.toStdString().c_str(),
-                   body.toStdString().c_str(),
-                   icon.toStdString().c_str());
-    notify_notification_set_timeout(notify_p, 8000);
-    notify_notification_set_urgency(notify_p, NOTIFY_URGENCY_NORMAL);
+        notify_p = notify_notification_new(
+                       title.toStdString().c_str(),
+                       body.toStdString().c_str(),
+                       icon.toStdString().c_str());
+        notify_notification_set_timeout(notify_p, 8000);
+        notify_notification_set_urgency(notify_p, NOTIFY_URGENCY_NORMAL);
+    } else {
+        notify_notification_update(notify_p,
+                                   title.toStdString().c_str(),
+                                   body.toStdString().c_str(),
+                                   icon.toStdString().c_str());
+    }
 
     if (notify_notification_show(notify_p, &error) == FALSE) {
+        qDebug() << "show notify fail !" ;
         return false;
     }
 
-    notify_uninit();
     return true;
 }
 #endif //Q_OS_LINUX
