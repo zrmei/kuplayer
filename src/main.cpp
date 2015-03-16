@@ -12,7 +12,7 @@
 #include "ui_control_classes.h"
 USR_NAMESPACE_KUPLAYER
 
-#include <resources/libs/QtSingleApplication>
+
 #include <QDesktopWidget>
 #include <QSplashScreen>
 #include <QMessageBox>
@@ -20,6 +20,8 @@ USR_NAMESPACE_KUPLAYER
 #include <QTextCodec>
 #include <QDir>
 #include <QSettings>
+
+#include <QtSingleApplication>
 
 
 int main(int argc, char *argv[])

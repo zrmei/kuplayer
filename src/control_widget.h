@@ -39,7 +39,7 @@ public slots:
 private:
     void init_actions();
     struct ControlWidget_Impl;
-    std::shared_ptr<ControlWidget_Impl> pImpl;
+    std::unique_ptr<ControlWidget_Impl> pImpl;
 };
 
 KUPLAYER_NAMESPACE_END //namespace end

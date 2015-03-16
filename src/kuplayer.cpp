@@ -404,8 +404,8 @@ void MainWidget::on_url_ji_triggered(QString name, QString url)
 void MainWidget::on_url_changed(CLASS classes, int type, QString name)
 {
 #define LOCATE  0
-#define  CLASS  1
-#define   TIME  2
+#define _CLASS  1
+#define __TIME  2
 
     if (name == "全部") {
         name = "";
@@ -416,20 +416,20 @@ void MainWidget::on_url_changed(CLASS classes, int type, QString name)
             std::get<LOCATE>(pImpl->locate_class_time[classes]) = name;
             break;
 
-        case CLASS:
-            std::get< CLASS>(pImpl->locate_class_time[classes]) = name;
+        case _CLASS:
+            std::get<_CLASS>(pImpl->locate_class_time[classes]) = name;
             break;
 
-        case TIME:
-            std::get<  TIME>(pImpl->locate_class_time[classes]) = name;
+        case __TIME:
+            std::get<__TIME>(pImpl->locate_class_time[classes]) = name;
             break;
     }
 
     auto url = pImpl->pyinit->getUrlByName(
                    classes,
                    std::get<LOCATE>(pImpl->locate_class_time[classes]),
-                   std::get< CLASS>(pImpl->locate_class_time[classes]),
-                   std::get<  TIME>(pImpl->locate_class_time[classes])
+                   std::get<_CLASS>(pImpl->locate_class_time[classes]),
+                   std::get<__TIME>(pImpl->locate_class_time[classes])
                )[0];
     auto get_img_url = bind(&PyScript::connect_img_url,
                             pImpl->pyinit,
@@ -441,7 +441,9 @@ void MainWidget::on_url_changed(CLASS classes, int type, QString name)
             this, SLOT(on_loadImage_started(int, QStringList)));
     tmp->start();
     qobject_cast<ListWidget *>(pImpl->stacked_widget->widget(classes))->reset();
-#undef CLASS
+#undef LOCATE
+#undef _CLASS
+#undef __TIME
 }
 
 void MainWidget::init_trayicon()

@@ -219,8 +219,8 @@ QString TitleWidget::get_text() const
 }
 void TitleWidget::on_turepage_triggered(int index)
 {
-    for_each(pImpl->labels_store->begin(), pImpl->labels_store->end(),
-    [](QList<TypeLabel *>::value_type label) {
+    for_each(pImpl->labels_store->cbegin(), pImpl->labels_store->cend(),
+    [](const QList<TypeLabel *>::value_type & label) {
         label->setMousePress(false);
     });
     pImpl->labels_store->at(index)->setMousePress(true);
@@ -231,9 +231,7 @@ void TitleWidget::on_turepage_triggered(QString name)
 {
     unsigned int index = down_title.indexOf(name);
 
-    if (index > PLAYER) {
-        index = PLAYER;
-    }
+    if (index > PLAYER) { index = PLAYER; }
 
     on_turepage_triggered(index);
 }

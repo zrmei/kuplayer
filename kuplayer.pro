@@ -15,7 +15,7 @@ QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS_DEBUG += -O0 -g3 
 QMAKE_CXXFLAGS_RELEASE +=  -DQT_NO_DEBUG_OUTPUT -DAV_NO_DEBUG_OUTPUT
 
-DEFINES += NO_WIFI_TEST
+#DEFINES += NO_WIFI_TEST
 
 QMAKE_LFLAGS += -Wl,-rpath,"../lib"
 QMAKE_LFLAGS_RELEASE += -Wl,-s -Wl,-O2
@@ -78,11 +78,15 @@ TRANSLATIONS += kuplayer_zn.ts
 
 
 unix: {
-    INCLUDEPATH += /usr/include/python2.7/
-    LIBS += $$PWD/resources/libs/libboost_python.a
-    LIBS += $$PWD/resources/libs/libboost_system.a
-
-    LIBS += -lpython2.7 
+    INCLUDEPATH += /usr/include/python2.7/ \
+                    $$PWD/resources/libs
+                    
+    LIBS += -L$$PWD/resources/libs \
+            $$PWD/resources/libs/libboost_python.a \
+            $$PWD/resources/libs/libboost_system.a \
+            -lQtSingleApplication   \
+            -loptions_64 \
+            -lpython2.7 
 
     exists( /usr/include/libnotify/notify.h ) {
         INCLUDEPATH += /usr/include/glib-2.0/
@@ -94,13 +98,6 @@ unix: {
     } else {
         message("Can not find libnotify.so. You can: sudo apt-get install libnotify4-dev")
     }
-    
-    exists( /lib64 ){
-        LIBS += -L$$PWD/resources/libs  -loptions_64 -lQtSingleApplication
-    } else {
-        LIBS += -L$$PWD/resources/libs  -loptions_32
-    }
-    
 }
 
 

@@ -64,7 +64,7 @@ private:
         tr("Music"), tr("Cartoon"), tr("Player")
     };
     struct TitleWidget_Impl;
-    std::shared_ptr<TitleWidget_Impl> pImpl;
+    std::unique_ptr<TitleWidget_Impl> pImpl;
 
 };
 

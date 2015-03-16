@@ -42,7 +42,7 @@ private:
     int currentIndex {0};
     list_map  play_list;
     struct PlayListWidget_Impl;
-    std::shared_ptr<PlayListWidget_Impl> pImpl;
+    std::unique_ptr<PlayListWidget_Impl> pImpl;
 };
 
 KUPLAYER_NAMESPACE_END // namespace end

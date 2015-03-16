@@ -44,7 +44,7 @@ public:
 
 private:
     struct AreaWidget_Impl;
-    std::shared_ptr<AreaWidget_Impl> pImpl;
+    std::unique_ptr<AreaWidget_Impl> pImpl;
 };
 
 class ListWidget final : public QWidget
@@ -76,7 +76,7 @@ private:
     AreaWidget *down_list_widget;
     CLASS type_;
     struct ListWidget_Impl;
-    std::shared_ptr<ListWidget_Impl> pImpl;
+    std::unique_ptr<ListWidget_Impl> pImpl;
 };
 
 inline void ListWidget::addDetailLabel(DetailLabel *label)

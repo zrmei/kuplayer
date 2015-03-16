@@ -47,7 +47,7 @@ private slots:
 
 private:
     struct DetailLabel_Impl;
-    std::shared_ptr<DetailLabel_Impl> pImpl;
+    std::unique_ptr<DetailLabel_Impl> pImpl;
 };
 
 

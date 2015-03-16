@@ -19,7 +19,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QPixmap>
 #include <QDir>
 
-struct NAMESPACE_KUPLAYER::SkinWidget::SkinWidget_Impl {
+struct SkinWidget::SkinWidget_Impl {
     QList<DetailLabel *> *label_store;
     QScrollArea *view;
     QGridLayout *scroll_layout;

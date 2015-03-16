@@ -35,7 +35,7 @@ public slots:
     void init_setting(conf_info *);
 private:
     struct MenuWidget_Impl;
-    std::shared_ptr<MenuWidget_Impl> pImpl;
+    std::unique_ptr<MenuWidget_Impl> pImpl;
 };
 
 /**********************************************/
@@ -55,7 +55,7 @@ public slots:
 private:
     QStackedWidget *right_widget;
     struct down_widget_Impl;
-    std::shared_ptr<down_widget_Impl> pImpl;
+    std::unique_ptr<down_widget_Impl> pImpl;
 };
 
 KUPLAYER_NAMESPACE_END //namespace end

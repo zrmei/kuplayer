@@ -60,7 +60,7 @@ private:
 
 private:
     struct MainWidget_Impl;
-    std::shared_ptr<MainWidget_Impl> pImpl;
+    std::unique_ptr<MainWidget_Impl> pImpl;
 };
 
 KUPLAYER_NAMESPACE_END //namespace end
