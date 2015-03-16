@@ -86,6 +86,7 @@ struct NAMESPACE_KUPLAYER::MainWidget::MainWidget_Impl {
         , name({"tv", "movice", "zy", "music", "comic"})
     , ico_path(ico_path) {
         control_widget = player_widget->control_widget;
+        player->setRenderer(player_widget->renderer);
     }
     ~MainWidget_Impl() {
         delete setting;
@@ -114,14 +115,13 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     QVBoxLayout *main_layout = new QVBoxLayout(this);
     main_layout->addWidget(pImpl->title_widget);
     setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    pImpl->player->setRenderer(pImpl->player_widget->renderer);
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Window, QColor(240, 240, 240));
     text_palette.setColor(QPalette::Background, QColor(255, 255, 255, 100));
     pImpl->stacked_widget->setPalette(text_palette);
 
-    for (CLASS i = 0 ; i < 5 ; ++i) {
-        ListWidget *l = new ListWidget(i);
+    for (auto && class_index : {TV, MOVIE, ZONGYI, MUSIC, COMIC}) {
+        ListWidget *l = new ListWidget(class_index);
         connect(l, SIGNAL(clicked(CLASS, int, QString)), this, SLOT(on_url_changed(CLASS, int, QString)));
         connect(l, SIGNAL(emit_next_page(CLASS)), this, SLOT(on_nextPage_loaded(CLASS)));
         pImpl->stacked_widget->addWidget(l);
@@ -149,9 +149,20 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     connect(pImpl->title_widget, SIGNAL(min_clicked()), this, SLOT(on_showMin_clicked()));
     connect(pImpl->title_widget, SIGNAL(ture_page(int)), pImpl->stacked_widget, SLOT(setCurrentIndex(int)));
     connect(pImpl->title_widget, SIGNAL(menu_clicked()), pImpl->main_menu, SLOT(on_showed()));
+#ifndef NO_WIFI_TEST
+    init_module();
+#endif
+    addActions(Control_Widget->reg_actions());
+    addActions(pImpl->xuan_ji_widget->init_action());
+    SHOW_MSG(tr("kuplayer: free for youku!"));
+    SHOW_WINDOW_NORMAL
+    pImpl->title_widget->on_turepage_triggered(PLAYER);
+}
 
+void MainWidget::init_module()
+{
     if (pImpl->pyinit->show_list.size()) {
-        for (int class_index = 0; class_index < 5; ++class_index) {
+        for (auto && class_index : {TV, MOVIE, ZONGYI, MUSIC, COMIC}) {
             auto *tmp = new mThread(class_index,
                                     bind(&PyScript::connect_img_url,
                                          pImpl->pyinit,
@@ -162,12 +173,6 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
             tmp->start();
         }
     }
-
-    addActions(Control_Widget->reg_actions());
-    addActions(pImpl->xuan_ji_widget->init_action());
-    SHOW_MSG(tr("kuplayer: free for youku!"));
-    SHOW_WINDOW_NORMAL
-    pImpl->title_widget->on_turepage_triggered(PLAYER);
 }
 
 MainWidget::~MainWidget()
@@ -251,7 +256,6 @@ void MainWidget::on_Fullscreen_changed()
         pImpl->title_widget->hide();
         Control_Widget->hide();
         SHOW_WINDOW_MAXSIZE
-
     }
 
     is_full_screen = !is_full_screen;
@@ -447,7 +451,6 @@ void MainWidget::init_trayicon()
     pImpl->trayicon->setToolTip("kuplayer");
     connect(pImpl->trayicon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
             this, SLOT(on_trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
-
     QMenu *tray_menu = new QMenu;
     pImpl->trayicon->setContextMenu(tray_menu);
     auto   *set_action = tray_menu->addAction(tr("Settings"));

@@ -26,10 +26,12 @@ class MainWidget
     Q_OBJECT
 signals:
     void send_status(int);
+
 public:
     MainWidget(PyScript *pyinit, const QString &, QWidget *parent = 0);
     virtual ~MainWidget();
     void setIniFile(QSettings *);
+    
 public slots:
     void on_showMin_clicked();
     void on_skin_changed(QString);
@@ -42,10 +44,13 @@ public slots:
     void on_url_triggered(QString, QString);
     void on_url_ji_triggered(QString, QString);
     void on_url_changed(CLASS, int, QString);
+
 private slots:
     void on_trayIcon_clicked(QSystemTrayIcon::ActivationReason);
     void on_title_widget_closed();
+
 private:
+    void init_module();
     bool is_fullscreen_can_changed();
     bool is_can_auto_play_next();
 

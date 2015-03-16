@@ -190,14 +190,14 @@ void ListWidget::init_locate(QHBoxLayout *locate_layout)
             break;
     }
 
-    for_each(pImpl->locate_name.begin(), pImpl->locate_name.end(),
-    [&](QStringList::value_type locate_name) {
-        SelectLabel *label = new SelectLabel(locate_name, "");
-        label->setFixedSize(60, 25);
-        pImpl->locate_labels->append(label);
-        locate_layout->addWidget(label, 0, Qt::AlignTop);
-        connect(label, SIGNAL(be_selected(QString, QString)),
-                this, SLOT(on_locate_clicked(QString, QString)));
+    for_each(pImpl->locate_name.cbegin(), pImpl->locate_name.cend(),
+        [&](const QStringList::value_type & locate_name) {
+            SelectLabel *label = new SelectLabel(locate_name, "");
+            label->setFixedSize(60, 25);
+            pImpl->locate_labels->append(label);
+            locate_layout->addWidget(label, 0, Qt::AlignTop);
+            connect(label, SIGNAL(be_selected(QString, QString)),
+                    this, SLOT(on_locate_clicked(QString, QString)));
     });
 
     if (pImpl->locate_labels->size()) {
@@ -242,14 +242,14 @@ void ListWidget::init_type(QHBoxLayout *type_layout)
             break;
     }
 
-    for_each(pImpl->type_name.begin(), pImpl->type_name.end(),
-    [&](QStringList::value_type type_name) {
-        SelectLabel *label = new SelectLabel(type_name, "");
-        label->setFixedSize(60, 25);
-        pImpl->type_labels->append(label);
-        type_layout->addWidget(label);
-        connect(label, SIGNAL(be_selected(QString, QString)),
-                this, SLOT(on_type_clicked(QString, QString)));
+    for_each(pImpl->type_name.cbegin(), pImpl->type_name.cend(),
+        [&](const QStringList::value_type & type_name) {
+            SelectLabel *label = new SelectLabel(type_name, "");
+            label->setFixedSize(60, 25);
+            pImpl->type_labels->append(label);
+            type_layout->addWidget(label);
+            connect(label, SIGNAL(be_selected(QString, QString)),
+                    this, SLOT(on_type_clicked(QString, QString)));
     });
 
     if (pImpl->type_labels->size()) {
@@ -263,13 +263,13 @@ void ListWidget::init_type(QHBoxLayout *type_layout)
 void ListWidget::init_time(QHBoxLayout *time_layout)
 {
     for_each(pImpl->time_name.cbegin(), pImpl->time_name.cend(),
-    [&](const QStringList::value_type & time_name) {
-        SelectLabel *label = new SelectLabel(time_name, "");
-        label->setFixedSize(60, 25);
-        pImpl->time_labels->append(label);
-        time_layout->addWidget(label, 0, Qt::AlignBottom);
-        connect(label, SIGNAL(be_selected(QString, QString)),
-                this, SLOT(on_time_clicked(QString, QString)));
+        [&](const QStringList::value_type & time_name) {
+            SelectLabel *label = new SelectLabel(time_name, "");
+            label->setFixedSize(60, 25);
+            pImpl->time_labels->append(label);
+            time_layout->addWidget(label, 0, Qt::AlignBottom);
+            connect(label, SIGNAL(be_selected(QString, QString)),
+                    this, SLOT(on_time_clicked(QString, QString)));
     });
 
     if (pImpl->time_labels->size()) {
@@ -280,38 +280,45 @@ void ListWidget::init_time(QHBoxLayout *time_layout)
     time_layout->setContentsMargins(5, 0, 0, 0);
 }
 
+inline void emit_clicked(CLASS one, int two, QString three)
+{
+#ifndef NO_WIFI_TEST
+    emit clicked(one, two, three);
+#endif
+}
+
 void ListWidget::on_locate_clicked(QString locate, QString)
 {
     int index = pImpl->locate_name.indexOf(locate);
 
-    for (int i = 0; i < pImpl->locate_name.size(); ++i) {
-        pImpl->locate_labels->at(i)->set_selected(false);
+    for (SelectLabel * item : * (pImpl->locate_labels)) {
+        item->set_selected(false);
     }
 
     pImpl->locate_labels->at(index)->set_selected(true);
-    emit clicked(type_, 0, locate);
+    emit_clicked(type_, 0, locate);
 }
 
 void ListWidget::on_type_clicked(QString type, QString)
 {
     int index = pImpl->type_name.indexOf(type);
 
-    for (int i = 0; i < pImpl->type_name.size(); ++i) {
-        pImpl->type_labels->at(i)->set_selected(false);
+    for (SelectLabel * item : * (pImpl->type_labels)) {
+        item->set_selected(false);
     }
 
     pImpl->type_labels->at(index)->set_selected(true);
-    emit clicked(type_, 1, type);
+    emit_clicked(type_, 1, type);
 }
 
 void ListWidget::on_time_clicked(QString time, QString)
 {
     int index = pImpl->time_name.indexOf(time);
 
-    for (int i = 0; i < pImpl->time_name.size(); ++i) {
-        pImpl->time_labels->at(i)->set_selected(false);
+    for (SelectLabel * item : * (pImpl->time_labels)) {
+        item->set_selected(false);
     }
 
     pImpl->time_labels->at(index)->set_selected(true);
-    emit clicked(type_, 2, time);
+    emit_clicked(type_, 2, time);
 }

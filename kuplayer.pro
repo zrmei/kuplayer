@@ -13,9 +13,9 @@ PRECOMPILED_HEADER = src/common.h
 
 QMAKE_CXXFLAGS += -std=c++11 
 QMAKE_CXXFLAGS_DEBUG += -O0 -g3 
-QMAKE_CXXFLAGS_RELEASE +=  -Werror -DQT_NO_DEBUG_OUTPUT
+QMAKE_CXXFLAGS_RELEASE +=  -DQT_NO_DEBUG_OUTPUT -DAV_NO_DEBUG_OUTPUT
 
-DEFINES +=  AV_NO_DEBUG_OUTPUT
+DEFINES += NO_WIFI_TEST
 
 QMAKE_LFLAGS += -Wl,-rpath,"../lib"
 QMAKE_LFLAGS_RELEASE += -Wl,-s -Wl,-O2
@@ -96,10 +96,11 @@ unix: {
     }
     
     exists( /lib64 ){
-        LIBS += -L$$PWD/resources/libs  -loptions_64
+        LIBS += -L$$PWD/resources/libs  -loptions_64 -lQtSingleApplication
     } else {
         LIBS += -L$$PWD/resources/libs  -loptions_32
     }
+    
 }
 
 
