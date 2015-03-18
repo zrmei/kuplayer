@@ -1,10 +1,22 @@
-/*********************************************
-*     MadeBy : MeiZhaorui(Mason)
-*     E-Mail : listener_mei@163.com
-*      Phone : (+86)131-5898-7498
-*       Date : 2014/10/14
-*       host : Ubuntu x86_64 3.13.0-37
- *********************************************/
+/*
+   Copyright (C) 2015 MeiZhaorui(Mason) <listener_mei@163.com>
+   
+   The File is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+   
+   The File is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with the Library; if not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
+
 #ifndef LOADIMAGE_H
 #define LOADIMAGE_H
 
@@ -29,26 +41,27 @@ class LoadImage final : public QObject
     Q_OBJECT
 
 signals:
-    void loadImageFinished(CLASS/*视频种类*/, QPixmap/*图片*/,
-                           QString/*图片名称*/, QString/*所指url*/);
+    void loadImageFinished(CLASS/*视频种类*/, QPixmap/*图片*/, QString/*图片名称*/, QString/*所指url*/);
 public:
     LoadImage(CLASS index, QObject *parent = 0)
         : index(index)
         , currentIndex(0)
         , list_(new QList<QStringList>)
         , request(new QNetworkRequest)
-        , manager(new QNetworkAccessManager) {
+        , manager(new QNetworkAccessManager)
+    {
         Q_UNUSED(parent);
-        connect(manager, SIGNAL(finished(QNetworkReply *)),
-                this, SLOT(replyFinished(QNetworkReply *)));
+        connect(manager, SIGNAL(finished(QNetworkReply *)),this, SLOT(replyFinished(QNetworkReply *)));
     }
 
-    void setFileName(const QStringList &listname, QString separator = "$$") {
-        for (int i = 0; i < listname.size(); ++i) {
-            list_->append(listname[i].split(separator));
+    void setFileName(const QStringList &listname, QString const& separator = "$$") 
+    {
+        for (const QStringList::value_type & item : listname) {
+            list_->append(item.split(separator));
         }
     }
-    inline void start() {
+    void start() 
+    {
         if (currentIndex == list_->length()) {
             emit loadImageFinished(index, QPixmap(), "", "");
             currentIndex = 0;
@@ -61,7 +74,8 @@ public:
     }
 
 private slots:
-    void replyFinished(QNetworkReply *reply) {
+    void replyFinished(QNetworkReply *reply) 
+    {
         QPixmap pix;
         pix.loadFromData(reply->readAll());
         emit loadImageFinished(
@@ -75,7 +89,8 @@ private slots:
     }
 
 private:
-    virtual ~LoadImage() {
+    virtual ~LoadImage() 
+    {
         qDebug() << "delete loadimage:" << index;
         delete request;
         delete manager;

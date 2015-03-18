@@ -36,7 +36,9 @@ SOURCES += src/control_widget.cpp \
     src/skin_widget.cpp \
     src/title_widget.cpp \
     src/ui_control_classes.cpp \
-    src/control_label.cpp
+    src/control_label.cpp \
+    src/common.cpp \
+    src/conf_info.cpp
 
 HEADERS  += src/common.h \
     src/control_widget.h \
@@ -58,7 +60,8 @@ HEADERS  += src/common.h \
     src/title_widget.h \
     src/ui_control_classes.h \
     src/gloal_func.h \
-    src/control_label.h
+    src/control_label.h \
+    src/conf_info.h
 
 RESOURCES += \
     src/kuplayer.qrc

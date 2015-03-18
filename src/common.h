@@ -1,12 +1,44 @@
-/*********************************************
-*     MadeBy : MeiZhaorui(Mason)
-*     E-Mail : listener_mei@163.com
-*      Phone : (+86)131-5898-7498
-*       Date : 2014/10/13
-*       host : Ubuntu x86_64 3.13.0-37
- *********************************************/
+/*
+   Copyright (C) 2015 MeiZhaorui(Mason) <listener_mei@163.com>
+   
+   The File is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+   
+   The File is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with the Library; if not, see
+   <http://www.gnu.org/licenses/>.
+*/
 #ifndef COMMON_H
 #define COMMON_H
+
+#if defined(__GNUC__) && !defined(__clang__)
+    #if (__GNUC__ < 4) || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
+        #error Please use gcc4.6.0 or higher to support some new feature.
+    #endif
+#elif defined(__clang__)
+    #if (__clang_major__ < 3) || (__clang_major__ == 3 && __clang_minor__ < 4)
+        #error Please use clang3.5.0 or higher to support some new feature.
+    #endif
+#endif
+
+#ifndef NO_KUPLAYER_NAMESPACE
+    #define KUPLAYER_NAMESPACE_BEGIN namespace mei { namespace kuplayer {
+    #define KUPLAYER_NAMESPACE_END } }
+    #define USR_NAMESPACE_KUPLAYER using namespace mei::kuplayer;
+    #define NAMESPACE_KUPLAYER mei::kuplayer
+#else
+    #define KUPLAYER_NAMESPACE_BEGIN
+    #define KUPLAYER_NAMESPACE_END
+    #define USR_NAMESPACE_KUPLAYER
+    #define NAMESPACE_KUPLAYER
+#endif
 
 #include <QObject>
 #include <QDebug>
@@ -24,39 +56,19 @@ using std::find_if_not;
 using std::bind;
 using std::function;
 
-#ifndef NO_KUPLAYER_NAMESPACE
-#define KUPLAYER_NAMESPACE_BEGIN namespace mei { namespace kuplayer {
-#define KUPLAYER_NAMESPACE_END } }
-#define USR_NAMESPACE_KUPLAYER using namespace mei::kuplayer;
-#define NAMESPACE_KUPLAYER mei::kuplayer
-#else
-#define KUPLAYER_NAMESPACE_BEGIN
-#define KUPLAYER_NAMESPACE_END
-#define USR_NAMESPACE_KUPLAYER
-#define NAMESPACE_KUPLAYER
-#endif
-
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
-const int SHADOW_WIDTH = 5;
-const int SHADOW_HEIGHT = 5;
-const int WINDOW_WIDTH = 1002;
-const int WINDOW_HEIGHT = 657;
 
-const QString SHOW_PAGE = "http://www.youku.com/show_page/";
+extern int SHADOW_WIDTH;
+extern int SHADOW_HEIGHT;
+extern int WINDOW_WIDTH;
+extern int WINDOW_HEIGHT;
 
-#if defined(__GNUC__) && !defined(__clang__)
-#if (__GNUC__ < 4) || (__GNUC__ == 4 && __GNUC_MINOR__ < 6)
-#error Please use gcc4.6.0 or higher to support some new feature.
-#endif
-#elif defined(__clang__)
-#if (__clang_major__ < 3) || (__clang_major__ == 3 && __clang_minor__ < 4)
-#error Please use clang3.5.0 or higher to support some new feature.
-#endif
-#endif
+extern QString SHOW_PAGE;
 
-typedef unsigned int CLASS;
-const CLASS TV = 0, MOVIE = 1, ZONGYI = 2, MUSIC = 3, COMIC = 4, PLAYER = 5, NONE = 6;
+typedef unsigned short CLASS;
+const CLASS TV{0}, MOVIE{1}, ZONGYI{2}, MUSIC{3}, COMIC{4}, PLAYER{5}, NONE{5};
+
 
 KUPLAYER_NAMESPACE_END // namespace end
 #endif

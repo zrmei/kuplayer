@@ -1,10 +1,21 @@
-/*********************************************
-*     MadeBy : MeiZhaorui(Mason)
-*     E-Mail : listener_mei@163.com
-*      Phone : (+86)131-5898-7498
-*       Date : 2014/10/13
-*       host : Ubuntu x86_64 3.13.0-37
- *********************************************/
+/*
+   Copyright (C) 2015 MeiZhaorui(Mason) <listener_mei@163.com>
+   
+   The File is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+   
+   The File is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with the Library; if not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
 #ifndef LIST_WIDGET_H
 #define LIST_WIDGET_H
 #include "common.h"
@@ -15,15 +26,13 @@ KUPLAYER_NAMESPACE_BEGIN //namespace begin
 class DetailLabel;
 class SelectLabel;
 
-
-
 class mScrollArea : public QScrollArea
 {
     Q_OBJECT
 signals:
-    void load_next_page_();
+    void load_next_page();
 public:
-    mScrollArea(QWidget *parent = 0);
+    explicit mScrollArea(QWidget *parent = 0);
 protected:
     virtual void wheelEvent(QWheelEvent *);
 private slots:
@@ -57,7 +66,7 @@ signals:
     void emit_next_page(CLASS);
 
 public:
-    explicit ListWidget(CLASS type, QWidget *parent = 0);
+    ListWidget(CLASS type, QWidget *parent = 0);
     ~ListWidget();
     void addDetailLabel(DetailLabel *label);
     void reset();

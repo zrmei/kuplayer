@@ -1,11 +1,23 @@
-/*********************************************
-*     MadeBy : MeiZhaorui(Mason)
-*     E-Mail : listener_mei@163.com
-*      Phone : (+86)131-5898-7498
-*       Date : 2014/10/13
-*       host : Ubuntu x86_64 3.13.0-37
- *********************************************/
+/*
+   Copyright (C) 2015 MeiZhaorui(Mason) <listener_mei@163.com>
+   
+   The File is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+   
+   The File is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with the Library; if not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
 #include "common.h"
+#include "conf_info.h"
 #include "gloal_func.h"
 #include "kuplayer.h"
 #include "title_widget.h"
@@ -378,19 +390,16 @@ void MainWidget::on_url_triggered(QString name, QString url)
 }
 void MainWidget::on_url_ji_triggered(QString name, QString url)
 {
-    static bool good {false};
+    static bool video_url_is_good {false};
 
     if (name == url) {
-        if (is_full_screen) {
-            on_Fullscreen_changed();
-        }
-
+        if (is_full_screen) on_Fullscreen_changed();
         return;
     }
 
-    good = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
+    video_url_is_good = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
 
-    if (good) {
+    if (video_url_is_good) {
         pImpl->stacked_widget->setCurrentIndex(PLAYER);
         Control_Widget->isRuning = true;
         pImpl->player->mPlay();
@@ -413,16 +422,13 @@ void MainWidget::on_url_changed(CLASS classes, int type, QString name)
 
     switch (type) {
         case LOCATE: //locate
-            std::get<LOCATE>(pImpl->locate_class_time[classes]) = name;
-            break;
+            std::get<LOCATE>(pImpl->locate_class_time[classes]) = name; break;
 
         case _CLASS:
-            std::get<_CLASS>(pImpl->locate_class_time[classes]) = name;
-            break;
+            std::get<_CLASS>(pImpl->locate_class_time[classes]) = name; break;
 
         case __TIME:
-            std::get<__TIME>(pImpl->locate_class_time[classes]) = name;
-            break;
+            std::get<__TIME>(pImpl->locate_class_time[classes]) = name; break;
     }
 
     auto url = pImpl->pyinit->getUrlByName(
@@ -437,10 +443,10 @@ void MainWidget::on_url_changed(CLASS classes, int type, QString name)
                             pImpl->name[classes]
                            );
     auto *tmp = new mThread(classes, get_img_url);
-    connect(tmp, SIGNAL(load_finished(int, QStringList)),
-            this, SLOT(on_loadImage_started(int, QStringList)));
+    connect(tmp, SIGNAL(load_finished(int, QStringList)), this, SLOT(on_loadImage_started(int, QStringList)));
     tmp->start();
     qobject_cast<ListWidget *>(pImpl->stacked_widget->widget(classes))->reset();
+    
 #undef LOCATE
 #undef _CLASS
 #undef __TIME
@@ -451,13 +457,15 @@ void MainWidget::init_trayicon()
     pImpl->trayicon->setIcon(QIcon(":logo/logo_icon"));
     pImpl->trayicon->show();
     pImpl->trayicon->setToolTip("kuplayer");
-    connect(pImpl->trayicon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(on_trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
+    connect(pImpl->trayicon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this, SLOT(on_trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
+    
     QMenu *tray_menu = new QMenu;
     pImpl->trayicon->setContextMenu(tray_menu);
+    
     auto   *set_action = tray_menu->addAction(tr("Settings"));
     auto *about_action = tray_menu->addAction(tr("About"));
     auto  *exit_action = tray_menu->addAction(tr("Exit"));
+    
     connect(set_action, SIGNAL(triggered()), pImpl->main_menu, SLOT(show()));
     connect(about_action, SIGNAL(triggered()), pImpl->main_menu, SLOT(show_about()));
     connect(exit_action, &QAction::triggered, [&]() {
@@ -474,12 +482,7 @@ void MainWidget::init_trayicon()
 
 void MainWidget::init_setting()
 {
-    pImpl->setting->default_video_format = pImpl->iniFile->value("setting/format", "normal").toString();
-    pImpl->setting->close_all = pImpl->iniFile->value("setting/close_all", true).toBool();
-    pImpl->setting->auto_play_next = pImpl->iniFile->value("setting/auto_play_next", false).toBool();
-    pImpl->setting->min_or_close = pImpl->iniFile->value("setting/min_or_close", false).toBool();
-    pImpl->setting->start_when_pc_on = pImpl->iniFile->value("setting/start_when_pc_on", false).toBool();
-    pImpl->setting->language = pImpl->iniFile->value("setting/language", true).toBool();
+   conf_info_to_file(pImpl->setting,pImpl->iniFile);
     pImpl->skin_widget->on_url_triggered("", pImpl->iniFile->value("setting/skin", ":/kin/0").toString());
     pImpl->main_menu->init_setting(pImpl->setting);
 }
@@ -487,10 +490,5 @@ void MainWidget::init_setting()
 void MainWidget::to_inifile()
 {
     pImpl->iniFile->setValue("setting/skin", get_skin());
-    pImpl->iniFile->setValue("setting/format", pImpl->setting->default_video_format);
-    pImpl->iniFile->setValue("setting/close_all", pImpl->setting->close_all);
-    pImpl->iniFile->setValue("setting/auto_play_next", pImpl->setting->auto_play_next);
-    pImpl->iniFile->setValue("setting/min_or_close", pImpl->setting->min_or_close);
-    pImpl->iniFile->setValue("setting/start_when_pc_on", pImpl->setting->start_when_pc_on);
-    pImpl->iniFile->setValue("setting/language", pImpl->setting->language);
+    conf_info_from_file(pImpl->setting,pImpl->iniFile);
 }

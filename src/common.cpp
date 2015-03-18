@@ -16,32 +16,12 @@
    <http://www.gnu.org/licenses/>.
 */
 
-#ifndef SELECT_LABEL_H
-#define SELECT_LABEL_H
 #include "common.h"
-#include <QLabel>
+USR_NAMESPACE_KUPLAYER
 
-KUPLAYER_NAMESPACE_BEGIN //namespace begin
+int NAMESPACE_KUPLAYER::SHADOW_WIDTH = 5;
+int NAMESPACE_KUPLAYER::SHADOW_HEIGHT = 5;
+int NAMESPACE_KUPLAYER::WINDOW_WIDTH = 1002;
+int NAMESPACE_KUPLAYER::WINDOW_HEIGHT = 657;
 
-class SelectLabel final : public QLabel
-{
-    Q_OBJECT
-signals:
-    void be_selected(QString, QString);
-public:
-    SelectLabel(QString name, QString url = "", QWidget *parent = 0);
-    virtual ~SelectLabel();
-    void set_selected(bool);
-protected:
-    virtual void enterEvent(QEvent *);
-    virtual void leaveEvent(QEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
-    virtual void paintEvent(QPaintEvent *ev);
-private:
-    bool mouse_pressed {false};
-    bool be_select {false};
-    QString url_;
-};
-
-KUPLAYER_NAMESPACE_END // namespace end
-#endif // SELECT_LABEL_H
+QString NAMESPACE_KUPLAYER::SHOW_PAGE = "http://www.youku.com/show_page/";

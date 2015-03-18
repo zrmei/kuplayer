@@ -1,10 +1,21 @@
-/*********************************************
-*     MadeBy : MeiZhaorui(Mason)
-*     E-Mail : listener_mei@163.com
-*      Phone : (+86)131-5898-7498
-*       Date : 2014/10/13
-*       host : Ubuntu x86_64 3.13.0-37
- *********************************************/
+/*
+   Copyright (C) 2015 MeiZhaorui(Mason) <listener_mei@163.com>
+   
+   The File is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Lesser General Public
+   License as published by the Free Software Foundation; either
+   version 2.1 of the License, or (at your option) any later version.
+   
+   The File is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Lesser General Public License for more details.
+   
+   You should have received a copy of the GNU Lesser General Public
+   License along with the Library; if not, see
+   <http://www.gnu.org/licenses/>.
+*/
+
 #include "common.h"
 #include "control_widget.h"
 #include "control_label.h"
@@ -18,7 +29,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QTime>
 
 
-struct NAMESPACE_KUPLAYER::ControlWidget::ControlWidget_Impl {
+struct ControlWidget::ControlWidget_Impl {
     Q_DISABLE_COPY(ControlWidget_Impl)
 
     QAction *backward_key;
@@ -76,6 +87,7 @@ struct NAMESPACE_KUPLAYER::ControlWidget::ControlWidget_Impl {
 
 ControlWidget::ControlWidget(QWidget *parent)
     : QWidget(parent)
+    , isRuning(false)
     , pImpl(new ControlWidget_Impl())
 {
     connect(pImpl->backward_, SIGNAL(clicked()), this, SIGNAL(backward_clicked()));
