@@ -42,7 +42,6 @@ private:
 
     QStringList pic_list;
     QString PIC_PATH;
-
     struct SkinWidget_Impl;
     std::shared_ptr<SkinWidget_Impl> pImpl;
 };

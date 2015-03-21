@@ -29,6 +29,7 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+
 struct NAMESPACE_KUPLAYER::MenuWidget::MenuWidget_Impl {
     PushButton *btn_close;
     down_widget_ *down_widget;

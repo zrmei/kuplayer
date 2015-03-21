@@ -21,6 +21,7 @@
 #include "mplayer_widget.h"
 
 #include <QKeyEvent>
+#include <QTimer>
 
 USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 

@@ -101,6 +101,13 @@ QList<QAction *> PlayListWidget::init_action()
     return { {pImpl->play_next_key, pImpl->play_prev_key} };
 }
 
+#include <algorithm>
+using std::find_if;
+using std::find_if_not;
+using std::sort;
+#include <functional>
+using std::for_each;
+
 void PlayListWidget::sort(const QStringList &list)
 {
     static QString first;
@@ -223,7 +230,7 @@ void PlayListWidget::on_playPrev_clicked()
                std::get<2>(play_list[currentIndex]));
 }
 
-
+#include <QTimer>
 void PlayListWidget::leaveEvent(QEvent *)
 {
     QTimer::singleShot(800, this, SLOT(hide()));

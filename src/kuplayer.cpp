@@ -1,16 +1,16 @@
 /*
    Copyright (C) 2015 MeiZhaorui(Mason) <listener_mei@163.com>
-   
+
    The File is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-   
+
    The File is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with the Library; if not, see
    <http://www.gnu.org/licenses/>.
@@ -116,23 +116,21 @@ struct NAMESPACE_KUPLAYER::MainWidget::MainWidget_Impl {
 };
 
 MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *parent)
-#ifdef CAN_RESIZE
-    : ResizedWidget(parent)
-#else
     : ShadowWidget(parent)
-#endif
     , pImpl(new MainWidget_Impl(pyinit, ico_path))
 {
     setAttribute(Qt::WA_QuitOnClose, true);
+
     QVBoxLayout *main_layout = new QVBoxLayout(this);
     main_layout->addWidget(pImpl->title_widget);
     setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
     QPalette text_palette = palette();
     text_palette.setColor(QPalette::Window, QColor(240, 240, 240));
     text_palette.setColor(QPalette::Background, QColor(255, 255, 255, 100));
     pImpl->stacked_widget->setPalette(text_palette);
 
-    for (auto && class_index : {TV, MOVIE, ZONGYI, MUSIC, COMIC}) {
+    for (int class_index = 0; class_index < 5; ++class_index) {
         ListWidget *l = new ListWidget(class_index);
         connect(l, SIGNAL(clicked(CLASS, int, QString)), this, SLOT(on_url_changed(CLASS, int, QString)));
         connect(l, SIGNAL(emit_next_page(CLASS)), this, SLOT(on_nextPage_loaded(CLASS)));
@@ -142,6 +140,7 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     pImpl->stacked_widget->addWidget(pImpl->player_widget);
     main_layout->addWidget(pImpl->stacked_widget);
     main_layout->setSpacing(0);
+
     connect(pImpl->xuan_ji_widget, SIGNAL(click(QString, QString)), this, SLOT(on_url_ji_triggered(QString, QString)));
     connect(pImpl->skin_widget, SIGNAL(skin_change_clicked(QString)), this, SLOT(on_skin_changed(QString)));
     connect(pImpl->player, SIGNAL(mFinished()), this, SLOT(on_play_finished()));
@@ -161,9 +160,11 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
     connect(pImpl->title_widget, SIGNAL(min_clicked()), this, SLOT(on_showMin_clicked()));
     connect(pImpl->title_widget, SIGNAL(ture_page(int)), pImpl->stacked_widget, SLOT(setCurrentIndex(int)));
     connect(pImpl->title_widget, SIGNAL(menu_clicked()), pImpl->main_menu, SLOT(on_showed()));
+
 #ifndef NO_WIFI_TEST
     init_module();
 #endif
+
     addActions(Control_Widget->reg_actions());
     addActions(pImpl->xuan_ji_widget->init_action());
     SHOW_MSG(tr("kuplayer: free for youku!"));
@@ -174,14 +175,13 @@ MainWidget::MainWidget(PyScript *pyinit, const QString &ico_path, QWidget *paren
 void MainWidget::init_module()
 {
     if (pImpl->pyinit->show_list.size()) {
-        for (auto && class_index : {TV, MOVIE, ZONGYI, MUSIC, COMIC}) {
+        for (int class_index = 0; class_index < 5; ++class_index) {
             auto *tmp = new mThread(class_index,
                                     bind(&PyScript::connect_img_url,
                                          pImpl->pyinit,
                                          pImpl->pyinit->show_list[class_index],
                                          pImpl->name[class_index]));
-            connect(tmp, SIGNAL(load_finished(int, QStringList)),
-                    this, SLOT(on_loadImage_started(int, QStringList)));
+            connect(tmp, SIGNAL(load_finished(int, QStringList)), this, SLOT(on_loadImage_started(int, QStringList)));
             tmp->start();
         }
     }
@@ -263,11 +263,11 @@ void MainWidget::on_Fullscreen_changed()
     if (is_full_screen) {
         pImpl->title_widget->show();
         Control_Widget->show();
-        SHOW_WINDOW_NORMAL
+        SHOW_WINDOW_NORMAL;
     } else {
         pImpl->title_widget->hide();
         Control_Widget->hide();
-        SHOW_WINDOW_MAXSIZE
+        SHOW_WINDOW_MAXSIZE;
     }
 
     is_full_screen = !is_full_screen;
@@ -275,15 +275,12 @@ void MainWidget::on_Fullscreen_changed()
 
 bool MainWidget::is_fullscreen_can_changed()
 {
-    return is_full_screen
-           && (!pImpl->setting->auto_play_next
-               || pImpl->xuan_ji_widget->IsEnd) ;
+    return is_full_screen && (!pImpl->setting->auto_play_next || pImpl->xuan_ji_widget->IsEnd) ;
 }
 
 bool MainWidget::is_can_auto_play_next()
 {
-    return pImpl->setting->auto_play_next
-           && (*(pImpl->player_widget))->isRuning ;
+    return pImpl->setting->auto_play_next && (*(pImpl->player_widget))->isRuning ;
 }
 
 void MainWidget::on_play_finished()
@@ -393,7 +390,8 @@ void MainWidget::on_url_ji_triggered(QString name, QString url)
     static bool video_url_is_good {false};
 
     if (name == url) {
-        if (is_full_screen) on_Fullscreen_changed();
+        if (is_full_screen) { on_Fullscreen_changed(); }
+
         return;
     }
 
@@ -446,7 +444,7 @@ void MainWidget::on_url_changed(CLASS classes, int type, QString name)
     connect(tmp, SIGNAL(load_finished(int, QStringList)), this, SLOT(on_loadImage_started(int, QStringList)));
     tmp->start();
     qobject_cast<ListWidget *>(pImpl->stacked_widget->widget(classes))->reset();
-    
+
 #undef LOCATE
 #undef _CLASS
 #undef __TIME
@@ -457,15 +455,15 @@ void MainWidget::init_trayicon()
     pImpl->trayicon->setIcon(QIcon(":logo/logo_icon"));
     pImpl->trayicon->show();
     pImpl->trayicon->setToolTip("kuplayer");
-    connect(pImpl->trayicon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),this, SLOT(on_trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
-    
+    connect(pImpl->trayicon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(on_trayIcon_clicked(QSystemTrayIcon::ActivationReason)));
+
     QMenu *tray_menu = new QMenu;
     pImpl->trayicon->setContextMenu(tray_menu);
-    
+
     auto   *set_action = tray_menu->addAction(tr("Settings"));
     auto *about_action = tray_menu->addAction(tr("About"));
     auto  *exit_action = tray_menu->addAction(tr("Exit"));
-    
+
     connect(set_action, SIGNAL(triggered()), pImpl->main_menu, SLOT(show()));
     connect(about_action, SIGNAL(triggered()), pImpl->main_menu, SLOT(show_about()));
     connect(exit_action, &QAction::triggered, [&]() {
@@ -482,7 +480,7 @@ void MainWidget::init_trayicon()
 
 void MainWidget::init_setting()
 {
-   conf_info_to_file(pImpl->setting,pImpl->iniFile);
+    conf_info_to_file(pImpl->setting, pImpl->iniFile);
     pImpl->skin_widget->on_url_triggered("", pImpl->iniFile->value("setting/skin", ":/kin/0").toString());
     pImpl->main_menu->init_setting(pImpl->setting);
 }
@@ -490,5 +488,5 @@ void MainWidget::init_setting()
 void MainWidget::to_inifile()
 {
     pImpl->iniFile->setValue("setting/skin", get_skin());
-    conf_info_from_file(pImpl->setting,pImpl->iniFile);
+    conf_info_from_file(pImpl->setting, pImpl->iniFile);
 }

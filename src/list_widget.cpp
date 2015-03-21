@@ -29,6 +29,9 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QVBoxLayout>
 #include <QScrollBar>
 
+#include <functional>
+using std::for_each;
+
 struct NAMESPACE_KUPLAYER::AreaWidget::AreaWidget_Impl {
     QGridLayout *scroll_layout;
     mScrollArea *view;

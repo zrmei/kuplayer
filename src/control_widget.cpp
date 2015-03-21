@@ -28,6 +28,8 @@ USR_NAMESPACE_KUPLAYER //using namespace mei::kuplayer
 #include <QApplication>
 #include <QTime>
 
+#include <functional>
+using std::bind;
 
 struct ControlWidget::ControlWidget_Impl {
     Q_DISABLE_COPY(ControlWidget_Impl)

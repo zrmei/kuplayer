@@ -19,6 +19,7 @@
 #ifndef GLOAL_H
 #define GLOAL_H
 #include "common.h"
+#include <QString>
 KUPLAYER_NAMESPACE_BEGIN //namespace begin
 
 template<typename T>
