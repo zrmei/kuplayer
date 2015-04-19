@@ -37,8 +37,8 @@ class QString;
         printf("\n=================================================================\n");\
         return return_value;}
 #else
-#define PYTHON_CATCH_EXCEPTION_BEGIN
-#define PYTHON_CATCH_EXCEPTION_END
+#define PYTHON_CATCH_EXCEPTION_BEGIN  try{
+#define PYTHON_CATCH_EXCEPTION_END(return_value) }catch(boost::python::error_already_set){return return_value;}
 #endif
 namespace Python
 {
@@ -86,8 +86,8 @@ public:
     PyScript();
     ~PyScript();
     bool getShowList();
-    bool GetVideoUrls(QString keyurl, QString format);
-
+    
+    QStringList GetVideoUrls(QString keyurl, QString format);
     QStringList connect_img_url(QString, QString);
     QStringList getUrlByName(CLASS, QString, QString, QString);
     QStringList gotoNextPage(QString name, int index);

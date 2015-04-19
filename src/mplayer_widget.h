@@ -39,13 +39,14 @@ public:
     virtual ~MPlayer();
     void mPlay();
     void mStop();
+    void setPlayList(QStringList &list);
+    
 public slots:
+    void setDuration();
     void mSeekBack();
     void mSeekFore();
-    void setPlayList();
     void play_pause(bool);
-    void setDuration();
-
+    
     void vol_down();
     void vol_up();
 private slots:

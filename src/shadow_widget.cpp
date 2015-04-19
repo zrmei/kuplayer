@@ -53,7 +53,7 @@ void ShadowWidget::change_skin(QString pic_name)
 {
     static const QString PIC_PATH {qApp->applicationDirPath() + "/../sources/img/skin/"};
     skin = PIC_PATH + pic_name;
-
+    qDebug() <<skin;
     if (!QFileInfo(skin).isFile()) {
         pic_name = ":/skin/0";
     }
@@ -105,7 +105,8 @@ void ShadowWidget::mouseReleaseEvent(QMouseEvent *ev)
 void ShadowWidget::paintEvent(QPaintEvent *)
 {
     if (!is_full_screen) {
-        static QPixmap qskin(skin);
+        static QPixmap qskin;
+        qskin.load(skin);
         
         QPainter painter(this);
         drawWindowShadow(painter);

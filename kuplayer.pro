@@ -11,7 +11,7 @@ TEMPLATE = app
 
 PRECOMPILED_HEADER = src/common.h
 
-QMAKE_CXXFLAGS += -std=c++11 
+QMAKE_CXXFLAGS += -std=c++11 -DAV_NO_DEBUG_OUTPUT
 QMAKE_CXXFLAGS_DEBUG += -O0 -g3 
 QMAKE_CXXFLAGS_RELEASE +=  -DQT_NO_DEBUG_OUTPUT -DAV_NO_DEBUG_OUTPUT
 
@@ -102,5 +102,8 @@ unix: {
         message("Can not find libnotify.so. You can: sudo apt-get install libnotify4-dev")
     }
 }
+
+SUBDIRS += \
+    testkuplayer/testkuplayer.pro
 
 

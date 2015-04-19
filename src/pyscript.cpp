@@ -1,16 +1,16 @@
 /*
    Copyright (C) 2015 MeiZhaorui(Mason) <listener_mei@163.com>
-   
+
    The File is free software; you can redistribute it and/or
    modify it under the terms of the GNU Lesser General Public
    License as published by the Free Software Foundation; either
    version 2.1 of the License, or (at your option) any later version.
-   
+
    The File is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Lesser General Public License for more details.
-   
+
    You should have received a copy of the GNU Lesser General Public
    License along with the Library; if not, see
    <http://www.gnu.org/licenses/>.
@@ -37,25 +37,33 @@ PyScript::~PyScript()
     delete init_;
 }
 
-bool PyScript::GetVideoUrls(QString keyurl, QString format)
+QStringList PyScript::GetVideoUrls(QString keyurl, QString format)
 {
+    qDebug() <<"format:" << format;
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
-    int i {0};
+    return_list.clear();
+    static list tmp ;
     PYTHON_CATCH_EXCEPTION_BEGIN
-    i = python::call_method<int>(module, "getVideoUrls",
-                                 keyurl.toStdString().c_str(),
-                                 format.toStdString().c_str()
-                                );
-    PYTHON_CATCH_EXCEPTION_END(false)
-    return i == 0 ? false : true;
+    tmp = python::call_method<list>(module, "getVideoUrls",
+                                   keyurl.toStdString().c_str(),
+                                   format.toStdString().c_str()
+                                  );
+    PYTHON_CATCH_EXCEPTION_END(return_list)
+    qDebug() << python::len(tmp);
+    for (ssize_t i = 0; i < python::len(tmp); ++i) {
+        return_list.append(QString(extract<char *>(tmp[i])));
+    }
+    qDebug() << return_list;
+    
+    return return_list;
 }
 
 bool PyScript::getShowList()
 {
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
-    list tmp;
+    static list tmp;
     PYTHON_CATCH_EXCEPTION_BEGIN
     tmp = python::call_method<list>(module, "getShowList");
     PYTHON_CATCH_EXCEPTION_END(false)
@@ -91,7 +99,7 @@ QStringList PyScript::connect_img_url(QString url, QString name)
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
     return_list.clear();
-    list tmp ;
+    static list tmp ;
     PYTHON_CATCH_EXCEPTION_BEGIN
     tmp = python::call_method<list>(module
                                     , "connect_img_url"
@@ -129,7 +137,7 @@ QStringList PyScript::getplayUrl(QString url)
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
     return_list.clear();
-    python::list sstr;
+    static python::list sstr;
     PYTHON_CATCH_EXCEPTION_BEGIN
     sstr = python::call_method<list>(module
                                      , "getplayUrl"
@@ -169,7 +177,7 @@ QStringList PyScript::getAll(CLASS classes, QString url)
             return return_list;
     }
 
-    python::list sstr;
+    static python::list sstr;
     PYTHON_CATCH_EXCEPTION_BEGIN
     sstr = python::call_method<list>(module
                                      , func.toStdString().c_str()

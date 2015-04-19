@@ -44,24 +44,13 @@ MPlayer::~MPlayer()
     list_file.remove();
 }
 
-void MPlayer::setPlayList()
+void MPlayer::setPlayList(QStringList &list)
 {
-    if (list_file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        static QTextStream txtInput(&list_file);
-        play_list.clear();
-
-        while (!txtInput.atEnd()) {
-            play_list.append(txtInput.readLine());
-        }
-
-        list_file.close();
-    }
+    play_list = std::move(list);
 }
 
 void MPlayer::mPlay()
 {
-    setPlayList();
-
     if (isPlaying()) {
         stop();
     } else {
@@ -73,7 +62,7 @@ void MPlayer::mStarted()
     if (play_list.size()) {
         play(play_list.at(0));
         play_list.removeAt(0);
-        QTimer::singleShot(800, this, SLOT(setDuration()));
+        QTimer::singleShot(1000, this, SLOT(setDuration()));
     } else {
         emit mFinished();
     }

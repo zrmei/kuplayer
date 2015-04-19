@@ -211,9 +211,9 @@ void down_widget_::init_setting(conf_info *info)
     pImpl->base_ui->radioButton_min->setChecked(pImpl->settings->min_or_close);
     pImpl->base_ui->checkBox_start->setChecked(pImpl->settings->start_when_pc_on);
 
-    if (pImpl->settings->default_video_format == "high") {
+    if (pImpl->settings->default_video_format == "mp4") {
         pImpl->play_ui->format_high->setChecked(true);
-    } else if (pImpl->settings->default_video_format == "normal") {
+    } else if (pImpl->settings->default_video_format == "flv") {
         pImpl->play_ui->format_normal->setChecked(true);
     } else {
         pImpl->play_ui->format_spuer->setChecked(true);
@@ -245,11 +245,11 @@ void down_widget_::btn_selected(QString name, QString)
         pImpl->settings->start_when_pc_on = pImpl->base_ui->checkBox_start->isChecked();
 
         if (pImpl->play_ui->format_high->isChecked()) {
-            pImpl->settings->default_video_format = "high";
+            pImpl->settings->default_video_format = "mp4";
         } else if (pImpl->play_ui->format_normal->isChecked()) {
-            pImpl->settings->default_video_format = "normal";
+            pImpl->settings->default_video_format = "flv";
         } else {
-            pImpl->settings->default_video_format = "super";
+            pImpl->settings->default_video_format = "hd2";
         }
     } else {
         init_setting(pImpl->settings);

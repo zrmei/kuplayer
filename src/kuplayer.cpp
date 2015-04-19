@@ -253,6 +253,8 @@ void MainWidget::on_showMin_clicked()
 
 void MainWidget::on_skin_changed(QString index)
 {
+    qDebug() << index;
+    
     change_skin(index);
     pImpl->xuan_ji_widget->change_skin(index);
     pImpl->main_menu->change_skin(index);
@@ -361,15 +363,15 @@ void MainWidget::on_loadImage_finished(
 
 void MainWidget::on_url_triggered(QString name, QString url)
 {
-    static bool good {false};
+    static QStringList play_list;
 
     if (url.startsWith(SHOW_PAGE)) {
         url = pImpl->pyinit->getplayUrl(url)[0];
     }
 
-    good = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
-
-    if (!url.isEmpty() && good) {
+    play_list = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
+    
+    if ( !(url.isEmpty() || play_list.isEmpty()) ) {
         auto *tmp = new mThread(NONE, bind(&PyScript::getAll,
                                            pImpl->pyinit,
                                            pImpl->stacked_widget->currentIndex(),
@@ -379,6 +381,7 @@ void MainWidget::on_url_triggered(QString name, QString url)
                 pImpl->xuan_ji_widget, SLOT(on_list_changed(int, QStringList)));
         pImpl->title_widget->on_turepage_triggered(PLAYER);
         tmp->start();
+        pImpl->player->setPlayList(play_list);
         pImpl->player->mPlay();
         Control_Widget->isRuning = true;
         SHOW_MSG(tr("Currently playing:").append(name));
@@ -387,7 +390,7 @@ void MainWidget::on_url_triggered(QString name, QString url)
 }
 void MainWidget::on_url_ji_triggered(QString name, QString url)
 {
-    static bool video_url_is_good {false};
+     static QStringList play_list;
 
     if (name == url) {
         if (is_full_screen) { on_Fullscreen_changed(); }
@@ -395,11 +398,12 @@ void MainWidget::on_url_ji_triggered(QString name, QString url)
         return;
     }
 
-    video_url_is_good = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
+    play_list = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
 
-    if (video_url_is_good) {
+    if (!play_list.isEmpty() ) {
         pImpl->stacked_widget->setCurrentIndex(PLAYER);
         Control_Widget->isRuning = true;
+        pImpl->player->setPlayList(play_list);
         pImpl->player->mPlay();
         SHOW_MSG(tr("Currently playing:")
                  .append(pImpl->title_widget->get_text())
