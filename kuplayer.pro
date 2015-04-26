@@ -20,6 +20,7 @@ QMAKE_CXXFLAGS_RELEASE +=  -DQT_NO_DEBUG_OUTPUT -DAV_NO_DEBUG_OUTPUT
 QMAKE_LFLAGS += -Wl,-rpath,"../lib"
 QMAKE_LFLAGS_RELEASE += -Wl,-s -Wl,-O2
 
+QMAKE_PROJECT_NAME = kuplayer
 
 SOURCES += src/control_widget.cpp \
     src/detail_label.cpp \
