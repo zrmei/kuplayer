@@ -6,38 +6,164 @@ import urllib2
 import re
 import threading
 import time
+import base64
+import json
 
-def getVideoUrls(raw_url, f='normal'):
-    url = "http://www.flvcd.com/parse.php?format=%s&kw=%s" % (f, raw_url)
-    response = urllib2.urlopen(url)
-    the_page = response.read().decode("gbk")
+# from py_kuplayer import *
+# L = get_html("http://box.zhangmen.baidu.com/x?op=12&count=1&title=最炫民族风$$凤凰传奇$$$$")
+# print L
 
-    re_qb = re.compile((r'(?<=<a href=).*? (?=class="link")'))
-    re_mulqb = re.compile((r'(?<=<BR><a href=).*? (?=target)'))
+            
 
-    videourl = re_mulqb.findall(the_page)
-    if not videourl:
-        videourl = re_qb.findall(the_page)
-    count = len(videourl)
-    if count == 0:
-        return 0
-    else:
-        f = open("./.playlist",'w')
-        for i in range(count):
-            print >> f,videourl[i].split("\"")[1]
-        f.close()
-        return 1
+fake_headers = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    'Accept-Charset': 'UTF-8,*;q=0.5',
+    'Accept-Language': 'en-US,en;q=0.8',
+    'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64; rv:13.0) Gecko/20100101 Firefox/13.0'
+}
 
-def OpenUrl(url):
-    user_agent='Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:16.0) Gecko/20100101 Firefox/16.0'
-    headers={'User-Agent' : user_agent}
+def get_html(url):
     values = {'name' : 'MeiZhaorui(Mason)',
               'location' : 'China',
               'language' : 'Python2.7' }
     data = urllib.urlencode(values)
-    req = urllib2.Request(url, data,headers)
+    req = urllib2.Request(url, data,fake_headers)
     response = urllib2.urlopen(req)
     return response.read()
+
+
+class Youku():
+
+    def __init__(self, *args):
+        self.url = None
+        self.vid = None
+        self.streams = {}
+        # self.audiolang = None
+
+    stream_types = [
+        {'id': 'hd2', 'container': 'flv'},
+        {'id': 'mp4', 'container': 'mp4'},
+        {'id': 'flv', 'container': 'flv'}
+    ]
+
+    @staticmethod
+    def generate_ep(vid, ep):
+        f_code_1 = 'becaf9be'
+        f_code_2 = 'bf7e5f01'
+
+        def trans_e(a, c):
+            f = h = 0
+            b = list(range(256))
+            result = ''
+            while h < 256:
+                f = (f + b[h] + ord(a[h % len(a)])) % 256
+                b[h], b[f] = b[f], b[h]
+                h += 1
+            q = f = h = 0
+            while q < len(c):
+                h = (h + 1) % 256
+                f = (f + b[h]) % 256
+                b[h], b[f] = b[f], b[h]
+                if isinstance(c[q], int):
+                    result += chr(c[q] ^ b[(b[h] + b[f]) % 256])
+                else:
+                    result += chr(ord(c[q]) ^ b[(b[h] + b[f]) % 256])
+                q += 1
+
+            return result
+
+        e_code = trans_e(f_code_1, base64.b64decode(bytes(ep)))
+        sid, token = e_code.split('_')
+        new_ep = trans_e(f_code_2, '%s_%s_%s' % (sid, vid, token))
+        return base64.b64encode(bytes(new_ep)), sid, token
+
+    @staticmethod
+    def parse_m3u8(m3u8):
+        return re.findall(r'(http://[^?]+)\?ts_start=0', m3u8)
+
+    @staticmethod
+    def match_vid(text, pattern):
+        match = re.search(pattern, text)
+        if match:
+            return match.group(1)
+        else:
+            return None
+
+    @staticmethod
+    def get_vid_from_url(url):
+        return Youku.match_vid(url, r'youku\.com/v_show/id_([a-zA-Z0-9=]+)')
+
+    def prepare(self, **kwargs):
+        assert self.url or self.vid
+
+        if self.url and not self.vid:
+            self.vid = self.__class__.get_vid_from_url(self.url)
+
+        playlist = json.loads(
+        	get_html('http://v.youku.com/player/getPlayList/VideoIDS/%s/Pf/4/ctype/12/ev/1' % self.vid)
+        	)
+        playlistdata0 = playlist['data'][0]
+
+        self.ep = playlistdata0['ep']
+        self.ip = playlistdata0['ip']
+
+        for stream_type in self.stream_types:
+            if stream_type['id'] in playlistdata0['streamsizes']:
+                stream_id = stream_type['id']
+                stream_size = int(playlistdata0['streamsizes'][stream_id])
+                self.streams[stream_id] = {'container': stream_type['container'],  'size': stream_size}
+                
+    def extract(self, **kwargs):
+        if 'stream_id' in kwargs and kwargs['stream_id']:
+            stream_id = kwargs['stream_id']
+
+            if stream_id not in self.streams:
+                exit(2)
+        else:
+            stream_id = "flv"
+
+        new_ep, sid, token = self.__class__.generate_ep(self.vid, self.ep)
+        m3u8_query = urllib.urlencode(dict(
+            ctype=12,
+            ep=new_ep,
+            ev=1,
+            keyframe=1,
+            oip=self.ip,
+            sid=sid,
+            token=token,
+            ts=int(time.time()),
+            type=stream_id,
+            vid=self.vid,
+        ))
+        m3u8_url = 'http://pl.youku.com/playlist/m3u8?' + m3u8_query
+  
+        m3u8 = get_html(m3u8_url)
+        self.streams[stream_id]['src'] = self.parse_m3u8(m3u8)
+
+
+    def getVideoUrls(self, url, **kwargs):
+        self.url = url
+        self.prepare(**kwargs)
+        self.extract(**kwargs)
+
+        return self.download(**kwargs)
+
+    def download(self, **kwargs):
+        if 'stream_id' in kwargs and kwargs['stream_id']:
+            stream_id = kwargs['stream_id']
+        else:
+            stream_id = 'flv'
+
+        urls = self.streams[stream_id]['src']
+
+        return urls
+
+
+
+def getVideoUrls(url,f='flv'):
+    site = Youku()
+    return site.getVideoUrls(url,steam_id=f)
+
 
 def downUrl(the_page, re_qb, key=-2, source=1):
     videourl = re_qb.findall(the_page)
@@ -60,9 +186,9 @@ def video_img(the_page):
     return downUrl(the_page, re_qb)
 
 def getplayUrl(url):
-    the_page = OpenUrl(url)
-    re_db1 = re.compile('(?<=href=")http://v\.youku\.com/v_show/.*?(?=" target="_blank"><em>播放正片</em></a>)')
-    re_db = re.compile('(?<=href=")http://v\.youku\.com/v_show/.*?(?=" target="_blank"><em>播放.*?</a>)')
+    the_page = get_html(url)
+    re_db1 = re.compile('(?<=class="btnShow btnplay" href=")http://v\.youku\.com/v_show/.*?(?=\?from)')
+    re_db = re.compile('(?<=href=")http://v\.youku\.com/v_show/.*?(?=\?from)')
     videourl = re_db1.findall(the_page)
     if not videourl:
         videourl = re_db.findall(the_page)
@@ -70,7 +196,7 @@ def getplayUrl(url):
 
 #TV
 def get_tv_all(url):
-    the_page = OpenUrl(url)
+    the_page = get_html(url)
     re_qb = re.compile("(?<=title=)\"第[0-9]{,3}.*?<a class=.*?(?=>)", re.DOTALL)
     table = downUrl(the_page, re_qb, 1, -2)
     L = []
@@ -80,7 +206,7 @@ def get_tv_all(url):
     
 #zy
 def get_zy_all(url):
-    the_page = OpenUrl(url)
+    the_page = get_html(url)
     re_qb = re.compile('(?<=class="program").*?\.html', re.DOTALL)
     table = downUrl(the_page, re_qb, 3, -1)
     L=[]
@@ -89,7 +215,7 @@ def get_zy_all(url):
     return L
 #comic
 def get_comic_all(url):
-    the_page = OpenUrl(url)
+    the_page = get_html(url)
     re_qb = re.compile('(?<=<a class="A").*?播放', re.DOTALL)
     table = downUrl(the_page, re_qb, 10, 1)
     L=[]
@@ -104,7 +230,7 @@ def getGotoPage(the_page):
 
 def getShowList():
     re_qb = re.compile('(?<=<li><a  href=").*?(?=</a>)')
-    the_page = OpenUrl("http://www.youku.com/v/");
+    the_page = get_html("http://www.youku.com/v/");
     table = downUrl(the_page, re_qb, -1, 0)
     L = []
     L.append("http://www.youku.com" + table['>电视剧'][:-5])
@@ -130,7 +256,7 @@ class mythread(threading.Thread):
     def mcheck(self):
         while self.is_alive():
             pass
-        return self.table1
+        return self.table1 
 
 class mythread1(threading.Thread):
     def __init__(self,the_page):
@@ -146,7 +272,7 @@ class mythread1(threading.Thread):
         return self.table1
 
 def connect_img_url(url):
-    the_page = OpenUrl(url)
+    the_page = get_html(url)
     t = mythread(the_page)
     t1 = mythread1(the_page)
     t.setDaemon(True)

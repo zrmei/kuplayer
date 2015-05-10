@@ -360,16 +360,19 @@ void MainWidget::on_loadImage_finished(
     index_widget = pImpl->stacked_widget->widget(index);
     qobject_cast<ListWidget *>(index_widget)->addDetailLabel(l);
 }
-
+#define MEIDEBUG(msg) qDebug() <<"func:"<<__func__<<" line: "<<__LINE__<<"  "<<msg;
 void MainWidget::on_url_triggered(QString name, QString url)
 {
     static QStringList play_list;
-
+    MEIDEBUG(SHOW_PAGE);
     if (url.startsWith(SHOW_PAGE)) {
         url = pImpl->pyinit->getplayUrl(url)[0];
+        MEIDEBUG(url);
     }
 
     play_list = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
+    
+    qDebug() << __LINE__ << ": " << play_list;
     
     if ( !(url.isEmpty() || play_list.isEmpty()) ) {
         auto *tmp = new mThread(NONE, bind(&PyScript::getAll,
@@ -417,7 +420,7 @@ void MainWidget::on_url_changed(CLASS classes, int type, QString name)
 #define LOCATE  0
 #define _CLASS  1
 #define __TIME  2
-
+    
     if (name == "全部") {
         name = "";
     }
@@ -439,6 +442,7 @@ void MainWidget::on_url_changed(CLASS classes, int type, QString name)
                    std::get<_CLASS>(pImpl->locate_class_time[classes]),
                    std::get<__TIME>(pImpl->locate_class_time[classes])
                )[0];
+    
     auto get_img_url = bind(&PyScript::connect_img_url,
                             pImpl->pyinit,
                             url,

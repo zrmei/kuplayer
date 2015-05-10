@@ -39,7 +39,7 @@ PyScript::~PyScript()
 
 QStringList PyScript::GetVideoUrls(QString keyurl, QString format)
 {
-    qDebug() <<"format:" << format;
+    qDebug() <<"url:" << keyurl <<"htlp format:" << format;
     std::lock_guard<std::mutex> lock(mu);
     std::shared_ptr<Python::PyThreadStateLock> pylock;
     return_list.clear();
@@ -54,7 +54,6 @@ QStringList PyScript::GetVideoUrls(QString keyurl, QString format)
     for (ssize_t i = 0; i < python::len(tmp); ++i) {
         return_list.append(QString(extract<char *>(tmp[i])));
     }
-    qDebug() << return_list;
     
     return return_list;
 }
@@ -91,6 +90,8 @@ PyScript::getUrlByName(CLASS name, QString locate, QString classes, QString time
                                  , time.toStdString().c_str());
     PYTHON_CATCH_EXCEPTION_END(return_list)
     return_list << QString(extract<char *>(p));
+    
+    qDebug()<< __LINE__<<"   "<< return_list[0];
     return return_list;
 }
 
