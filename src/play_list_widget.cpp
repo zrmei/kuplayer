@@ -136,6 +136,7 @@ void PlayListWidget::sort(const QStringList &list)
 
 void PlayListWidget::on_list_changed(int, const QStringList &list)
 {
+    qDebug() <<__func__ << list;
     play_list.clear();
     IsEnd = false;
     currentIndex = 0;
@@ -193,6 +194,7 @@ void PlayListWidget::this_click(QString name, QString url)
         if (std::get<1>(play_list[i]) == name) {
             currentIndex = i;
             pImpl->label_store->at(i)->set_selected(true);
+            qDebug() << __func__ <<": "<< name << ", "<< url;
             emit click(name, url);
             return;
         }

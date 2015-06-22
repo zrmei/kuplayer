@@ -170,6 +170,7 @@ def downUrl(the_page, re_qb, key=-2, source=1):
     table_aa = {}
     for i in range(len(videourl)):
         tmp = videourl[i].strip().split("\"")
+        print(tmp)
         table_aa[tmp[key]] = tmp[source]
     return table_aa  # table
 
@@ -197,13 +198,15 @@ def getplayUrl(url):
 #TV
 def get_tv_all(url):
     the_page = get_html(url)
-    re_qb = re.compile("(?<=title=)\"第[0-9]{,3}.*?<a class=.*?(?=>)", re.DOTALL)
-    table = downUrl(the_page, re_qb, 1, -2)
+    re_qb = re.compile("(?<=title=)\"第[0-9]{,3}.*?<a class=.*?\.html", re.DOTALL)
+    table = downUrl(the_page, re_qb, 1, -1)
     L = []
     for i in table:
         L.append(i+"$$"+table[i])
     return L
-    
+
+# print(get_tv_all("http://v.youku.com/v_show/id_XMTI1ODc5MjU2NA==.html"))
+
 #zy
 def get_zy_all(url):
     the_page = get_html(url)
