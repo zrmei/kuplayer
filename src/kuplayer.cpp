@@ -400,19 +400,19 @@ void MainWidget::on_url_ji_triggered(QString name, QString url)
 
         return;
     }
-    qDebug() <<url;
-//    play_list = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
+//    qDebug() <<url;
+    play_list = pImpl->pyinit->GetVideoUrls(url, pImpl->setting->default_video_format);
 
-//    if (!play_list.isEmpty() ) {
-//        pImpl->stacked_widget->setCurrentIndex(PLAYER);
-//        Control_Widget->isRuning = true;
-//        pImpl->player->setPlayList(play_list);
-//        pImpl->player->mPlay();
-//        SHOW_MSG(tr("Currently playing:")
-//                 .append(pImpl->title_widget->get_text())
-//                 .append("   ")
-//                 .append(name));
-//    }
+    if (!play_list.isEmpty() ) {
+        pImpl->stacked_widget->setCurrentIndex(PLAYER);
+        Control_Widget->isRuning = true;
+        pImpl->player->setPlayList(play_list);
+        pImpl->player->mPlay();
+        SHOW_MSG(tr("Currently playing:")
+                 .append(pImpl->title_widget->get_text())
+                 .append("   ")
+                 .append(name));
+    }
 }
 
 void MainWidget::on_url_changed(CLASS classes, int type, QString name)

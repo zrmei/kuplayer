@@ -36,7 +36,7 @@ struct conf_info {
 inline void 
 conf_info_to_file(conf_info* setting,QSettings* iniFile)
 {
-    setting->default_video_format = iniFile->value("setting/format", "normal").toString();
+    setting->default_video_format = iniFile->value("setting/format", "flv").toString();
     setting->close_all = iniFile->value("setting/close_all", true).toBool();
     setting->auto_play_next = iniFile->value("setting/auto_play_next", false).toBool();
     setting->min_or_close = iniFile->value("setting/min_or_close", false).toBool();

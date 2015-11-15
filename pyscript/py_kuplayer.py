@@ -23,11 +23,7 @@ fake_headers = {
 }
 
 def get_html(url):
-    values = {'name' : 'MeiZhaorui(Mason)',
-              'location' : 'China',
-              'language' : 'Python2.7' }
-    data = urllib.urlencode(values)
-    req = urllib2.Request(url, data,fake_headers)
+    req = urllib2.Request(url,headers=fake_headers)
     response = urllib2.urlopen(req)
     return response.read()
 
@@ -160,9 +156,9 @@ class Youku():
 
 
 
-def getVideoUrls(url,f='flv'):
+def getVideoUrls(url,f):
     site = Youku()
-    return site.getVideoUrls(url,steam_id=f)
+    return site.getVideoUrls(url,stream_id=f)
 
 
 def downUrl(the_page, re_qb, key=-2, source=1):
@@ -170,7 +166,6 @@ def downUrl(the_page, re_qb, key=-2, source=1):
     table_aa = {}
     for i in range(len(videourl)):
         tmp = videourl[i].strip().split("\"")
-        print(tmp)
         table_aa[tmp[key]] = tmp[source]
     return table_aa  # table
 
