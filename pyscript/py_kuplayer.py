@@ -114,7 +114,7 @@ class Youku():
             stream_id = kwargs['stream_id']
 
             if stream_id not in self.streams:
-                exit(2)
+                stream_id = "flv"
         else:
             stream_id = "flv"
 
@@ -150,7 +150,10 @@ class Youku():
         else:
             stream_id = 'flv'
 
-        urls = self.streams[stream_id]['src']
+        if stream_id in self.streams and 'src' in self.streams[stream_id]:
+            urls = self.streams[stream_id]['src']
+        else:
+            urls = self.streams['flv']['src']
 
         return urls
 
